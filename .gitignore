@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.venv/
+.env
+data/digest.md
+
+# 🔒 Досьє з реквізитами НЕ публікуємо (репозиторій публічний).
+# У репозиторії лежить лише шаблон config/memory.example.yaml.
+# Локально: cp config/memory.example.yaml config/memory.yaml
+# Для GitHub Actions: вміст файлу кладеться в Secret MEMORY_YAML.
+config/memory.yaml
