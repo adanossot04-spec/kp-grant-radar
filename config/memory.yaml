@@ -1,0 +1,349 @@
+# ╔══════════════════════════════════════════════════════════════════════════╗
+# ║  ПАМ'ЯТЬ АГЕНТА — досьє організацій для автозаповнення грантових заявок   ║
+# ╚══════════════════════════════════════════════════════════════════════════╝
+#
+# Заповнюйте поступово: що більше заповнено — то більше розділів заявки
+# агент згенерує сам (команда: python -m grant_radar draft <id-можливості>).
+# Перевірити повноту: python -m grant_radar memory
+#
+# Правила:
+#   • порожнє значення "" означає «ще не заповнено» і потрапить у список прогалин;
+#   • поля з позначкою [критично] потрібні майже в кожній заявці;
+#   • можна описати кілька організацій (комунальну і приватну) — агент підбере
+#     потрібну за типом бенефіціара гранту;
+#   • файл містить персональні та банківські дані → тримайте репозиторій ПРИВАТНИМ
+#     або винесіть memory.yaml у .gitignore і передавайте через GitHub Secret.
+
+organizations:
+
+  # ══════════════════════════════════════════════════════════════════════════
+  # 1. КОМУНАЛЬНЕ ПІДПРИЄМСТВО
+  # ══════════════════════════════════════════════════════════════════════════
+  - id: kp
+    entity_type: communal          # communal | private
+    active: true
+
+    # ── Ідентифікація ──────────────────────────────────────────────────────
+    identity:
+      legal_name_uk: ""            # [критично] повна назва за статутом
+      legal_name_en: ""            # [критично] офіційний переклад (для заявок ЄС)
+      short_name_uk: ""
+      short_name_en: ""
+      legal_form_uk: "Комунальне підприємство"
+      legal_form_en: "Municipal (communal) enterprise"
+      edrpou: ""                   # [критично] код ЄДРПОУ
+      vat_number: ""               # ІПН платника ПДВ (якщо є)
+      registration_date: ""        # РРРР-ММ-ДД
+      kved_main: ""                # напр. 38.11 Збирання безпечних відходів
+      kved_other: []
+      founder_uk: ""               # [критично] засновник: назва громади/ради
+      founder_decision: ""         # рішення про створення: № і дата
+      ownership: "100% комунальна власність територіальної громади"
+      website: ""
+      social: {facebook: "", other: ""}
+
+    # ── Адреси та контакти ─────────────────────────────────────────────────
+    contacts:
+      legal_address_uk: ""         # [критично]
+      legal_address_en: ""         # [критично] латиницею, з індексом і країною
+      actual_address_uk: ""
+      region_uk: "Закарпатська область"
+      region_nuts: ""              # код NUTS/регіону, якщо потрібен у заявці ЄС
+      hromada: ""                  # назва територіальної громади
+      phone: ""
+      email_official: ""           # [критично]
+      head:                        # керівник, що підписує заявку
+        full_name_uk: ""           # [критично]
+        full_name_en: ""
+        position_uk: "Директор"
+        position_en: "Director"
+        acts_on_basis: "Статуту"   # підстава повноважень
+        phone: ""
+        email: ""
+      project_contact:             # хто веде проєкт/заявку
+        full_name_uk: ""
+        position_uk: ""
+        phone: ""
+        email: ""
+        languages: ""              # напр. «укр — рідна, англ — B2»
+      accountant: {full_name_uk: "", phone: "", email: ""}
+
+    # ── Міжнародні ідентифікатори (економлять години при подачі) ───────────
+    international_ids:
+      eu_pic: ""                   # 9-значний PIC порталу Funding & Tenders
+      eu_pic_status: ""            # validated / self-registered
+      lei: ""                      # Legal Entity Identifier, якщо є
+      duns_uei: ""                 # UEI для заявок USAID/US
+      ungm_number: ""              # реєстрація в UN Global Marketplace
+      prozorro_id: ""
+
+    # ── Банківські реквізити ───────────────────────────────────────────────
+    banking:
+      bank_name_uk: ""
+      bank_name_en: ""
+      iban_uah: ""                 # [критично]
+      iban_eur: ""                 # для грантів ЄС
+      iban_usd: ""
+      swift: ""
+      correspondent_bank: ""
+      treasury_account: ""         # якщо кошти проходять через казначейство
+
+    # ── Персонал ───────────────────────────────────────────────────────────
+    staff:
+      total: 0                     # [критично] загальна кількість працівників
+      by_category: {management: 0, engineers: 0, drivers: 0, workers: 0, other: 0}
+      key_people:                  # ключові фахівці — підуть у розділ «команда»
+        - name_uk: ""
+          role_uk: ""
+          experience_years: 0
+          qualification: ""
+      has_project_manager: false
+      english_speaking_staff: 0
+
+    # ── Фінанси (3 останні роки) ───────────────────────────────────────────
+    finance:
+      currency: "UAH"
+      annual_turnover: {"2023": 0, "2024": 0, "2025": 0}   # [критично]
+      net_result: {"2023": 0, "2024": 0, "2025": 0}
+      municipal_subsidy_share_pct: 0      # частка дотації з бюджету громади
+      tariff_coverage_pct: 0              # покриття собівартості тарифом
+      debts: ""                           # прострочена заборгованість, кредити
+      audited: false
+      audit_company: ""
+      cofinancing_capacity:
+        own_funds_uah: 0                  # [критично] скільки можемо дати своїх
+        municipal_budget_uah: 0           # співфінансування громади (рішення ради)
+        max_cofinancing_pct: 0            # типово ЄС вимагає 10–20%
+        credit_ready: false
+      previous_state_aid_de_minimis: ""   # отримана держдопомога за 3 роки
+
+    # ── Матеріальна база ───────────────────────────────────────────────────
+    assets:
+      land_plots: ""               # ділянки: площа, кадастровий номер, цільове
+      buildings: ""                # бази, ангари, адмінбудівлі
+      landfill: ""                 # полігон: площа, залишковий ресурс, паспорт
+      sorting_line: ""             # сортувальна лінія: потужність, рік
+      vehicles: ""                 # сміттєвози, трактори, самоскиди: к-сть, вік
+      containers: ""               # к-сть і типи контейнерів
+      equipment_other: ""
+      asset_book_value_uah: 0
+
+    # ── Дозволи та ліцензії ────────────────────────────────────────────────
+    permits:
+      waste_management_license: "" # ліцензія/дозвіл на поводження з відходами
+      environmental_permits: ""    # дозвіл на викиди, спецводокористування
+      land_documents: ""
+      iso_certificates: ""         # ISO 9001/14001, якщо є
+      other: ""
+
+    # ── Операційні показники (цифри, які просять у кожній заявці) ──────────
+    operations:
+      service_area_population: 0   # [критично] скільки людей обслуговуєте
+      settlements_served: 0
+      households_served: 0
+      businesses_served: 0
+      waste_collected_tons_year: 0 # [критично]
+      waste_sorted_pct: 0
+      recycled_tons_year: 0
+      landfill_remaining_years: 0
+      collection_coverage_pct: 0
+      routes_km_per_week: 0
+      fuel_consumption_l_year: 0
+      key_problems_uk: ""          # [критково] 3–5 проблем = основа розділу «обґрунтування»
+      key_problems_en: ""
+
+    # ── Досвід проєктів (донори люблять «track record») ────────────────────
+    experience:
+      has_donor_experience: false
+      projects:
+        - title_uk: ""
+          donor: ""
+          years: ""
+          budget: ""
+          role: ""                 # заявник / партнер
+          results_uk: ""
+      partners:                    # наявні партнери для консорціумів
+        - name: ""
+          country: ""
+          type: ""                 # громада-побратим / НУО / університет / бізнес
+          contact: ""
+      support_letters_available: ""
+      twin_city: ""                # місто-побратим у ЄС — величезний плюс для Interreg
+
+    # ── Стратегічний контекст (потрібен у розділі «відповідність політикам») ─
+    strategy:
+      hromada_development_strategy: ""   # назва, рішення, роки
+      waste_management_plan: ""          # регіональний/місцевий план
+      energy_plan_secap: ""              # SECAP / Угода мерів
+      climate_commitments: ""
+      alignment_eu: "Європейський зелений курс, Директива 2008/98/ЄС про відходи"
+      alignment_ua: "Закон України «Про управління відходами» № 2320-IX"
+      sdg: ["SDG 11", "SDG 12"]          # цілі сталого розвитку
+
+    # ── Готові ідеї проєктів (агент підбиратиме їх під конкурси) ───────────
+    project_pipeline:
+      - code: "P1"
+        title_uk: ""               # напр. «Впровадження роздільного збирання ТПВ»
+        title_en: ""
+        problem_uk: ""
+        objective_uk: ""
+        activities_uk: ""
+        target_groups_uk: ""
+        expected_results_uk: ""
+        indicators: ""             # тонни/рік, % сортування, к-сть населення
+        budget_total_eur: 0
+        cofinancing_eur: 0
+        duration_months: 0
+        readiness: ""              # ідея / ТЕО / проєктно-кошторисна документація
+        documents_ready: ""
+
+    # ── Стандартні тексти (вставляються у заявки «як є») ───────────────────
+    boilerplate:
+      org_description_uk_500: ""   # [критично] опис організації, ~500 знаків
+      org_description_en_500: ""   # [критично] те саме англійською
+      org_description_en_1500: ""
+      mission_uk: ""
+      mission_en: ""
+      capacity_statement_en: ""    # чому ми спроможні виконати проєкт
+      target_groups_en: ""
+      gender_equality_statement_en: ""     # просять майже всі донори ЄС
+      environmental_policy_en: ""
+      anticorruption_statement_en: ""
+      data_protection_statement_en: ""
+      risk_management_en: ""
+      sustainability_after_project_en: ""  # що буде після завершення фінансування
+
+    # ── Документи (де лежать файли) ────────────────────────────────────────
+    documents:
+      statute: ""                  # шлях або посилання на скан статуту
+      edr_extract: ""              # витяг з ЄДР
+      founder_decision: ""
+      financial_reports: ""
+      director_appointment: ""
+      bank_details_letter: ""
+      tax_status_certificate: ""
+      council_cofinancing_decision: ""
+      other: ""
+
+    # ── Преференції щодо грантів ───────────────────────────────────────────
+    preferences:
+      min_grant_eur: 10000
+      max_cofinancing_pct: 20
+      languages_for_application: ["uk", "en"]
+      open_to_partnership: true
+      avoid_topics: ["оборона", "суто наукові дослідження"]
+      priority_topics: ["ТПВ", "сортування", "благоустрій", "спецтехніка",
+                        "енергоефективність", "транскордонні проєкти"]
+
+  # ══════════════════════════════════════════════════════════════════════════
+  # 2. ПРИВАТНЕ ПІДПРИЄМСТВО (видаліть або заповніть за потреби)
+  # ══════════════════════════════════════════════════════════════════════════
+  - id: private
+    entity_type: private
+    active: false                  # поставте true, коли почнете заповнювати
+
+    identity:
+      legal_name_uk: ""
+      legal_name_en: ""
+      legal_form_uk: "Товариство з обмеженою відповідальністю"
+      legal_form_en: "Limited liability company"
+      edrpou: ""
+      vat_number: ""
+      registration_date: ""
+      kved_main: ""
+      ownership_structure: ""      # власники та частки
+      ultimate_beneficial_owners: ""   # [критично] UBO — перевіряють усі донори
+      website: ""
+
+    contacts:
+      legal_address_uk: ""
+      legal_address_en: ""
+      phone: ""
+      email_official: ""
+      head: {full_name_uk: "", full_name_en: "", position_uk: "Директор", email: ""}
+      project_contact: {full_name_uk: "", phone: "", email: ""}
+
+    international_ids:
+      eu_pic: ""
+      lei: ""
+      duns_uei: ""
+
+    banking:
+      bank_name_uk: ""
+      iban_uah: ""
+      iban_eur: ""
+      swift: ""
+
+    # ── Статус МСП за класифікацією ЄС (визначає доступ до більшості програм) ─
+    sme_status:
+      category: ""                 # micro (<10 осіб) | small (<50) | medium (<250)
+      employees: 0                 # [критично]
+      annual_turnover_eur: 0       # [критично]
+      balance_sheet_total_eur: 0
+      independent: true            # чи не є частиною великої групи
+      woman_led: false
+      veteran_led: false
+      idp_related: false           # релокований бізнес / ВПО — часто окремі квоти
+
+    finance:
+      annual_turnover: {"2023": 0, "2024": 0, "2025": 0}
+      net_profit: {"2023": 0, "2024": 0, "2025": 0}
+      export_share_pct: 0
+      export_markets: []
+      cofinancing_capacity: {own_funds_eur: 0, credit_ready: false,
+                             max_cofinancing_pct: 50}
+      previous_state_aid_de_minimis: ""
+      tax_debts: "відсутні"
+
+    operations:
+      main_products_uk: ""
+      main_products_en: ""
+      production_capacity: ""
+      equipment: ""
+      premises: ""                 # власні/орендовані площі
+      certificates: ""             # ISO, CE, HACCP
+      innovations_patents: ""
+      jobs_created_last_3y: 0
+      jobs_planned: 0
+
+    experience:
+      has_donor_experience: false
+      projects: [{title_uk: "", donor: "", years: "", budget: "", results_uk: ""}]
+      partners: [{name: "", country: "", type: ""}]
+
+    project_pipeline:
+      - code: "B1"
+        title_uk: ""
+        problem_uk: ""
+        objective_uk: ""
+        expected_results_uk: ""
+        indicators: ""
+        budget_total_eur: 0
+        cofinancing_eur: 0
+        duration_months: 0
+        readiness: ""
+
+    boilerplate:
+      org_description_uk_500: ""
+      org_description_en_500: ""
+      business_model_en: ""
+      market_analysis_en: ""
+      competitive_advantage_en: ""
+      environmental_impact_en: ""
+      gender_equality_statement_en: ""
+      sustainability_after_project_en: ""
+
+    documents:
+      statute: ""
+      edr_extract: ""
+      financial_reports: ""
+      tax_status_certificate: ""
+      ubo_structure: ""
+      other: ""
+
+    preferences:
+      min_grant_eur: 5000
+      max_cofinancing_pct: 50
+      languages_for_application: ["uk", "en"]
+      priority_topics: ["переробка вторсировини", "енергоефективність виробництва",
+                        "експорт до ЄС", "модернізація обладнання"]

@@ -1,0 +1,165 @@
+# Джерела моніторингу грантів для комунальних підприємств
+# type: sedia | rss
+# enabled: true/false — вмикайте/вимикайте без зміни коду
+# weight: множник довіри до джерела (0.8–1.2), впливає на фінальний скоринг
+# region: EU | UA | INT  (для фільтрів у дашборді)
+
+sources:
+
+  # ───────────────────────── ЄС: офіційний портал грантів і тендерів ──────────
+  - id: eu_ft_portal
+    name: "EU Funding & Tenders Portal (SEDIA)"
+    type: sedia
+    region: EU
+    enabled: true
+    weight: 1.2
+    params:
+      # type: 1 = гранти (topics), 2 = тендери/зовнішні дії, 8 = cascade funding
+      types: ["1", "2", "8"]
+      # 31094501 = Forthcoming, 31094502 = Open
+      statuses: ["31094501", "31094502"]
+      page_size: 100
+      max_pages: 6
+      # пошукові запити (кожен виконується окремо). *** = без текстового фільтра
+      queries:
+        - "waste management"
+        - "circular economy municipal"
+        - "urban mobility public transport"
+        - "green urban space"
+        - "municipal infrastructure Ukraine"
+        - "local authorities recovery"
+        - "Ukraine reconstruction"
+
+  # ───────────────────────── ЄС: тендери (безкоштовний API, без ключа) ────────
+  - id: ted
+    name: "TED — тендери та закупівлі ЄС"
+    type: ted
+    region: EU
+    enabled: true
+    weight: 0.9
+    beneficiary_hint: private      # підряди найчастіше для бізнесу
+    params:
+      limit: 40
+      queries:
+        - "notice-title ~ (waste)"
+        - "notice-title ~ (municipal)"
+        - "notice-title ~ (recycling)"
+        - "place-of-performance-country-lot=UKR"
+
+  # ───────────────────────── ЄС / транскордонні програми ──────────────────────
+  - id: huskroua
+    name: "Interreg NEXT HUSKROUA (Угорщина–Словаччина–Румунія–Україна)"
+    type: rss
+    region: EU
+    enabled: true
+    weight: 1.2   # найрелевантніша програма для Закарпаття
+    url: "https://next.huskroua-cbc.eu/feed/"
+
+  - id: keep_eu
+    name: "Keep.eu (Interreg / територіальна співпраця)"
+    type: rss
+    region: EU
+    enabled: true
+    weight: 1.0
+    url: "https://www.keep.eu/rss"
+
+  - id: ec_presscorner
+    name: "European Commission — Press corner"
+    type: rss
+    region: EU
+    enabled: true
+    weight: 0.8
+    url: "https://ec.europa.eu/commission/presscorner/api/rss?language=en"
+
+  - id: eu4digital
+    name: "EU4Digital"
+    type: rss
+    region: EU
+    enabled: false
+    weight: 0.7
+    url: "https://eufordigital.eu/feed/"
+
+  - id: danube_region
+    name: "EU Strategy for the Danube Region (EUSDR)"
+    type: rss
+    region: EU
+    enabled: true
+    weight: 0.9
+    url: "https://danube-region.eu/feed/"
+
+  # ───────────────────────── МФО / міжнародні донори ──────────────────────────
+  - id: worldbank
+    name: "Світовий банк — проєкти в Україні"
+    type: worldbank
+    region: INT
+    enabled: true
+    weight: 1.0
+    params:
+      country: "UA"
+      rows: 60
+
+  - id: eib
+    name: "Європейський інвестиційний банк (EIB) — новини"
+    type: rss
+    region: EU
+    enabled: true
+    weight: 0.8
+    url: "https://www.eib.org/en/press/all/index.rss"
+
+  - id: nefco
+    name: "NEFCO (Nordic Environment Finance Corporation)"
+    type: rss
+    region: INT
+    enabled: true
+    weight: 1.1
+    url: "https://www.nefco.int/feed/"
+
+  - id: boell_ua
+    name: "Heinrich-Böll-Stiftung Україна"
+    type: rss
+    region: INT
+    enabled: false
+    weight: 0.7
+    url: "https://ua.boell.org/uk/rss.xml"
+
+  # ───────────────────────── Україна ──────────────────────────────────────────
+  - id: prostir_grants
+    name: "Громадський простір — Конкурси та гранти"
+    type: rss
+    region: UA
+    enabled: true
+    weight: 1.1
+    url: "https://www.prostir.ua/feed/?post_type=grant"
+
+  - id: prostir_all
+    name: "Громадський простір — усі новини"
+    type: rss
+    region: UA
+    enabled: true
+    weight: 0.9
+    url: "https://www.prostir.ua/feed/"
+
+  - id: eef
+    name: "Фонд енергоефективності"
+    type: rss
+    region: UA
+    enabled: true
+    weight: 1.0
+    url: "https://eef.org.ua/feed/"
+
+  - id: mepr
+    name: "Міндовкілля (Міністерство захисту довкілля та природних ресурсів)"
+    type: rss
+    region: UA
+    enabled: true
+    weight: 0.9
+    url: "https://mepr.gov.ua/feed/"
+
+  # ───────────────────────── Шаблон для власних джерел ────────────────────────
+  # - id: my_source
+  #   name: "Назва"
+  #   type: rss
+  #   region: UA
+  #   enabled: true
+  #   weight: 1.0
+  #   url: "https://example.org/feed/"
