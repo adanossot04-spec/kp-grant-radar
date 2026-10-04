@@ -494,3 +494,101 @@ sources:
   #   enabled: true
   #   weight: 1.0
   #   url: "https://example.org/feed/"
+
+  # ───────── Партнерства громад і допомога технікою (вкладка 🤝) ─────────
+  # Тут шукаємо не гранти, а міста-побратими, ініціативи та організації ЄС,
+  # які передають громадам України техніку, транспорт і обладнання.
+  - id: cities4cities
+    name: "Cities4Cities | United4Ukraine — партнерства громад"
+    type: rss
+    region: EU
+    enabled: true
+    weight: 1.3
+    beneficiary_hint: communal
+    url: "https://cities4cities.eu/feed/"
+
+  - id: frontlineua
+    name: "Асоціація прифронтових міст і громад"
+    type: rss
+    region: UA
+    enabled: true
+    weight: 0.9
+    beneficiary_hint: communal
+    url: "https://frontlineua.org/feed/"
+
+  - id: gnews_twin_ua
+    name: "Побратими та техніка — пошук новин (укр.)"
+    type: gnews
+    region: UA
+    enabled: true
+    weight: 1.0
+    beneficiary_hint: communal
+    params:
+      lang: uk
+      country: UA
+      per_query: 15
+      queries:
+        - "місто-побратим передало громаді техніку when:180d"
+        - "громада отримала сміттєвоз від партнерів when:180d"
+        - "передали комунальну техніку громаді when:180d"
+        - "побратимство громад Україна Європа допомога when:180d"
+        - "пожежний автомобіль передали громаді партнери when:180d"
+        - "громада отримала автобус від партнерів з ЄС when:180d"
+        - "громада отримала генератори від міста-побратима when:180d"
+        - "меморандум про співпрацю громада місто Німеччини when:180d"
+        - "гуманітарний вантаж техніки для громади when:180d"
+        - "спецтехніка в подарунок громаді від партнерів when:180d"
+  - id: gnews_twin_en
+    name: "Twin cities & equipment aid — news search (EN)"
+    type: gnews
+    region: EU
+    enabled: true
+    weight: 1.0
+    beneficiary_hint: communal
+    params:
+      lang: en
+      country: US
+      per_query: 15
+      queries:
+        - "donated fire truck Ukrainian municipality when:180d"
+        - "twin city Ukraine municipal equipment donation when:180d"
+        - "city donates vehicles to Ukrainian partner town when:180d"
+        - "municipality partnership Ukraine waste trucks when:180d"
+        - "sister city Ukraine donation ambulance bus when:180d"
+        - "decommissioned municipal vehicles sent to Ukraine when:180d"
+        - "council sends equipment to Ukrainian partner city when:180d"
+  - id: gnews_twin_de
+    name: "Partnerstädte & Technikhilfe — Nachrichten (DE)"
+    type: gnews
+    region: EU
+    enabled: true
+    weight: 1.0
+    beneficiary_hint: communal
+    params:
+      lang: de
+      country: DE
+      per_query: 15
+      queries:
+        - "Partnerstadt Ukraine Fahrzeuge gespendet when:180d"
+        - "Hilfstransport Ukraine Kommune Technik when:180d"
+        - "Feuerwehrfahrzeug Ukraine Partnergemeinde übergeben when:180d"
+        - "Müllfahrzeug Ukraine gespendet Stadt when:180d"
+        - "Städtepartnerschaft Ukraine Hilfslieferung when:180d"
+        - "Bus für ukrainische Partnerstadt gespendet when:180d"
+  - id: gnews_twin_pl
+    name: "Gminy partnerskie i sprzęt — wiadomości (PL)"
+    type: gnews
+    region: EU
+    enabled: true
+    weight: 1.0
+    beneficiary_hint: communal
+    params:
+      lang: pl
+      country: PL
+      per_query: 15
+      queries:
+        - "gmina partnerska Ukraina sprzęt przekazany when:180d"
+        - "wóz strażacki dla ukraińskiej gminy when:180d"
+        - "samorząd przekazał pojazdy komunalne Ukrainie when:180d"
+        - "miasto partnerskie Ukraina darowizna sprzętu when:180d"
+        - "śmieciarka przekazana ukraińskiemu miastu when:180d"

@@ -6,12 +6,13 @@
 from __future__ import annotations
 
 # порядок = пріоритет при визначенні основного напряму
-TRACK_ORDER = ["waste", "education", "inclusion", "water", "nature", "transport",
+TRACK_ORDER = ["partnership", "waste", "education", "inclusion", "water", "nature", "transport",
                "urban", "safety", "energy", "health", "veterans", "housing",
                "culture", "youth", "digital", "tourism", "business",
                "recovery", "other"]
 
 LABEL = {
+    "partnership": "🤝 Побратими та допомога технікою",
     "waste": "♻️ Відходи та циркулярна економіка",
     "education": "🎓 Освіта та навчання",
     "inclusion": "♿ Інклюзивність і безбар'єрність",
@@ -34,6 +35,7 @@ LABEL = {
 }
 
 SHORT = {
+    "partnership": "🤝 Побратими",
     "waste": "♻️ Відходи", "education": "🎓 Освіта", "inclusion": "♿ Інклюзія",
     "water": "💧 Вода", "nature": "🌿 Довкілля", "transport": "🚌 Транспорт",
     "urban": "🌳 Благоустрій", "safety": "🛡 Безпека", "energy": "⚡ Енергетика",

@@ -94,6 +94,7 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
 <div class="tabs">
   <button class="tab on" data-feed="ua">🇺🇦 Україна — пряме фінансування <b id="cnt_ua">0</b></button>
   <button class="tab" data-feed="eu">🇪🇺 ЄС — консорціумні проєкти <b id="cnt_eu">0</b></button>
+  <button class="tab" data-feed="aid">🤝 Побратими та техніка <b id="cnt_aid">0</b></button>
   <button class="tab" data-feed="all">🌍 Усе разом <b id="cnt_all">0</b></button>
 </div>
 <div class="filters">
@@ -205,10 +206,11 @@ function render(){
   el.addEventListener("input",render); el.addEventListener("change",render);
 });
 
-// вкладки: 🇺🇦 пряме фінансування / 🇪🇺 консорціуми ЄС / усе разом
+// вкладки: 🇺🇦 пряме фінансування / 🇪🇺 консорціуми / 🤝 побратими й техніка / усе
 window.FEED="ua";
 document.getElementById("cnt_ua").textContent  = DATA.filter(d=>(d.feed||"ua")==="ua").length;
 document.getElementById("cnt_eu").textContent  = DATA.filter(d=>(d.feed||"ua")==="eu").length;
+document.getElementById("cnt_aid").textContent = DATA.filter(d=>(d.feed||"ua")==="aid").length;
 document.getElementById("cnt_all").textContent = DATA.length;
 document.querySelectorAll(".tab").forEach(btn=>{
   btn.addEventListener("click",()=>{
@@ -227,6 +229,12 @@ def export(db: Database, out_dir: Path | None = None, min_score: int = 12, limit
     out_dir = Path(out_dir or config.DOCS_DIR)
     out_dir.mkdir(parents=True, exist_ok=True)
     rows = db.query(min_score=min_score, limit=limit, only_active=True)
+    # вкладка 🤝 «Побратими та техніка»: тут бал не головне — навіть коротка
+    # новина про передану техніку є контактом донора, тож беремо всі записи
+    seen = {r["uid"] for r in rows}
+    rows += [r for r in db.query(feed="aid", min_score=0, limit=400, only_active=True)
+             if r["uid"] not in seen]
+    rows.sort(key=lambda r: -(r.get("score") or 0))
     for r in rows:
         r.pop("raw_json", None)
         r["budget_human"] = budget_mod.human(r.get("budget_eur"))

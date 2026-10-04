@@ -260,8 +260,48 @@ EU_CONSORTIUM_SOURCES = {"eu_ft_portal", "ec_presscorner", "danube_region",
                          "interreg", "life_programme", "cerv"}
 
 
+# ───────── Вкладка 🤝: побратими, партнерства громад, допомога технікою ─────
+# Тут корисним є саме те, що в інших вкладках вважається «новиною»:
+# повідомлення «місто N передало громаді M сміттєвоз» — це контакт донора,
+# у якого можна попросити таку саму техніку.
+AID_SOURCES = {"cities4cities", "frontlineua", "gnews_twin_ua", "gnews_twin_en",
+               "gnews_twin_de", "gnews_twin_pl"}
+
+AID_MARK = re.compile(
+    r"(побратим|твіннінг|партнерств\w* громад|громад\w*-партнер|партнерськ\w* громад|"
+    r"міжмуніципальн|twinning|twin (?:town|city|cities)|sister cit|"
+    r"partner (?:city|cities|town|municipalit)|municipal partnership|city-to-city|"
+    r"cities4cities|united4ukraine|partnerstadt|partnergemeinde|"
+    r"st[äa]dtepartnerschaft|gmina partnerska|miasto partnerskie)", re.I)
+
+AID_GOODS = re.compile(
+    r"(сміттєвоз|комунальн\w+ техн|спецтехнік|пожежн\w+ (?:авто|машин)|"
+    r"швидк\w+ допомог\w+ авто|автобус|екскаватор|трактор|грейдер|генератор|"
+    r"передал\w* (?:техн|обладн|автомоб|транспорт)|передано (?:техн|обладн|автомоб)|"
+    r"донац\w* техн|гуманітарн\w* вантаж|обладнання для громад|"
+    r"fire (?:truck|engine|vehicle)|garbage truck|refuse (?:truck|vehicle)|ambulance|"
+    r"municipal (?:equipment|vehicles|machinery)|decommissioned (?:equipment|vehicles)|"
+    r"donat\w* (?:vehicles|equipment|buses|trucks|machinery)|equipment donation|"
+    r"feuerwehrfahrzeug|m[üu]llwagen|hilfslieferung|hilfstransport|gespendet|"
+    r"wóz strażacki|śmieciark|sprzęt (?:przekazan|komunaln)|przekaza\w* pojazd)", re.I)
+
+
+def is_aid(item: dict[str, Any]) -> bool:
+    """Чи належить запис до вкладки «Побратими та техніка»."""
+    title = item.get("title") or ""
+    text = f"{title} {item.get('summary') or ''}"
+    if (item.get("source_id") or "") in AID_SOURCES:
+        # спеціалізоване джерело: досить згадки партнерства або техніки
+        return bool(AID_MARK.search(text) or AID_GOODS.search(text))
+    # у звичайних джерелах — лише якщо партнерство прямо в заголовку
+    # і поруч згадана техніка/обладнання (щоб не ловити будь-яку новину)
+    return bool(AID_MARK.search(title) and AID_GOODS.search(text))
+
+
 def feed_of(item: dict[str, Any]) -> str:
-    """'ua' — пряме фінансування для української організації, 'eu' — консорціум."""
+    """'ua' — пряме фінансування, 'eu' — консорціум, 'aid' — побратими й техніка."""
+    if is_aid(item):
+        return "aid"
     if (item.get("region") or "") == "UA":
         return "ua"
     text = f"{item.get('title') or ''} {item.get('summary') or ''}"
@@ -313,6 +353,13 @@ def screen(item: dict[str, Any], today: date | None = None) -> tuple[bool, str, 
     blob = f"{title} {summary} {body}"
     if VACANCY.search(blob[:900]):
         return False, "vacancy", deadline
+
+    # Вкладка 🤝 «Побратими та техніка»: тут повідомлення «місто N передало
+    # громаді M сміттєвоз» — це не шум, а контакт потенційного донора. Тому
+    # правила news / no_source / not_a_call / event не застосовуємо,
+    # а перевірки дедлайну, тендерів, вакансій і давності (вище) лишаються.
+    if feed_of(item) == "aid":
+        return True, "", deadline
 
     if source_id not in CALL_PORTALS:
         open_call = bool(OPEN_CALL.search(blob))

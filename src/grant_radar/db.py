@@ -40,7 +40,8 @@ CREATE TABLE IF NOT EXISTS opportunities (
     resolved_at   TEXT,
     actionable    INTEGER DEFAULT 1,   -- 0 = новина/протерміноване, у стрічці не показуємо
     hide_reason   TEXT DEFAULT '',
-    feed          TEXT DEFAULT 'ua',   -- ua = пряме фінансування, eu = консорціум ЄС
+    feed          TEXT DEFAULT 'ua',   -- ua = пряме фінансування, eu = консорціум ЄС,
+                                     -- aid = побратими й передача техніки
     llm_score     INTEGER,
     llm_summary   TEXT,
     llm_fit       TEXT,
@@ -231,7 +232,7 @@ class Database:
             sql += " AND apply_url IS NOT NULL AND apply_url <> ''"
         if not include_hidden:
             sql += " AND COALESCE(actionable, 1) = 1"
-        if feed in ("ua", "eu"):
+        if feed in ("ua", "eu", "aid"):
             sql += " AND COALESCE(feed, 'ua') = ?"
             args.append(feed)
         if budget_band:
@@ -323,6 +324,8 @@ class Database:
                          "AND COALESCE(feed,'ua')='ua'").fetchone()[0],
             "feed_eu": c("SELECT COUNT(*) FROM opportunities WHERE COALESCE(actionable,1)=1 "
                          "AND COALESCE(feed,'ua')='eu'").fetchone()[0],
+            "feed_aid": c("SELECT COUNT(*) FROM opportunities WHERE COALESCE(actionable,1)=1 "
+                          "AND COALESCE(feed,'ua')='aid'").fetchone()[0],
             "actionable": c("SELECT COUNT(*) FROM opportunities "
                             "WHERE COALESCE(actionable,1)=1").fetchone()[0],
             "budgets": budgets,

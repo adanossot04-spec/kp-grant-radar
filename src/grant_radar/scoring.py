@@ -20,8 +20,9 @@ import re
 from typing import Any, Pattern
 
 from .models import Opportunity
+from .screening import AID_GOODS, AID_MARK
 
-CORE_GROUPS = ("waste", "municipal", "urban", "transport", "business", "education",
+CORE_GROUPS = ("partnership", "waste", "municipal", "urban", "transport", "business", "education",
                "inclusion", "nature", "water", "safety", "health", "culture",
                "youth", "veterans", "housing", "digital", "tourism")
 BAND_LABEL = {"high": "🔥 Висока", "medium": "🟡 Середня", "low": "⚪ Низька"}
@@ -107,6 +108,15 @@ class Scorer:
 
         # Бонус: грант дозволяє придбати техніку, контейнери, обладнання —
         # для комунального підприємства це найцінніший тип підтримки.
+        # Партнерство громад / передача техніки — окремий тип можливості:
+        # це не конкурс, а контакт донора, тому «новинні» штрафи тут не діють.
+        partner_hit = ("partnership" in groups_title or "partnership" in groups_body
+                       or bool(AID_MARK.search(title) or AID_GOODS.search(title)))
+        if partner_hit:
+            base += float(self.cfg.get("partnership_bonus", 16)) * (
+                1.0 if "partnership" in groups_title else 0.6)
+            reasons.append("🤝 партнерство громад / передача техніки")
+
         has_equipment = "equipment" in groups_title or "equipment" in groups_body
         if has_equipment and core_any:
             bonus = float(self.cfg.get("equipment_bonus", 10))
@@ -123,7 +133,7 @@ class Scorer:
         if has_signal:
             base += self.signal["points"] * (1.0 if sig_th else 0.6)
             reasons.append(f"фінансування: {', '.join((sig_th + sig_bh)[:3])}")
-        elif is_news:
+        elif is_news and not partner_hit:
             base -= 18
             reasons.append("немає ознак конкурсу/фінансування")
 
@@ -166,7 +176,7 @@ class Scorer:
         if not core_title:
             # профільного слова немає в заголовку → максимум «середня»
             points = min(points, high - 1)
-        if is_news and not explicit_call:
+        if is_news and not explicit_call and not partner_hit:
             # новина без профільного слова в заголовку — майже завжди шум
             if not core_title and points > NEWS_CAP_NO_CORE_TITLE:
                 points = NEWS_CAP_NO_CORE_TITLE
