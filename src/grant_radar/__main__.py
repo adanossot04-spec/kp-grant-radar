@@ -4,6 +4,7 @@
     python -m grant_radar rescore      # перерахувати бали після правок profile.yaml
     python -m grant_radar resolve      # знайти першоджерела (де подавати заявку)
     python -m grant_radar screen       # відсіяти новини, вакансії та протерміноване
+    python -m grant_radar check        # самоперевірка: чи не лишилось протермінованого
     python -m grant_radar serve        # веб-дашборд на http://0.0.0.0:8000
     python -m grant_radar export       # статичний сайт у docs/ (GitHub Pages)
     python -m grant_radar digest       # дайджест у Markdown + Telegram
@@ -27,7 +28,7 @@ from .scoring import BAND_LABEL
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="grant_radar", description="Грант-радар для КП")
     ap.add_argument("command",
-                    choices=["collect", "rescore", "resolve", "screen", "serve", "export", "digest",
+                    choices=["collect", "rescore", "resolve", "screen", "check", "serve", "export", "digest",
                              "sources", "top", "memory", "draft"])
     ap.add_argument("--no-llm", action="store_true", help="не викликати LLM навіть за наявності ключа")
     ap.add_argument("--host", default="0.0.0.0")
@@ -91,6 +92,17 @@ def main(argv: list[str] | None = None) -> int:
         log.info("🗓 Дедлайнів знайдено в тексті: %d; знято хибних: %d",
                  res["deadlines"], res.get("cleared", 0))
         return 0
+
+    if args.command == "check":
+        from .screening import selfcheck
+        problems = selfcheck(db)
+        if not problems:
+            log.info("✅ Самоперевірка пройдена: протермінованих і зламаних дат немає")
+            return 0
+        log.error("❌ Знайдено проблем: %d", len(problems))
+        for line in problems[:30]:
+            log.error("   — %s", line)
+        return 1
 
     if args.command == "serve":
         import uvicorn

@@ -28,13 +28,14 @@ USER_LABEL = {"interesting": "⭐ цікаво", "in_progress": "✍️ готу
 def index(request: Request, q: str = "", band: str = "", region: str = "",
           source: str = "", status: str = "", order: str = "score", all: str = "",
           benef: str = "", group: str = "track", track: str = "", equip: str = "",
-          budget: str = "", apply: str = "", hidden: str = ""):
+          budget: str = "", apply: str = "", hidden: str = "", feed: str = "ua"):
     items = db.query(
         search=q or None, band=band or None, region=region or None,
         source_id=source or None, user_status=status or None,
         beneficiary=benef or None, track=track or None,
         equipment_only=bool(equip), budget_band=budget or None,
-        apply_only=bool(apply), include_hidden=bool(hidden), order=order,
+        apply_only=bool(apply), include_hidden=bool(hidden),
+        feed=None if feed == "all" else feed, order=order,
         only_active=not bool(all), limit=400,
     )
     # групування підсумкового списку
@@ -62,7 +63,7 @@ def index(request: Request, q: str = "", band: str = "", region: str = "",
                      "status": status, "order": order, "all": all,
                      "benef": benef, "group": group, "track": track,
                      "equip": equip, "budget": budget, "apply": apply,
-                     "hidden": hidden}.items() if v})
+                     "hidden": hidden, "feed": feed}.items() if v})
     return templates.TemplateResponse(request, "dashboard.html", {
         "items": items, "stats": stats,
         "org": profile.get("organization", {}),
@@ -78,8 +79,14 @@ def index(request: Request, q: str = "", band: str = "", region: str = "",
         "f": {"q": q, "band": band, "region": region, "source": source,
               "status": status, "order": order, "all": all, "benef": benef,
               "group": group, "track": track, "equip": equip, "budget": budget,
-              "apply": apply, "hidden": hidden},
+              "apply": apply, "hidden": hidden, "feed": feed},
         "qs": qs,
+        "qs_without_feed": urlencode({k: v for k, v in
+                                      {"q": q, "band": band, "region": region,
+                                       "source": source, "status": status, "order": order,
+                                       "all": all, "benef": benef, "group": group,
+                                       "track": track, "equip": equip, "budget": budget,
+                                       "apply": apply, "hidden": hidden}.items() if v}),
         "last_run": (last.get("finished_at") or "—")[:16].replace("T", " "),
     })
 

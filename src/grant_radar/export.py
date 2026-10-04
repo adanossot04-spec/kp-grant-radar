@@ -55,6 +55,13 @@ h2.gh span{background:var(--panel2);border:1px solid var(--line);border-radius:9
 .tag.origin{background:#132a1f;color:#8ff0b5;border-color:#1f5236;font-weight:600}
 .links{margin:8px 0 2px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .donorbtn{background:#2a3350!important;border-color:#3d4a73!important;color:#dce6ff!important}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 10px}
+.tab{display:flex;align-items:center;gap:7px;padding:9px 15px;border-radius:10px;cursor:pointer;
+     border:1px solid #273043;background:#141924;color:#9aa3b2;font-size:14px;font-family:inherit}
+.tab b{background:#1e2636;color:#cfd8e8;border-radius:20px;padding:1px 9px;font-size:12.5px}
+.tab:hover{border-color:#3a4a66;color:#cfd8e8}
+.tab.on{background:#17304a;border-color:#2f6ea6;color:#e8f1ff}
+.tab.on b{background:#235080;color:#fff}
 .applybtn{background:#1f7a4d;color:#eafff3;border:1px solid #2e9e66;border-radius:8px;
           padding:6px 12px;font-size:13px;font-weight:600;text-decoration:none}
 .src{color:#9aa3b2;font-size:12.5px;text-decoration:none;border-bottom:1px dotted #475}
@@ -83,6 +90,11 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
 <div class="stat"><b style="color:#d7a8f5">__EDU__</b><span>🎓 освіта</span></div>
 <div class="stat"><b style="color:#ffc07a">__EQUIP__</b><span>🚛 техніка / контейнери</span></div>
 <div class="stat"><b style="color:#8fe3e8">__BUDSM__</b><span>💶 до 500 тис. €</span></div>
+</div>
+<div class="tabs">
+  <button class="tab on" data-feed="ua">🇺🇦 Україна — пряме фінансування <b id="cnt_ua">0</b></button>
+  <button class="tab" data-feed="eu">🇪🇺 ЄС — консорціумні проєкти <b id="cnt_eu">0</b></button>
+  <button class="tab" data-feed="all">🌍 Усе разом <b id="cnt_all">0</b></button>
 </div>
 <div class="filters">
 <input type="text" id="q" placeholder="пошук: відходи, waste, Interreg…">
@@ -149,7 +161,8 @@ function section(title, items){
   return `<h2 class="gh">${title}<span>${items.length}</span></h2>` + items.map(card).join("");
 }
 function render(){
-  const q=document.getElementById("q").value.toLowerCase(),
+  const fd=window.FEED||"ua",
+        q=document.getElementById("q").value.toLowerCase(),
         b=document.getElementById("band").value,
         r=document.getElementById("region").value,
         tr=document.getElementById("track").value,
@@ -162,6 +175,7 @@ function render(){
   let rows=DATA.filter(d=>(!b||d.band===b)&&(!r||d.region===r)&&
     (!tr||(d.track||"other")===tr)&&(!eq||d.equipment)&&
     (!bu||(d.budget_band||"unknown")===bu)&&(!ap||d.apply_url)&&
+    (fd==="all"||(d.feed||"ua")===fd)&&
     (!n||d.beneficiary===n||(n!=="unknown"&&d.beneficiary==="both"))&&
     (!q||((d.title+" "+(d.summary||"")+" "+(d.llm_summary||"")).toLowerCase().includes(q))));
   rows.sort((x,y)=> o==="score" ? y.score-x.score
@@ -190,12 +204,26 @@ function render(){
   const el=document.getElementById(id);
   el.addEventListener("input",render); el.addEventListener("change",render);
 });
+
+// вкладки: 🇺🇦 пряме фінансування / 🇪🇺 консорціуми ЄС / усе разом
+window.FEED="ua";
+document.getElementById("cnt_ua").textContent  = DATA.filter(d=>(d.feed||"ua")==="ua").length;
+document.getElementById("cnt_eu").textContent  = DATA.filter(d=>(d.feed||"ua")==="eu").length;
+document.getElementById("cnt_all").textContent = DATA.length;
+document.querySelectorAll(".tab").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll(".tab").forEach(b=>b.classList.remove("on"));
+    btn.classList.add("on");
+    window.FEED=btn.dataset.feed;
+    render();
+  });
+});
 render();
 </script></body></html>
 """
 
 
-def export(db: Database, out_dir: Path | None = None, min_score: int = 20, limit: int = 800) -> Path:
+def export(db: Database, out_dir: Path | None = None, min_score: int = 12, limit: int = 1000) -> Path:
     out_dir = Path(out_dir or config.DOCS_DIR)
     out_dir.mkdir(parents=True, exist_ok=True)
     rows = db.query(min_score=min_score, limit=limit, only_active=True)

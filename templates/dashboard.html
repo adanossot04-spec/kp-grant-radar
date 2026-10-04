@@ -65,6 +65,13 @@
   .applybtn{background:#1f7a4d;color:#eafff3;border:1px solid #2e9e66;border-radius:8px;
             padding:6px 12px;font-size:13px;font-weight:600;text-decoration:none}
   .applybtn:hover{background:#2a9960}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 10px}
+  .tab{display:flex;align-items:center;gap:7px;padding:9px 15px;border-radius:10px;
+       border:1px solid #273043;background:#141924;color:#9aa3b2;text-decoration:none;font-size:14px}
+  .tab b{background:#1e2636;color:#cfd8e8;border-radius:20px;padding:1px 9px;font-size:12.5px}
+  .tab:hover{border-color:#3a4a66;color:#cfd8e8}
+  .tab.on{background:#17304a;border-color:#2f6ea6;color:#e8f1ff}
+  .tab.on b{background:#235080;color:#fff}
   .donorbtn{background:#2a3350;border-color:#3d4a73;color:#dce6ff}
   .donorbtn:hover{background:#36406a}
   .src{color:var(--muted);font-size:12.5px;text-decoration:none;border-bottom:1px dotted #475}
@@ -102,7 +109,19 @@
     <div class="stat"><b style="font-size:14px;padding-top:7px">{{ last_run }}</b><span>останнє сканування</span></div>
   </div>
 
+  <div class="tabs">
+    {% for key, icon, label, cnt in [
+        ('ua','🇺🇦','Україна — пряме фінансування', stats.feed_ua),
+        ('eu','🇪🇺','ЄС — консорціумні проєкти', stats.feed_eu),
+        ('all','🌍','Усе разом', stats.feed_ua + stats.feed_eu)] %}
+    <a class="tab {% if (f.feed or 'ua') == key %}on{% endif %}"
+       href="?{{ qs_without_feed }}{% if qs_without_feed %}&{% endif %}feed={{ key }}">
+      {{ icon }} {{ label }} <b>{{ cnt }}</b></a>
+    {% endfor %}
+  </div>
+
   <form class="filters" method="get">
+    <input type="hidden" name="feed" value="{{ f.feed or 'ua' }}">
     <input type="text" name="q" placeholder="пошук: відходи, waste, Interreg…" value="{{ f.q or '' }}">
     <select name="band">
       <option value="">усі рівні</option>

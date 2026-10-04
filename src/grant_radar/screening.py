@@ -200,11 +200,77 @@ REASON_TEXT = {
     "not_a_call": "стаття без ознак конкурсу чи фінансування",
     "event": "подія (вебінар, тренінг, форум), а не конкурс",
     "stale": "оголошення старше за рік, а дедлайн не підтверджено",
+    "tender": "тендер на закупівлю (підряд), а не грант для заявника",
 }
 
-# джерела, де запис без дедлайну — нормально (проєктний пайплайн, не конкурс із датою)
-NO_DEADLINE_OK = {"worldbank", "eu_ft_portal"}
+# закупівлі: тендер — це підряд на постачання, а не грант, який отримує
+# підприємство чи організація. Користувач просив таке не показувати.
+TENDER_SOURCES = {"ted", "prostir_tenders"}
+TENDER_MARK = re.compile(
+    r"^\s*(тендер|tender|оголошення про закупівл|contract notice|"
+    r"invitation to (?:bid|tender)|запит (?:цінових )?пропозиц|rfq|rfp)\b", re.I)
+CPV_MARK = re.compile(r"\bCPV[\s:]*\d{6,8}|cn-standard|contract notice", re.I)
+# слова, що свідчать: це все-таки грант, а не підряд
+GRANT_WORDS = re.compile(r"(грант|grant|субгрант|sub-?grant|стипенді|scholarship|"
+                         r"call for proposals|фінансова підтримка проєкт)", re.I)
+
+# джерела, де запис без дедлайну — нормально (портал ЄС публікує майбутні конкурси)
+NO_DEADLINE_OK = {"eu_ft_portal"}
+# скільки живе оголошення без підтвердженого дедлайну
 STALE_AFTER_DAYS = 365
+STALE_BY_SOURCE = {"worldbank": 1095}      # кредитні проєкти МФО тривають роками
+
+# явна ознака, що програму вже закрито
+CLOSED_MARK = re.compile(r"(статус:\s*closed|status:\s*closed|проєкт завершен|закрито для подачі)", re.I)
+
+
+def norm_date(raw: str | None) -> str | None:
+    """Зводить будь-яку дату до ISO. Нерозпізнане → None (а не «як є»).
+
+    Саме через збережений «як є» рядок `6/30/2025 12:00:00` закриті проєкти
+    Світового банку порівнювались із сьогоднішньою датою як текст («6» > «2»)
+    і вважались чинними.
+    """
+    if not raw:
+        return None
+    s = str(raw).strip()
+    try:
+        return datetime.fromisoformat(s.replace("Z", "+00:00")).date().isoformat()
+    except ValueError:
+        pass
+    m = re.match(r"(\d{1,2})[/.](\d{1,2})[/.](\d{4})", s)
+    if m:
+        try:
+            return date(int(m.group(3)), int(m.group(1)), int(m.group(2))).isoformat()
+        except ValueError:
+            return None
+    try:
+        from dateutil import parser as dtparser
+        return dtparser.parse(s, dayfirst=False).date().isoformat()
+    except Exception:
+        return None
+
+
+# конкурси, де український заявник отримує кошти напряму, проти
+# консорціумних програм ЄС, куди українська організація може зайти лише
+# партнером у складі консорціуму з країн-членів
+UA_MARK = re.compile(r"(україн|ukrain|ukraine)", re.I)
+EU_CONSORTIUM_SOURCES = {"eu_ft_portal", "ec_presscorner", "danube_region",
+                         "huskroua", "eu4environment", "euneighbours_east",
+                         "interreg", "life_programme", "cerv"}
+
+
+def feed_of(item: dict[str, Any]) -> str:
+    """'ua' — пряме фінансування для української організації, 'eu' — консорціум."""
+    if (item.get("region") or "") == "UA":
+        return "ua"
+    text = f"{item.get('title') or ''} {item.get('summary') or ''}"
+    if item.get("source_id") in EU_CONSORTIUM_SOURCES:
+        # навіть у порталі ЄС трапляються конкурси прямо для України
+        return "ua" if re.search(r"(for ukraine|в україні|для україни|ukraine[ -]based|"
+                                 r"ukrainian (?:organisations?|organizations?|companies|smes))",
+                                 text, re.I) else "eu"
+    return "ua" if UA_MARK.search(text) else "eu"
 
 
 def screen(item: dict[str, Any], today: date | None = None) -> tuple[bool, str, str | None]:
@@ -220,29 +286,29 @@ def screen(item: dict[str, Any], today: date | None = None) -> tuple[bool, str, 
     apply_url = (item.get("apply_url") or "").strip()
 
     # 1) дедлайн: беремо збережений або виймаємо з тексту
-    deadline = (item.get("deadline_at") or "").strip() or None
+    deadline = norm_date(item.get("deadline_at"))
     found = extract_deadline(title, summary, body, today=today,
                              published=item.get("published_at"))
     if not deadline and found:
         deadline = found
-    if deadline:
-        try:
-            dl = datetime.fromisoformat(deadline.replace("Z", "+00:00")).date()
-            if dl < today:
-                return False, "expired", deadline
-        except ValueError:
-            pass
+    if deadline and deadline < today.isoformat():
+        return False, "expired", deadline
+
+    if CLOSED_MARK.search(f"{title} {summary}"[:900]):
+        return False, "expired", deadline
 
     # старе оголошення без підтвердженого дедлайну — майже напевно вже закрите
     if not deadline and source_id not in NO_DEADLINE_OK:
-        published = (item.get("published_at") or "").strip()
-        if published:
-            try:
-                pub = datetime.fromisoformat(published.replace("Z", "+00:00")).date()
-                if (today - pub).days > STALE_AFTER_DAYS:
-                    return False, "stale", None
-            except ValueError:
-                pass
+        published = norm_date(item.get("published_at"))
+        limit = STALE_BY_SOURCE.get(source_id, STALE_AFTER_DAYS)
+        if published and (today - date.fromisoformat(published)).days > limit:
+            return False, "stale", None
+
+    head = f"{title} {summary}"[:900]
+    if not GRANT_WORDS.search(head) and (
+            source_id in TENDER_SOURCES or TENDER_MARK.search(title)
+            or CPV_MARK.search(head)):
+        return False, "tender", deadline
 
     blob = f"{title} {summary} {body}"
     if VACANCY.search(blob[:900]):
@@ -279,7 +345,7 @@ def screen_all(db, fetch: int = 0, workers: int = 8, redate: bool = False) -> di
                там дата приходить структуровано.
     """
     rows = [dict(r) for r in db.conn.execute(
-        "SELECT uid, title, summary, source_id, url, apply_url, deadline_at, "
+        "SELECT uid, title, summary, source_id, region, url, apply_url, deadline_at, "
         "published_at, resolved_at, score FROM opportunities ORDER BY score DESC")]
 
     bodies: dict[str, str] = {}
@@ -288,7 +354,8 @@ def screen_all(db, fetch: int = 0, workers: int = 8, redate: bool = False) -> di
             [r for r in rows if not (r.get("deadline_at") or "").strip()][:fetch], workers)
 
     counts = {"shown": 0, "news": 0, "vacancy": 0, "no_source": 0, "expired": 0,
-              "not_a_call": 0, "event": 0, "stale": 0, "deadlines": 0, "cleared": 0}
+              "not_a_call": 0, "event": 0, "stale": 0, "tender": 0,
+              "deadlines": 0, "cleared": 0}
     for r in rows:
         r["body"] = bodies.get(r["uid"], "")
         if redate and r.get("source_id") not in CALL_PORTALS:
@@ -306,12 +373,12 @@ def screen_all(db, fetch: int = 0, workers: int = 8, redate: bool = False) -> di
                 db.conn.execute("UPDATE opportunities SET deadline_at=NULL WHERE uid=?",
                                 (r["uid"],))
         ok, reason, deadline = screen(r)
-        if deadline and deadline != (r.get("deadline_at") or ""):
+        if deadline and deadline != (r.get("deadline_at") or "")[:10]:
             counts["deadlines"] += 1
         db.conn.execute(
-            "UPDATE opportunities SET actionable=?, hide_reason=?, deadline_at=COALESCE(?, deadline_at) "
-            "WHERE uid=?",
-            (1 if ok else 0, reason, deadline, r["uid"]))
+            "UPDATE opportunities SET actionable=?, hide_reason=?, feed=?, "
+            "deadline_at=COALESCE(?, deadline_at) WHERE uid=?",
+            (1 if ok else 0, reason, feed_of(r), deadline, r["uid"]))
         counts["shown" if ok else reason] += 1
     db.conn.commit()
     return counts
@@ -340,3 +407,32 @@ def _fetch_bodies(rows: list[dict[str, Any]], workers: int = 8) -> dict[str, str
 
     with ThreadPoolExecutor(max_workers=workers) as ex:
         return {uid: text for uid, text in ex.map(one, rows) if text}
+
+
+def selfcheck(db) -> list[str]:
+    """Перевіряє стрічку на типові помилки, які вже траплялись.
+
+    Повертає список проблем (порожній = все гаразд). Використовується
+    командою `python -m grant_radar check` і кроком у GitHub Actions,
+    щоб протермінований чи неформатований запис більше не доїжджав до сайту.
+    """
+    today = datetime.now(timezone.utc).date().isoformat()
+    rows = [dict(r) for r in db.conn.execute(
+        "SELECT uid, title, source_id, deadline_at, published_at, apply_url "
+        "FROM opportunities WHERE COALESCE(actionable,1)=1")]
+    problems: list[str] = []
+    for r in rows:
+        raw = (r.get("deadline_at") or "").strip()
+        if raw:
+            norm = norm_date(raw)
+            if not norm:
+                problems.append(f"нерозпізнана дата {raw!r}: {r['title'][:60]}")
+            elif norm < today:
+                problems.append(f"протерміновано {norm}: {r['title'][:60]}")
+        else:
+            pub = norm_date(r.get("published_at"))
+            limit = STALE_BY_SOURCE.get(r.get("source_id"), STALE_AFTER_DAYS)
+            if (pub and r.get("source_id") not in NO_DEADLINE_OK
+                    and (date.fromisoformat(today) - date.fromisoformat(pub)).days > limit):
+                problems.append(f"старе без дедлайну ({pub}): {r['title'][:60]}")
+    return problems

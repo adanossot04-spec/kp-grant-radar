@@ -86,11 +86,13 @@ sources:
         - "renewable energy local communities"
 
   # ───────────────────────── ЄС: тендери (безкоштовний API, без ключа) ────────
+  # Тендери ЄС — це підряди на постачання, а не гранти для заявника.
+  # Увімкніть (enabled: true), якщо колись знадобляться закупівлі.
   - id: ted
     name: "TED — тендери та закупівлі ЄС"
     type: ted
     region: EU
-    enabled: true
+    enabled: false
     weight: 0.9
     beneficiary_hint: private      # підряди найчастіше для бізнесу
     params:

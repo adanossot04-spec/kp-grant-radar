@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS opportunities (
     resolved_at   TEXT,
     actionable    INTEGER DEFAULT 1,   -- 0 = новина/протерміноване, у стрічці не показуємо
     hide_reason   TEXT DEFAULT '',
+    feed          TEXT DEFAULT 'ua',   -- ua = пряме фінансування, eu = консорціум ЄС
     llm_score     INTEGER,
     llm_summary   TEXT,
     llm_fit       TEXT,
@@ -102,7 +103,8 @@ class Database:
                          ("article_url", "TEXT DEFAULT ''"),
                          ("resolved_at", "TEXT"),
                          ("actionable", "INTEGER DEFAULT 1"),
-                         ("hide_reason", "TEXT DEFAULT ''")):
+                         ("hide_reason", "TEXT DEFAULT ''"),
+                         ("feed", "TEXT DEFAULT 'ua'")):
             if col not in have:
                 self.conn.execute(f"ALTER TABLE opportunities ADD COLUMN {col} {ddl}")
 
@@ -194,6 +196,7 @@ class Database:
         budget_band: str | None = None,
         apply_only: bool = False,
         include_hidden: bool = False,
+        feed: str | None = None,
         user_status: str | None = None,
         search: str | None = None,
         only_active: bool = True,
@@ -228,6 +231,9 @@ class Database:
             sql += " AND apply_url IS NOT NULL AND apply_url <> ''"
         if not include_hidden:
             sql += " AND COALESCE(actionable, 1) = 1"
+        if feed in ("ua", "eu"):
+            sql += " AND COALESCE(feed, 'ua') = ?"
+            args.append(feed)
         if budget_band:
             sql += " AND COALESCE(budget_band, 'unknown') = ?"
             args.append(budget_band)
@@ -313,6 +319,10 @@ class Database:
             "tracks": tracks, "equipment": equip,
             "regions": regions, "ua": regions.get("UA", 0), "resolved": resolved,
             "hidden": sum(hidden.values()), "hidden_by_reason": hidden,
+            "feed_ua": c("SELECT COUNT(*) FROM opportunities WHERE COALESCE(actionable,1)=1 "
+                         "AND COALESCE(feed,'ua')='ua'").fetchone()[0],
+            "feed_eu": c("SELECT COUNT(*) FROM opportunities WHERE COALESCE(actionable,1)=1 "
+                         "AND COALESCE(feed,'ua')='eu'").fetchone()[0],
             "actionable": c("SELECT COUNT(*) FROM opportunities "
                             "WHERE COALESCE(actionable,1)=1").fetchone()[0],
             "budgets": budgets,
@@ -340,7 +350,11 @@ def _days_left(deadline: str | None) -> int | None:
     if not deadline:
         return None
     try:
-        dt = datetime.fromisoformat(str(deadline).replace("Z", "+00:00"))
+        from .screening import norm_date
+        norm = norm_date(deadline)
+        if not norm:
+            return None
+        dt = datetime.fromisoformat(norm)
     except ValueError:
         return None
     if dt.tzinfo is None:

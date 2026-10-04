@@ -18,6 +18,8 @@ log = logging.getLogger(__name__)
 
 def build_markdown(db: Database, min_score: int = 40, only_new: bool = True) -> tuple[str, list[str]]:
     items = db.unnotified(min_score) if only_new else db.query(min_score=min_score, limit=40)
+    # спершу те, що українська організація отримує напряму
+    items.sort(key=lambda x: (0 if (x.get("feed") or "ua") == "ua" else 1, -(x.get("score") or 0)))
     today = datetime.now().strftime("%d.%m.%Y")
     if not items:
         return f"# Грант-радар — {today}\n\nНових релевантних можливостей не знайдено.\n", []
@@ -40,6 +42,8 @@ def build_markdown(db: Database, min_score: int = 40, only_new: bool = True) -> 
                 dl = f" · ⏳ дедлайн {it['deadline_at'][:10]} ({it['days_left']} дн.)"
             lines.append(f"## {BAND_LABEL.get(it['band'], '')} {it['score']}/100 — {it['title']}")
             marks = tracks_mod.SHORT.get(it.get("track") or "other", "")
+            if (it.get("feed") or "ua") == "eu":
+                marks += " · 🇪🇺 консорціумний проєкт ЄС"
             if it.get("equipment"):
                 marks += " · 🚛 техніка/контейнери"
             if it.get("apply_host"):

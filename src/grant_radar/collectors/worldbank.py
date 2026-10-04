@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 import logging
+import re
 from datetime import datetime
 from typing import Any
 
@@ -69,9 +70,28 @@ def collect(source: dict[str, Any]) -> list[Opportunity]:
 
 
 def _norm(raw: str | None) -> str | None:
+    """API Світового банку віддає дати то в ISO, то у форматі `6/30/2025 12:00:00`.
+
+    Раніше неформатована дата зберігалась «як є» — і такий рядок не міг
+    порівнятися з поточною датою, тож закриті проєкти показувались як чинні.
+    Тепер будь-яка дата зводиться до ISO, а нерозпізнана відкидається.
+    """
     if not raw:
         return None
+    s = str(raw).strip()
     try:
-        return datetime.fromisoformat(str(raw).replace("Z", "+00:00")).isoformat(timespec="seconds")
+        return datetime.fromisoformat(s.replace("Z", "+00:00")).isoformat(timespec="seconds")
     except ValueError:
-        return str(raw)[:19] or None
+        pass
+    m = re.match(r"(\d{1,2})[/.](\d{1,2})[/.](\d{4})", s)          # M/D/YYYY
+    if m:
+        try:
+            return datetime(int(m.group(3)), int(m.group(1)), int(m.group(2))).isoformat(timespec="seconds")
+        except ValueError:
+            return None
+    try:
+        from dateutil import parser as dtparser
+        return dtparser.parse(s, dayfirst=False).isoformat(timespec="seconds")
+    except Exception:
+        log.debug("World Bank: невідомий формат дати %r", s)
+        return None
