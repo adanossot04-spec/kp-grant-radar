@@ -6,6 +6,7 @@
 from __future__ import annotations
 
 import json
+import re
 from datetime import datetime
 from pathlib import Path
 
@@ -328,7 +329,7 @@ DONORS_HTML = """<!DOCTYPE html>
 <header><h1>🤝 Реєстр донорів і партнерів</h1>
 <div class="sub">__ORG__ · пріоритет = Д (доведеність) + М (місток) + З (збіг потреби) − В (вартість входу) · оновлено __UPDATED__</div></header>
 <div class="wrap">
- <div class="nav"><a href="index.html">← до стрічки грантів</a><a href="#" class="on">📇 Реєстр донорів</a></div>
+ <div class="nav"><a href="index.html">← до стрічки грантів</a><a href="#" class="on">📇 Реєстр донорів</a><a href="danube.html">🌊 Громади на Дунаї</a></div>
  <div class="stats">
   <div class="stat"><b id="s_total">0</b><span>донорів</span></div>
   <div class="stat"><b id="s_hot" style="color:#ff6b4a">0</b><span>🔥 гарячі (7+)</span></div>
@@ -404,7 +405,8 @@ def export_donors(db: Database, out_dir: Path | None = None) -> Path:
 
     out_dir = Path(out_dir or config.DOCS_DIR)
     out_dir.mkdir(parents=True, exist_ok=True)
-    rows = db.donors(limit=2000)
+    rows = [r for r in db.donors(limit=2000)
+            if not str(r.get("uid") or "").startswith("danube:")]
     for r in rows:
         r["letter"] = donors_mod.build_letter(r)
     org = config.load_profile().get("community", {})
@@ -421,3 +423,171 @@ def export_donors(db: Database, out_dir: Path | None = None) -> Path:
     (out_dir / "donors.json").write_text(
         json.dumps(rows, ensure_ascii=False, indent=1), encoding="utf-8")
     return path
+
+
+DANUBE_HTML = """<!DOCTYPE html>
+<html lang="uk"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🌊 Придунайські громади — Грант-радар</title>
+<style>
+ :root{--bg:#0f1115;--panel:#171a21;--panel2:#1e222b;--line:#2a2f3a;--txt:#e8eaef;--muted:#9aa3b2;--accent:#4f9cf9}
+ *{box-sizing:border-box}
+ body{margin:0;background:var(--bg);color:var(--txt);font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+ a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+ header{background:linear-gradient(135deg,#102433,#101520);border-bottom:1px solid var(--line);padding:22px 28px}
+ h1{margin:0 0 4px;font-size:22px}.sub{color:var(--muted);font-size:13.5px}
+ .wrap{max-width:1400px;margin:0 auto;padding:18px 22px 60px}
+ .nav{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+ .nav a{padding:9px 15px;border-radius:10px;border:1px solid #273043;background:#141924;color:#9aa3b2;font-size:14px}
+ .nav a.on{background:#17304a;border-color:#2f6ea6;color:#e8f1ff}
+ .stats{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+ .stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 14px;min-width:120px}
+ .stat b{display:block;font-size:20px}.stat span{color:var(--muted);font-size:12px}
+ .hint{background:#111a22;border:1px solid #23394a;border-radius:12px;padding:12px 15px;color:#b7c0cf;font-size:13px;margin:10px 0 14px}
+ .filters{display:flex;gap:8px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;margin:12px 0}
+ .filters input,.filters select{background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:14px}
+ table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+ th,td{padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top;font-size:13.5px}
+ th{background:#141a24;color:var(--muted);text-align:left;white-space:nowrap}
+ tr:hover td{background:#1a1f29}
+ .pri{font-weight:700;border-radius:8px;padding:3px 9px;display:inline-block}
+ .hot{background:#3a1a14;color:#ff9d84;border:1px solid #7a2f1f}
+ .warm{background:#332a12;color:#f6cf7a;border:1px solid #6b571f}
+ .cold{background:#20242e;color:#9aa3b2;border:1px solid #333a48}
+ .badge{display:inline-block;background:var(--panel2);border:1px solid var(--line);border-radius:20px;padding:2px 9px;font-size:12px;color:#cfd8e8}
+ button{border-radius:8px;padding:5px 10px;font-size:12.5px;cursor:pointer}
+ button.copy{background:#14301f;border:1px solid #2e9e66;color:#9be8bb}
+ button.show{background:#182438;border:1px solid #2e4a6b;color:#cfe0ff}
+ .letter{display:none;white-space:pre-wrap;background:#10141c;border:1px solid var(--line);border-radius:10px;
+         padding:12px;margin-top:8px;font:12.5px/1.55 ui-monospace,Menlo,Consolas,monospace;color:#d7dee9}
+ footer{color:var(--muted);font-size:12px;text-align:center;padding:22px}
+</style></head><body>
+<header><h1>🌊 Придунайські громади: Австрія · Угорщина · Румунія</h1>
+<div class="sub">__ORG__ · спільний річковий басейн Тиса → Дунай · оновлено __UPDATED__</div></header>
+<div class="wrap">
+ <div class="nav"><a href="index.html">← стрічка грантів</a><a href="donors.html">📇 реєстр донорів</a>
+  <a href="#" class="on">🌊 Дунай</a></div>
+ <div class="stats">
+  <div class="stat"><b id="s_total">0</b><span>громад на Дунаї</span></div>
+  <div class="stat"><b id="s_mail" style="color:#5fd39a">0</b><span>з e-mail</span></div>
+  <div class="stat"><b id="s_at">0</b><span>🇦🇹 Австрія</span></div>
+  <div class="stat"><b id="s_hu">0</b><span>🇭🇺 Угорщина</span></div>
+  <div class="stat"><b id="s_ro">0</b><span>🇷🇴 Румунія</span></div>
+ </div>
+ <div class="hint">Аргумент листа: наша громада стоїть на <b>Тисі — найбільшій притоці Дунаю</b>, і відходи,
+  не зібрані у верхів'ї, за кілька днів опиняються нижче за течією. Наведення ладу з ТПВ у Вилоцькій громаді
+  напряму зменшує забруднення спільного басейну — це мова Рамкової водної директиви ЄС, ICPDR та стратегії EUSDR.
+  Текст листа береться з <code>config/profile.yaml</code> (блоки <code>situation</code> і <code>water</code>),
+  перелік громад — з <code>config/danube_partners.yaml</code>.</div>
+ <div class="filters">
+  <input type="text" id="q" placeholder="пошук: громада, e-mail…">
+  <select id="country"><option value="">усі країни</option><option value="AT">🇦🇹 Австрія</option>
+   <option value="HU">🇭🇺 Угорщина</option><option value="RO">🇷🇴 Румунія</option></select>
+  <select id="mail"><option value="">усі</option><option value="1">лише з e-mail</option>
+   <option value="0">без e-mail (треба знайти)</option></select>
+  <select id="pop"><option value="0">будь-який розмір</option><option value="5000">від 5 тис. мешканців</option>
+   <option value="20000">від 20 тис. мешканців</option><option value="100000">від 100 тис.</option></select>
+ </div>
+ <table><thead><tr><th>бал</th><th>громада</th><th>країна</th><th>мешканців</th><th>мова</th>
+   <th>e-mail</th><th>сайт</th><th>лист</th></tr></thead><tbody id="rows"></tbody></table>
+</div>
+<footer>Перелік оновлюється: <code>python scripts/fetch_danube_partners.py</code> → <code>python -m grant_radar danube</code>
+ · розсилка: <code>data/danube_mailing.csv</code></footer>
+<script>
+const P = __PARTNERS__, TPL = __LETTERS__;
+const esc = s => (s||'').replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const cls = p => p >= 7 ? 'hot' : (p >= 4 ? 'warm' : 'cold');
+const letterFor = r => (TPL[r.lang] || TPL['en'] || '').split('%%NAME%%').join(r.name);
+function draw(){
+  const q = document.getElementById('q').value.toLowerCase();
+  const cc = document.getElementById('country').value;
+  const mf = document.getElementById('mail').value;
+  const pf = parseInt(document.getElementById('pop').value, 10);
+  const rows = P.filter(r =>
+    (!cc || r.country === cc) &&
+    (mf === '' || (mf === '1' ? !!r.email : !r.email)) &&
+    (r.population || 0) >= pf &&
+    (!q || (r.name + ' ' + (r.email||'') + ' ' + (r.admin||'')).toLowerCase().includes(q)));
+  document.getElementById('rows').innerHTML = rows.map((r, i) => `
+    <tr><td><span class="pri ${cls(r.priority)}">${r.priority}</span></td>
+    <td><b>${esc(r.name)}</b>${r.admin ? '<div class="badge">' + esc(r.admin) + '</div>' : ''}</td>
+    <td>${r.country}</td><td>${r.population ? r.population.toLocaleString('uk-UA') : '—'}</td>
+    <td>${r.lang}</td>
+    <td>${r.email ? '<a href="mailto:' + esc(r.email) + '?subject=' + encodeURIComponent(r.subject) + '">' + esc(r.email) + '</a>' : '<span class="badge">немає</span>'}</td>
+    <td>${r.site ? '<a href="' + esc(r.site) + '" target="_blank" rel="noopener">сайт</a>' : '—'}</td>
+    <td><button class="show" data-i="${i}">✉️ лист</button>
+        <button class="copy" data-c="${i}">копіювати</button>
+        <div class="letter" id="L${i}"></div></td></tr>`).join('');
+  document.querySelectorAll('button.show').forEach(b => b.onclick = () => {
+    const el = document.getElementById('L' + b.dataset.i);
+    if (!el.textContent) el.textContent = letterFor(rows[b.dataset.i]);
+    el.style.display = el.style.display === 'block' ? 'none' : 'block';
+  });
+  document.querySelectorAll('button.copy').forEach(b => b.onclick = () => {
+    navigator.clipboard.writeText(letterFor(rows[b.dataset.c]));
+    b.textContent = '✓ скопійовано'; setTimeout(() => b.textContent = 'копіювати', 1500);
+  });
+  document.getElementById('s_total').textContent = rows.length;
+  document.getElementById('s_mail').textContent = rows.filter(r => r.email).length;
+  ['AT','HU','RO'].forEach(c =>
+    document.getElementById('s_' + c.toLowerCase()).textContent = P.filter(r => r.country === c).length);
+}
+['q','country','mail','pop'].forEach(id => document.getElementById(id).addEventListener('input', draw));
+draw();
+</script></body></html>
+"""
+
+
+def export_danube(db: Database, out_dir: Path | None = None) -> Path:
+    """Сторінка каналу «Дунайський басейн» зі списком громад і листами."""
+    from . import danube as danube_mod
+    from . import donors as donors_mod
+
+    out_dir = Path(out_dir or config.DOCS_DIR)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    rows = []
+    for d in danube_mod.list_donors(db):
+        pop = re.search(r"([\d\s]+) мешканців", d.get("notes") or "")
+        rows.append({
+            "name": d.get("name", ""), "country": d.get("country", ""),
+            "lang": d.get("lang", "en"), "email": d.get("contact_email", ""),
+            "phone": d.get("contact_phone", ""), "site": d.get("site", ""),
+            "priority": d.get("priority", 0),
+            "admin": (d.get("notes") or "").split(" · ")[0]
+                     if " · " in (d.get("notes") or "") else "",
+            "population": int(re.sub(r"\D", "", pop.group(1)) or 0) if pop else 0,
+            "subject": _subject_for(d.get("lang", "en")),
+        })
+    # лист однаковий для всіх громад однією мовою — зберігаємо один шаблон
+    letters = {}
+    for lang in {r["lang"] for r in rows} or {"de"}:
+        letters[lang] = donors_mod.build_letter(
+            {"uid": "danube:tpl", "name": "%%NAME%%", "country": "",
+             "goods": "waste", "lang": lang, "what": "", "news_url": "",
+             "priority": "", "proven": "", "bridge": "", "need": "", "cost": ""},
+            lang=lang)
+    org = config.load_profile().get("community", {})
+    html = (DANUBE_HTML
+            .replace("__PARTNERS__", json.dumps(rows, ensure_ascii=False))
+            .replace("__LETTERS__", json.dumps(letters, ensure_ascii=False))
+            .replace("__ORG__", f"{org.get('name_uk', '')} · {org.get('region_uk', '')}")
+            .replace("__UPDATED__", datetime.now().strftime("%d.%m.%Y %H:%M")))
+    path = out_dir / "danube.html"
+    path.write_text(html, encoding="utf-8")
+    (out_dir / "danube.json").write_text(
+        json.dumps(rows, ensure_ascii=False, indent=1), encoding="utf-8")
+    return path
+
+
+_SUBJECTS = {
+    "hu": "Együttműködési kezdeményezés – Tiszaújlak (Vylok), Kárpátalja",
+    "de": "Kooperationsanfrage – Gemeinde Vylok, Transkarpatien, Ukraine",
+    "ro": "Propunere de parteneriat – comunitatea Vylok, Transcarpatia, Ucraina",
+    "pl": "Propozycja współpracy – gmina Wyłok, Zakarpacie, Ukraina",
+    "en": "Partnership request – Vylok hromada, Zakarpattia, Ukraine",
+    "uk": "Пропозиція співпраці — Вилоцька громада, Закарпаття",
+}
+
+
+def _subject_for(lang: str) -> str:
+    return _SUBJECTS.get(lang, _SUBJECTS["en"])

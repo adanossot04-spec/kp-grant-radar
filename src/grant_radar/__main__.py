@@ -30,7 +30,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("command",
                     choices=["collect", "rescore", "resolve", "screen", "check", "serve", "export", "digest",
                              "sources", "top", "memory", "draft",
-                             "donors", "letter", "contacts"])
+                             "donors", "letter", "contacts", "danube"])
     ap.add_argument("--no-llm", action="store_true", help="не викликати LLM навіть за наявності ключа")
     ap.add_argument("--host", default="0.0.0.0")
     ap.add_argument("--port", type=int, default=8000)
@@ -50,7 +50,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--donor", type=int, default=None,
                     help="id донора з реєстру для команди letter")
     ap.add_argument("--lang", default=None,
-                    help="мова листа: hu | de | pl | en | uk (типово — мова країни донора)")
+                    help="мова листа: hu | de | pl | ro | en | uk (типово — мова країни донора)")
     ap.add_argument("--min-priority", type=int, default=4,
                     help="для donors/letter: мінімальний пріоритет донора")
     ap.add_argument("--benef", default=None,
@@ -136,6 +136,26 @@ def main(argv: list[str] | None = None) -> int:
                      (d["name"] or "—")[:26],
                      donors_mod.GOODS_LABEL.get(d["goods"], d["goods"])[:22],
                      donors_mod.STATUS_LABEL.get(d["status"], d["status"]))
+        return 0
+
+    if args.command == "danube":
+        from . import danube as danube_mod
+        from . import donors as donors_mod
+        from . import export as export_mod
+        res = danube_mod.seed(db)
+        st = danube_mod.stats(db)
+        log.info("🌊 Придунайські громади: +%d нових, оновлено %d, усього %d",
+                 res["added"], res["updated"], st["total"])
+        for cc, cnt in sorted(st["by_country"].items()):
+            log.info("   %-3s %-12s %4d громад · з e-mail %d", cc,
+                     donors_mod.COUNTRY_NAME.get(cc, cc), cnt,
+                     st["with_email"].get(cc, 0))
+        paths = danube_mod.write_letters(db, limit=args.limit if args.limit > 15 else 1000)
+        log.info("   ✉️  Персональних листів: %d (тека data/letters_danube)", len(paths))
+        csv_path = danube_mod.export_mailing(db)
+        log.info("   📊 Список розсилки: %s", csv_path)
+        page = export_mod.export_danube(db)
+        log.info("   🌐 Сторінка: %s", page)
         return 0
 
     if args.command == "letter":

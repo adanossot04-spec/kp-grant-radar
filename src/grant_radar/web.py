@@ -169,8 +169,8 @@ def donor_letter(donor_id: int, lang: str = ""):
         f'<a href="/donors/{donor_id}/letter?lang={code}" '
         f'style="margin-right:10px">{label}</a>'
         for code, label in [("hu", "угорською"), ("de", "німецькою"),
-                            ("pl", "польською"), ("en", "англійською"),
-                            ("uk", "українською")])
+                            ("pl", "польською"), ("ro", "румунською"),
+                            ("en", "англійською"), ("uk", "українською")])
     return HTMLResponse(
         "<html><head><meta charset='utf-8'><title>Лист донору</title></head>"
         "<body style='background:#0f1115;color:#e8eaef;font:15px/1.6 system-ui;padding:26px'>"

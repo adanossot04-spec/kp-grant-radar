@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import csv
 import re
+import textwrap
 from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -69,6 +70,7 @@ COUNTRY_NAME = {
 # мова листування за країною
 LANG_BY_COUNTRY = {
     "HU": "hu", "DE": "de", "AT": "de", "CH": "de", "PL": "pl", "UA": "uk",
+    "RO": "ro",
 }
 
 # ───────────────── що саме передали (тип допомоги) ─────────────────
@@ -132,7 +134,7 @@ ORG_LABEL = {
 CIRCLE_LABEL = {
     1: "1 · угорський канал", 2: "2 · прикордоння і Тиса",
     3: "3 · слід сусіда (Закарпаття)", 4: "4 · профільні мережі",
-    5: "5 · освітні донори",
+    5: "5 · освітні донори", 6: "6 · Дунайський басейн",
 }
 
 STATUS_LABEL = {
@@ -348,6 +350,7 @@ mintegy {population} fő, jelentős részük magyar anyanyelvű.
 {reference_hu}
 
 {situation}
+{water}
 Legfontosabb szükségleteink:
 {needs_hu}
 
@@ -357,15 +360,15 @@ készek vagyunk testvértelepülési megállapodást aláírni.
 
 Hálásak lennénk, ha egy online megbeszélés vagy levélváltás keretében
 megvitathatnánk az együttműködés lehetséges formáit. Hisszük, hogy közös
-erővel megállíthatjuk a környezeti válságot, és tiszta, biztonságos jövőt
-teremthetünk térségünk számára.
+erővel megállíthatjuk a környezeti válságot, és tisztább vizet, biztonságos
+jövőt teremthetünk mindannyiunk folyói mentén.
 
 Köszönettel és tisztelettel,
 {person_en}{position_part_en}
 {name_hu} · {name_en}
 {email} · {phone}{website_part}""",
 
-"de": """Betreff: Kooperationsanfrage – {name_de} ({center_en}), Transkarpatien, Ukraine
+"de": """Betreff: Kooperationsanfrage – {name_de} ({center_hu}), Transkarpatien, Ukraine
 
 Sehr geehrte Damen und Herren,
 
@@ -376,6 +379,7 @@ Einwohner, direkt an der EU-Außengrenze ({border}).
 {reference_de}
 
 {situation}
+{water}
 Unser vorrangiger Bedarf:
 {needs_de}
 
@@ -385,8 +389,8 @@ Partnerschaftsvereinbarung würden wir gerne unterzeichnen.
 
 Wir würden uns sehr freuen, mögliche Wege der Zusammenarbeit in einem
 Online-Gespräch oder im Schriftverkehr zu besprechen. Gemeinsam können wir die
-ökologische Krise stoppen und unserer Region eine saubere und sichere Zukunft
-sichern.
+ökologische Krise stoppen und für sauberes Wasser und eine sichere Zukunft
+entlang unserer gemeinsamen Flüsse sorgen.
 
 Mit freundlichen Grüßen,
 {person_en}{position_part_en}
@@ -401,11 +405,12 @@ zwracamy się do Państwa w imieniu gminy {center_en} (Zakarpacie, Ukraina):
 {settlements} miejscowości, około {population} mieszkańców, przy samej granicy
 z Unią Europejską ({border}).
 
-{reference_en}
+{reference_pl}
 
 {situation}
+{water}
 Nasze priorytetowe potrzeby:
-{needs_en}
+{needs_pl}
 
 Pokrywamy odprawę celną, transport po stronie ukraińskiej, eksploatację i
 ubezpieczenie. Zobowiązujemy się do sprawozdania ze zdjęciami oraz jesteśmy
@@ -413,9 +418,39 @@ gotowi podpisać umowę o współpracy partnerskiej.
 
 Będziemy wdzięczni za możliwość omówienia form współpracy podczas spotkania
 online lub korespondencji roboczej. Wierzymy, że wspólnymi siłami zatrzymamy
-kryzys ekologiczny i zapewnimy regionowi czystą i bezpieczną przyszłość.
+kryzys ekologiczny i zapewnimy czystszą wodę oraz bezpieczną przyszłość
+naszym regionom.
 
 Z wyrazami szacunku,
+{person_en}{position_part_en}
+{name_en}
+{email} · {phone}{website_part}""",
+
+"ro": """Subiect: Propunere de parteneriat – comunitatea {center_en} ({center_hu}), Transcarpatia, Ucraina
+
+Stimată doamnă primar, stimate domnule primar, stimați colegi,
+
+Vă scriem în numele comunității {center_en} ({center_hu}) din regiunea
+Transcarpatia, Ucraina: {settlements} localități, aproximativ {population} de
+locuitori, chiar la frontiera Uniunii Europene ({border}).
+
+{reference_ro}
+
+{situation}
+{water}
+Nevoile noastre prioritare:
+{needs_ro}
+
+Ne asumăm vămuirea, transportul pe teritoriul Ucrainei, întreținerea și
+asigurarea. Vom prezenta un raport foto privind utilizarea echipamentelor și
+suntem pregătiți să semnăm un memorandum de cooperare.
+
+V-am fi sincer recunoscători pentru posibilitatea de a discuta formele
+concrete de cooperare într-o întâlnire online sau prin corespondență. Credem
+că împreună putem opri criza ecologică și putem asigura apă mai curată și un
+viitor sigur de-a lungul râurilor pe care le împărțim.
+
+Cu deosebită considerație,
 {person_en}{position_part_en}
 {name_en}
 {email} · {phone}{website_part}""",
@@ -431,6 +466,7 @@ settlements, about {population} residents, located directly on the EU border
 {reference_en}
 
 {situation}
+{water}
 Our priority needs:
 {needs_en}
 
@@ -440,8 +476,8 @@ release, and we are ready to sign a twinning memorandum.
 
 We would be sincerely grateful for the opportunity to discuss possible forms of
 cooperation in an online meeting or by correspondence. We believe that together
-we can stop this environmental crisis and secure a clean and safe future for
-our region.
+we can stop this environmental crisis and secure cleaner water and a safe
+future along the rivers we share.
 
 Kind regards,
 {person_en}{position_part_en}
@@ -458,6 +494,7 @@ Kind regards,
 {reference_uk}
 
 {situation}
+{water}
 Першочергові потреби:
 {needs_uk}
 
@@ -467,8 +504,8 @@ Kind regards,
 
 Будемо щиро вдячні за можливість обговорити потенційні шляхи співпраці під час
 онлайн-зустрічі чи робочого листування. Віримо, що спільними зусиллями ми
-зможемо зупинити екологічну кризу та забезпечити чисте і безпечне майбутнє для
-нашого регіону.
+зможемо зупинити екологічну кризу та забезпечити чистішу воду і безпечне
+майбутнє вздовж наших спільних річок.
 
 З повагою,
 {person_uk}{position_part_uk}
@@ -476,16 +513,53 @@ Kind regards,
 {email} · {phone}{website_part}""",
 }
 
+# ── привід для листа: новина про допомогу, яку донор уже надавав ──
 REFERENCE = {
     "hu": "Értesültünk arról, hogy Önök {date_part}{what_hu}. Ezért fordulunk "
           "Önökhöz azzal a kéréssel, hogy fontolják meg a velünk való "
           "együttműködést is.",
     "de": "Wir haben erfahren, dass Sie {date_part}{what_de}. Deshalb wenden "
           "wir uns mit der Bitte um Zusammenarbeit an Sie.",
+    "pl": "Dowiedzieliśmy się, że {date_part}wsparli Państwo ukraińską gminę: "
+          "«{what}». Dlatego zwracamy się do Państwa.",
+    "ro": "Am aflat că {date_part}ați sprijinit o comunitate din Ucraina: "
+          "«{what}». De aceea ne adresăm dumneavoastră.",
     "en": "We have learned that {date_part}you supported a Ukrainian community: "
           "«{what}». This is why we are turning to you.",
     "uk": "Ми дізналися, що {date_part}ви підтримали українську громаду: "
           "«{what}». Саме тому звертаємося до вас.",
+}
+
+# ── привід для громад Дунайського басейну (спільна річка, а не новина) ──
+REFERENCE_DANUBE = {
+    "hu": "Önökhöz, {donor} önkormányzatához fordulunk, mint a Duna partján "
+          "fekvő közösséghez. Községünk a Tisza partján fekszik, amely a Duna "
+          "legnagyobb mellékfolyója, így egy vízgyűjtő terület két végén élünk: "
+          "ami nálunk a hulladékkal történik, néhány nap alatt az Önök "
+          "folyószakaszának vízminőségét is érinti.",
+    "de": "Wir wenden uns an die Gemeinde {donor} als Kommune an der Donau. "
+          "Unsere Gemeinde liegt an der Theiß, dem größten Nebenfluss der "
+          "Donau — wir leben also an zwei Enden desselben Einzugsgebiets: Was "
+          "bei uns mit dem Abfall geschieht, erreicht binnen weniger Tage auch "
+          "Ihren Flussabschnitt.",
+    "pl": "Zwracamy się do gminy {donor} jako do samorządu położonego nad "
+          "Dunajem. Nasza gmina leży nad Cisą, największym dopływem Dunaju — "
+          "mieszkamy więc na dwóch końcach tego samego dorzecza: to, co dzieje "
+          "się u nas z odpadami, w ciągu kilku dni dotyczy także Państwa "
+          "odcinka rzeki.",
+    "ro": "Ne adresăm localității {donor}, în calitate de comunitate situată "
+          "pe Dunăre. Comunitatea noastră se află pe Tisa, cel mai mare afluent "
+          "al Dunării — trăim deci la cele două capete ale aceluiași bazin "
+          "hidrografic: ceea ce se întâmplă la noi cu deșeurile ajunge în "
+          "câteva zile și pe sectorul dumneavoastră de râu.",
+    "en": "We are writing to the municipality of {donor} as a community on the "
+          "Danube. Our hromada lies on the Tisza, the largest tributary of the "
+          "Danube — we live at two ends of the same river basin: what happens "
+          "with waste here reaches your stretch of the river within days.",
+    "uk": "Звертаємося до громади {donor} як до самоврядування на Дунаї. Наша "
+          "громада стоїть на Тисі — найбільшій притоці Дунаю, тож ми живемо на "
+          "двох кінцях одного річкового басейну: те, що відбувається з "
+          "відходами в нас, за кілька днів стосується і вашої ділянки річки.",
 }
 
 
@@ -494,15 +568,23 @@ MONTHS = {
            "August", "September", "Oktober", "November", "Dezember"],
     "en": ["", "January", "February", "March", "April", "May", "June", "July",
            "August", "September", "October", "November", "December"],
+    "pl": ["", "styczniu", "lutym", "marcu", "kwietniu", "maju", "czerwcu",
+           "lipcu", "sierpniu", "wrześniu", "październiku", "listopadzie",
+           "grudniu"],
+    "ro": ["", "ianuarie", "februarie", "martie", "aprilie", "mai", "iunie",
+           "iulie", "august", "septembrie", "octombrie", "noiembrie",
+           "decembrie"],
     "uk": ["", "січні", "лютому", "березні", "квітні", "травні", "червні",
            "липні", "серпні", "вересні", "жовтні", "листопаді", "грудні"],
 }
+
+LETTER_LANGS = ("uk", "en", "de", "hu", "pl", "ro")
 
 
 def _needs_block(community: dict[str, Any], lang: str, goods: str) -> str:
     needs = community.get("needs") or {}
     topic = "edu" if goods == "edu" else "waste"
-    key = f"{topic}_{lang if lang in ('uk', 'en', 'de', 'hu') else 'en'}"
+    key = f"{topic}_{lang if lang in LETTER_LANGS else 'en'}"
     items = needs.get(key) or needs.get(f"{topic}_en") or []
     lines = []
     for i, raw in enumerate(items, 1):
@@ -513,12 +595,49 @@ def _needs_block(community: dict[str, Any], lang: str, goods: str) -> str:
     return "\n".join(lines)
 
 
-def _situation_block(community: dict[str, Any], lang: str, goods: str) -> str:
-    """Опис ситуації громади з `config/profile.yaml` → `community.situation`."""
-    key = "situation_edu" if goods == "edu" else "situation"
-    block = (community.get(key) or {})
+def _profile_block(community: dict[str, Any], key: str, lang: str) -> str:
+    block = community.get(key) or {}
     text = block.get(lang) or block.get("en") or block.get("uk") or ""
     return text.rstrip() + "\n" if text else ""
+
+
+def _situation_block(community: dict[str, Any], lang: str, goods: str) -> str:
+    """Опис ситуації громади з `config/profile.yaml` → `community.situation`."""
+    return _profile_block(community, "situation_edu" if goods == "edu"
+                          else "situation", lang)
+
+
+def _water_block(community: dict[str, Any], lang: str, goods: str) -> str:
+    """Водний аргумент (Тиса → Дунай) з `config/profile.yaml` → `community.water`.
+
+    Додається до всіх листів про відходи й комунальну техніку: забруднення
+    басейну Дунаю стосується і сусідів нижче за течією, і донорів, які
+    фінансують екологічні проєкти. Для суто освітніх звернень пропускається.
+    """
+    if goods == "edu":
+        return ""
+    return _profile_block(community, "water", lang)
+
+
+_SUBJECT_RX = re.compile(r"^(Betreff|T[áa]rgy|Subject|Temat|Subiect|Тема):")
+
+
+def _reflow(body: str, width: int = 78) -> str:
+    """Вирівнює абзаци, у які підставилися довгі значення з профілю.
+
+    Чіпаємо лише суцільні абзаци: списки (рядки з відступом), тему листа
+    й підпис лишаємо як є, щоб не зламати форматування.
+    """
+    out = []
+    for block in body.split("\n\n"):
+        lines = block.split("\n")
+        long_line = max((len(x) for x in lines), default=0) > width
+        plain = all(not x.startswith((" ", "\t")) for x in lines)
+        if long_line and plain and not _SUBJECT_RX.match(block) and len(lines) > 1:
+            out.append(textwrap.fill(" ".join(x.strip() for x in lines), width))
+        else:
+            out.append(block)
+    return "\n\n".join(out)
 
 
 def build_letter(donor: dict[str, Any], lang: str | None = None) -> str:
@@ -534,26 +653,39 @@ def build_letter(donor: dict[str, Any], lang: str | None = None) -> str:
     if donor.get("event_date"):
         try:
             d = date.fromisoformat(donor["event_date"])
+            months = MONTHS.get(lang, MONTHS["en"])
             date_part = {
                 "hu": f"{d.year}. {d.month:02d}. hónapban ",
-                "de": f"im {MONTHS['de'][d.month]} {d.year} ",
-                "en": f"in {MONTHS['en'][d.month]} {d.year} ",
-                "uk": f"у {MONTHS['uk'][d.month]} {d.year} року ",
-            }.get(lang if lang in ("hu", "de", "uk") else "en", "")
+                "de": f"im {months[d.month]} {d.year} ",
+                "pl": f"w {months[d.month]} {d.year} roku ",
+                "ro": f"în {months[d.month]} {d.year} ",
+                "en": f"in {months[d.month]} {d.year} ",
+                "uk": f"у {months[d.month]} {d.year} року ",
+            }.get(lang, f"in {MONTHS['en'][d.month]} {d.year} ")
         except ValueError:
             date_part = ""
 
+    def wrap(text: str) -> str:
+        """Переносимо абзац по 78 символів — щоб лист читався в будь-якій пошті."""
+        return "\n".join(textwrap.wrap(text, width=78)) if text else ""
+
     what = donor.get("what") or ""
     ref_lang = lang if lang in REFERENCE else "en"
-    reference = REFERENCE[ref_lang].format(
-        date_part=date_part, what=what,
-        what_hu=f"támogattak egy ukrán közösséget: «{what}»",
-        what_de=f"eine ukrainische Gemeinde unterstützt haben: «{what}»")
+    if str(donor.get("uid") or "").startswith("danube:"):
+        # громада з Дунаю: приводом є спільний річковий басейн, а не новина
+        reference = wrap(REFERENCE_DANUBE[ref_lang].format(
+            donor=donor.get("name") or ""))
+    else:
+        reference = wrap(REFERENCE[ref_lang].format(
+            date_part=date_part, what=what,
+            what_hu=f"támogattak egy ukrán közösséget: «{what}»",
+            what_de=f"eine ukrainische Gemeinde unterstützt haben: «{what}»"))
 
     person_uk = contact.get("person_uk") or "<ПІБ відповідальної особи>"
     person_en = contact.get("person_en") or "<name in Latin letters>"
     pos_uk = contact.get("position_uk") or ""
     pos_en = contact.get("position_en") or ""
+    goods = donor.get("goods", "waste")
     values = {
         "name_uk": c.get("name_uk", ""), "name_en": c.get("name_en", ""),
         "name_uk_gen": c.get("name_uk_gen") or c.get("name_uk", ""),
@@ -573,14 +705,12 @@ def build_letter(donor: dict[str, Any], lang: str | None = None) -> str:
         "person_uk": person_uk, "person_en": person_en,
         "position_part_uk": f", {pos_uk}" if pos_uk else "",
         "position_part_en": f", {pos_en}" if pos_en else "",
-        "reference_hu": reference, "reference_de": reference,
-        "reference_en": reference, "reference_uk": reference,
-        "situation": _situation_block(c, lang, donor.get("goods", "waste")),
-        "needs_uk": _needs_block(c, "uk", donor.get("goods", "waste")),
-        "needs_en": _needs_block(c, "en", donor.get("goods", "waste")),
-        "needs_de": _needs_block(c, "de", donor.get("goods", "waste")),
-        "needs_hu": _needs_block(c, "hu", donor.get("goods", "waste")),
+        "situation": _situation_block(c, lang, goods),
+        "water": _water_block(c, lang, goods),
     }
+    for code in LETTER_LANGS:
+        values[f"reference_{code}"] = reference
+        values[f"needs_{code}"] = _needs_block(c, code, goods)
     header = (f"# Лист до: {donor.get('name')} ({COUNTRY_NAME.get(donor.get('country',''), '')})\n"
               f"# Привід: {donor.get('what')}\n"
               f"# Джерело: {donor.get('news_url')}\n"
@@ -588,7 +718,7 @@ def build_letter(donor: dict[str, Any], lang: str | None = None) -> str:
               f"(Д{donor.get('proven')} М{donor.get('bridge')} "
               f"З{donor.get('need')} −В{donor.get('cost')})\n"
               f"{'-' * 72}\n\n")
-    return header + LETTERS[lang].format(**values)
+    return header + _reflow(LETTERS[lang].format(**values))
 
 
 def write_letters(db: Database, out_dir: Path | None = None, min_priority: int = 4,
@@ -597,7 +727,11 @@ def write_letters(db: Database, out_dir: Path | None = None, min_priority: int =
     out_dir = Path(out_dir or config.DATA_DIR / "letters")
     out_dir.mkdir(parents=True, exist_ok=True)
     paths: list[Path] = []
-    for d in db.donors(min_priority=min_priority, limit=limit):
+    for d in db.donors(min_priority=min_priority, limit=limit * 10):
+        if str(d.get("uid") or "").startswith("danube:"):
+            continue  # придунайські громади — окрема команда `danube`
+        if len(paths) >= limit:
+            break
         safe = re.sub(r"[^\w\-]+", "_", f"{d['id']}-{d['name']}")[:60]
         path = out_dir / f"{safe}.txt"
         path.write_text(build_letter(d), encoding="utf-8")
