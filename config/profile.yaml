@@ -66,13 +66,16 @@ community:
              "természettudományi és informatikai szaktantermek felszerelése",
              "iskolabusz"]
   contact:
-    person_uk: ""            Білак Сергій Володимирович 
-    person_en: ""            Bilak Serhii Volodymyrovych
-    position_uk: "" Головний архітектор громади
-    position_en: "" Chief Architect of the Community
-    email: "" adanossot@ukr.net
-    phone: "" +380505681217
-    website: "" https://vylocka-gromada.gov.ua
+    # УВАГА: значення пишеться ВСЕРЕДИНІ лапок, інакше YAML не прочитається:
+    #   правильно → person_uk: "Прізвище Ім'я По батькові"
+    #   помилка    → person_uk: ""   Прізвище Ім'я По батькові
+    person_uk: "Білак Сергій Володимирович"        # ПІБ відповідальної особи
+    person_en: "Bilak Serhii Volodymyrovych"       # латиницею
+    position_uk: "Головний архітектор громади"
+    position_en: "Chief Architect of the Community"
+    email: "adanossot@ukr.net"
+    phone: "+380505681217"
+    website: "https://vylocka-gromada.gov.ua"
 
 # ─────────────── Тематичні групи ключових слів (uk + en) ────────────────
 # points — скільки балів дає група (нараховується один раз на групу)

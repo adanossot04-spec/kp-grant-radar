@@ -16,9 +16,35 @@ DB_PATH = Path(os.getenv("GR_DB_PATH", DATA_DIR / "grants.sqlite"))
 
 
 def load_yaml(name: str) -> dict[str, Any]:
+    """Читає YAML-конфіг і пояснює помилку людською мовою.
+
+    Найчастіша помилка при редагуванні просто на GitHub — значення, дописане
+    ПІСЛЯ порожніх лапок:
+        person_uk: ""   Білак Сергій Володимирович   ← YAML так не вміє
+    Правильно:
+        person_uk: "Білак Сергій Володимирович"
+    """
     path = CONFIG_DIR / name
     with open(path, encoding="utf-8") as fh:
-        return yaml.safe_load(fh) or {}
+        text = fh.read()
+    try:
+        return yaml.safe_load(text) or {}
+    except yaml.YAMLError as exc:
+        mark = getattr(exc, "problem_mark", None)
+        where = f" (рядок {mark.line + 1}, позиція {mark.column + 1})" if mark else ""
+        line = ""
+        if mark:
+            lines = text.splitlines()
+            if 0 <= mark.line < len(lines):
+                line = f"\n   рядок: {lines[mark.line].rstrip()}"
+        raise SystemExit(
+            f"❌ Помилка у файлі config/{name}{where}.{line}\n"
+            "   Найчастіша причина: значення дописане ПІСЛЯ порожніх лапок, напр.\n"
+            '     person_uk: ""   Білак Сергій Володимирович   ← так не можна\n'
+            "   Правильно — текст ВСЕРЕДИНІ лапок:\n"
+            '     person_uk: "Білак Сергій Володимирович"\n'
+            f"   Технічна деталь: {exc.__class__.__name__}: "
+            f"{getattr(exc, 'problem', exc)}") from exc
 
 
 def load_sources() -> list[dict[str, Any]]:

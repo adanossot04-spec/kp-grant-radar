@@ -357,9 +357,9 @@ biztosítást, valamint fényképes beszámolót készítünk az eszközök hasz
 és készek vagyunk testvértelepülési megállapodást aláírni.
 
 Köszönettel és tisztelettel,
-{person_uk}{position_part_uk}
-{name_uk}
-{email} · {phone}""",
+{person_en}{position_part_en}
+{name_hu} · {name_en}
+{email} · {phone}{website_part}""",
 
 "de": """Betreff: Partnerschaftsanfrage – {name_de} ({center_en}), Transkarpatien, Ukraine
 
@@ -384,7 +384,7 @@ Partnerschaftsvereinbarung würden wir gerne unterzeichnen.
 Mit freundlichen Grüßen,
 {person_en}{position_part_en}
 {name_en}
-{email} · {phone}""",
+{email} · {phone}{website_part}""",
 
 "pl": """Temat: Propozycja współpracy partnerskiej – gmina {center_en}, Zakarpacie, Ukraina
 
@@ -408,7 +408,7 @@ gotowi podpisać umowę o współpracy partnerskiej.
 Z wyrazami szacunku,
 {person_en}{position_part_en}
 {name_en}
-{email} · {phone}""",
+{email} · {phone}{website_part}""",
 
 "en": """Subject: Partnership request – {name_en} ({center_en}), Zakarpattia, Ukraine
 
@@ -433,7 +433,7 @@ release, and we are ready to sign a twinning memorandum.
 Kind regards,
 {person_en}{position_part_en}
 {name_en}
-{email} · {phone}""",
+{email} · {phone}{website_part}""",
 
 "uk": """Тема: Пропозиція партнерства — {name_uk}, Закарпаття
 
@@ -456,7 +456,7 @@ Kind regards,
 З повагою,
 {person_uk}{position_part_uk}
 {name_uk}
-{email} · {phone}""",
+{email} · {phone}{website_part}""",
 }
 
 REFERENCE = {
@@ -537,6 +537,7 @@ def build_letter(donor: dict[str, Any], lang: str | None = None) -> str:
         "fleet_de": c.get("fleet_de", ""), "fleet_hu": c.get("fleet_hu", ""),
         "email": contact.get("email") or "<e-mail громади>",
         "phone": contact.get("phone") or "<телефон / WhatsApp>",
+        "website_part": f" · {contact.get('website')}" if contact.get("website") else "",
         "person_uk": person_uk, "person_en": person_en,
         "position_part_uk": f", {pos_uk}" if pos_uk else "",
         "position_part_en": f", {pos_en}" if pos_en else "",
