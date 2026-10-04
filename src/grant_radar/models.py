@@ -40,6 +40,8 @@ class Opportunity:
     uid: str = ""
     beneficiary: str = "unknown"      # communal | private | both | unknown
     beneficiary_why: str = ""
+    track: str = "other"              # напрям: waste | education | transport | ...
+    equipment: int = 0                # 1 — грант дає техніку/контейнери/обладнання
     score: int = 0
     band: str = ""
     reasons: str = ""

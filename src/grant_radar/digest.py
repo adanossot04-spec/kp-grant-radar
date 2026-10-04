@@ -8,6 +8,7 @@ from datetime import datetime
 import requests
 
 from .db import Database
+from . import tracks as tracks_mod
 from .classify import LABEL as BENEF_LABEL
 from .scoring import BAND_LABEL
 
@@ -37,7 +38,10 @@ def build_markdown(db: Database, min_score: int = 40, only_new: bool = True) -> 
             if it.get("days_left") is not None:
                 dl = f" · ⏳ дедлайн {it['deadline_at'][:10]} ({it['days_left']} дн.)"
             lines.append(f"## {BAND_LABEL.get(it['band'], '')} {it['score']}/100 — {it['title']}")
-            lines.append(f"*{it['source_name']}{dl}*")
+            marks = tracks_mod.SHORT.get(it.get("track") or "other", "")
+            if it.get("equipment"):
+                marks += " · 🚛 техніка/контейнери"
+            lines.append(f"*{marks} · {it['source_name']}{dl}*")
             lines.append("")
             text = it.get("llm_summary") or (it.get("summary") or "")[:400]
             if text:

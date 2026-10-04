@@ -21,7 +21,7 @@ from typing import Any, Pattern
 
 from .models import Opportunity
 
-CORE_GROUPS = ("waste", "municipal", "urban", "transport", "business")
+CORE_GROUPS = ("waste", "municipal", "urban", "transport", "business", "education")
 BAND_LABEL = {"high": "🔥 Висока", "medium": "🟡 Середня", "low": "⚪ Низька"}
 
 # Пороги для новинних записів (RSS), які не є офіційними конкурсами
@@ -74,7 +74,13 @@ class Scorer:
         return th, bh
 
     # ─────────────────────────────────────────────────────────────
-    def score(self, opp: Opportunity, source_weight: float = 1.0) -> tuple[int, str, list[str]]:
+    def score(self, opp: Opportunity, source_weight: float = 1.0
+              ) -> tuple[int, str, list[str], dict[str, Any]]:
+        """Повертає (бал, рівень, причини, метадані).
+
+        Метадані: які групи спрацювали в заголовку / тексті та чи йдеться
+        про придбання техніки, контейнерів, обладнання.
+        """
         title = opp.title.lower()
         body = f"{opp.summary} {opp.programme} {opp.identifier}".lower()
         is_news = opp.status == "news"
@@ -83,6 +89,8 @@ class Scorer:
         reasons: list[str] = []
         core_title = False
         core_any = False
+        groups_title: list[str] = []
+        groups_body: list[str] = []
 
         for name, group in self.groups.items():
             th, bh = self._hits(group["terms"], title, body)
@@ -90,9 +98,18 @@ class Scorer:
                 continue
             base += group["points"] * (1.0 if th else 0.55)
             reasons.append(f"{name}{'★' if th else ''}: {', '.join((th + bh)[:4])}")
+            (groups_title if th else groups_body).append(name)
             if name in CORE_GROUPS:
                 core_any = True
                 core_title = core_title or bool(th)
+
+        # Бонус: грант дозволяє придбати техніку, контейнери, обладнання —
+        # для комунального підприємства це найцінніший тип підтримки.
+        has_equipment = "equipment" in groups_title or "equipment" in groups_body
+        if has_equipment and core_any:
+            bonus = float(self.cfg.get("equipment_bonus", 10))
+            base += bonus * (1.0 if "equipment" in groups_title else 0.6)
+            reasons.append("🚛 можливе придбання техніки/контейнерів/обладнання")
 
         th, bh = self._hits(self.geo["terms"], title, body)
         if th or bh:
@@ -149,7 +166,9 @@ class Scorer:
             if not has_signal and points > NEWS_CAP_NO_SIGNAL:
                 points = NEWS_CAP_NO_SIGNAL
 
-        return points, self.band(points), reasons
+        meta = {"groups_title": groups_title, "groups_body": groups_body,
+                "equipment": has_equipment}
+        return points, self.band(points), reasons, meta
 
     def band(self, points: int) -> str:
         if points >= int(self.cfg.get("high_threshold", 60)):

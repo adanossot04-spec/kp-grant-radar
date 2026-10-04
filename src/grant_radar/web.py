@@ -9,6 +9,7 @@ from fastapi.templating import Jinja2Templates
 
 from . import config
 from .db import Database
+from . import tracks as tracks_mod
 from .classify import LABEL as BENEF_LABEL
 from .scoring import BAND_LABEL
 
@@ -24,15 +25,23 @@ USER_LABEL = {"interesting": "⭐ цікаво", "in_progress": "✍️ готу
 @app.get("/", response_class=HTMLResponse)
 def index(request: Request, q: str = "", band: str = "", region: str = "",
           source: str = "", status: str = "", order: str = "score", all: str = "",
-          benef: str = "", group: str = "1"):
+          benef: str = "", group: str = "track", track: str = "", equip: str = ""):
     items = db.query(
         search=q or None, band=band or None, region=region or None,
         source_id=source or None, user_status=status or None,
-        beneficiary=benef or None, order=order, only_active=not bool(all), limit=400,
+        beneficiary=benef or None, track=track or None,
+        equipment_only=bool(equip), order=order,
+        only_active=not bool(all), limit=400,
     )
-    # групування: окремо комунальні, окремо приватні, окремо спільні
+    # групування підсумкового списку
     groups: list[tuple[str, list]] = []
-    if group == "1" and not benef:
+    if group == "track" and not track:
+        buckets: dict[str, list] = {}
+        for it in items:
+            buckets.setdefault(it.get("track") or "other", []).append(it)
+        for key in tracks_mod.ordered_tracks(list(buckets)):
+            groups.append((tracks_mod.LABEL.get(key, key), buckets[key]))
+    elif group == "benef" and not benef:
         buckets = {"communal": [], "both": [], "private": [], "unknown": []}
         for it in items:
             buckets.setdefault(it.get("beneficiary") or "unknown", buckets["unknown"]).append(it)
@@ -47,16 +56,19 @@ def index(request: Request, q: str = "", band: str = "", region: str = "",
     qs = urlencode({k: v for k, v in
                     {"q": q, "band": band, "region": region, "source": source,
                      "status": status, "order": order, "all": all,
-                     "benef": benef, "group": group}.items() if v})
+                     "benef": benef, "group": group, "track": track,
+                     "equip": equip}.items() if v})
     return templates.TemplateResponse(request, "dashboard.html", {
         "items": items, "stats": stats,
         "org": profile.get("organization", {}),
         "sources": db.sources_in_db(),
         "band_label": BAND_LABEL, "status_label": STATUS_LABEL, "user_label": USER_LABEL,
         "groups": groups, "benef_label": BENEF_LABEL,
+        "track_label": tracks_mod.LABEL, "track_short": tracks_mod.SHORT,
+        "tracks": tracks_mod.ordered_tracks(db.tracks_in_db()),
         "f": {"q": q, "band": band, "region": region, "source": source,
               "status": status, "order": order, "all": all, "benef": benef,
-              "group": group},
+              "group": group, "track": track, "equip": equip},
         "qs": qs,
         "last_run": (last.get("finished_at") or "—")[:16].replace("T", " "),
     })
@@ -73,10 +85,13 @@ def mark(request: Request, uid: str, status: str = "interesting"):
 # ───────────────────────────── JSON API ─────────────────────────────
 @app.get("/api/opportunities")
 def api_items(min_score: int = 0, band: str = "", region: str = "",
-              beneficiary: str = "", limit: int = 100):
+              beneficiary: str = "", track: str = "", equipment: bool = False,
+              limit: int = 100):
     return JSONResponse(db.query(min_score=min_score, band=band or None,
                                  region=region or None,
-                                 beneficiary=beneficiary or None, limit=limit))
+                                 beneficiary=beneficiary or None,
+                                 track=track or None, equipment_only=equipment,
+                                 limit=limit))
 
 
 @app.get("/api/draft/{uid}")

@@ -29,6 +29,8 @@ CREATE TABLE IF NOT EXISTS opportunities (
     reasons       TEXT,
     beneficiary   TEXT DEFAULT 'unknown',
     beneficiary_why TEXT,
+    track         TEXT DEFAULT 'other',
+    equipment     INTEGER DEFAULT 0,
     llm_score     INTEGER,
     llm_summary   TEXT,
     llm_fit       TEXT,
@@ -56,6 +58,7 @@ INDEXES = """CREATE INDEX IF NOT EXISTS idx_opp_score    ON opportunities(score 
 CREATE INDEX IF NOT EXISTS idx_opp_deadline ON opportunities(deadline_at);
 CREATE INDEX IF NOT EXISTS idx_opp_source   ON opportunities(source_id);
 CREATE INDEX IF NOT EXISTS idx_opp_benef    ON opportunities(beneficiary);
+CREATE INDEX IF NOT EXISTS idx_opp_track    ON opportunities(track);
 """
 
 
@@ -78,7 +81,9 @@ class Database:
         """Додає нові колонки до вже наявної бази (сумісність зі старими версіями)."""
         have = {r[1] for r in self.conn.execute("PRAGMA table_info(opportunities)")}
         for col, ddl in (("beneficiary", "TEXT DEFAULT 'unknown'"),
-                         ("beneficiary_why", "TEXT")):
+                         ("beneficiary_why", "TEXT"),
+                         ("track", "TEXT DEFAULT 'other'"),
+                         ("equipment", "INTEGER DEFAULT 0")):
             if col not in have:
                 self.conn.execute(f"ALTER TABLE opportunities ADD COLUMN {col} {ddl}")
 
@@ -107,6 +112,8 @@ class Database:
             "reasons": opp.reasons,
             "beneficiary": opp.beneficiary,
             "beneficiary_why": opp.beneficiary_why,
+            "track": opp.track,
+            "equipment": opp.equipment,
             "llm_score": opp.llm_score,
             "llm_summary": opp.llm_summary,
             "llm_fit": opp.llm_fit,
@@ -161,6 +168,8 @@ class Database:
         source_id: str | None = None,
         band: str | None = None,
         beneficiary: str | None = None,
+        track: str | None = None,
+        equipment_only: bool = False,
         user_status: str | None = None,
         search: str | None = None,
         only_active: bool = True,
@@ -186,6 +195,11 @@ class Database:
             else:
                 sql += " AND beneficiary = ?"
                 args.append(beneficiary)
+        if track:
+            sql += " AND track = ?"
+            args.append(track)
+        if equipment_only:
+            sql += " AND equipment = 1"
         if user_status:
             sql += " AND user_status = ?"
             args.append(user_status)
@@ -244,14 +258,23 @@ class Database:
             "SELECT source_name, COUNT(*) n, MAX(score) best FROM opportunities "
             "GROUP BY source_name ORDER BY n DESC"
         )]
+        tracks = {r[0]: r[1] for r in c(
+            "SELECT track, COUNT(*) FROM opportunities GROUP BY track")}
+        equip = c("SELECT COUNT(*) FROM opportunities WHERE equipment = 1").fetchone()[0]
         benef = {r[0]: r[1] for r in c(
             "SELECT beneficiary, COUNT(*) FROM opportunities GROUP BY beneficiary")}
         return {
             "total": total, "high": high, "medium": med, "deadline_30d": soon,
+            "tracks": tracks, "equipment": equip,
+            "waste": tracks.get("waste", 0), "education": tracks.get("education", 0),
             "communal": benef.get("communal", 0) + benef.get("both", 0),
             "private": benef.get("private", 0) + benef.get("both", 0),
             "last_run": dict(last) if last else None, "by_source": by_source,
         }
+
+    def tracks_in_db(self) -> list[str]:
+        return [r[0] for r in self.conn.execute(
+            "SELECT track, COUNT(*) n FROM opportunities GROUP BY track ORDER BY n DESC") if r[0]]
 
     def sources_in_db(self) -> list[tuple[str, str]]:
         return [(r["source_id"], r["source_name"]) for r in self.conn.execute(

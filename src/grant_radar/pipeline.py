@@ -11,6 +11,7 @@ from .db import Database, now_iso
 from .llm import LLMAnalyzer
 from .models import Opportunity
 from .scoring import Scorer
+from . import tracks as tracks_mod
 
 log = logging.getLogger(__name__)
 
@@ -51,8 +52,10 @@ def run(db: Database | None = None, use_llm: bool = True) -> dict[str, Any]:
     new_count = 0
     scored: list[Opportunity] = []
     for opp, weight in unique.values():
-        opp.score, opp.band, reasons = scorer.score(opp, weight)
+        opp.score, opp.band, reasons, meta = scorer.score(opp, weight)
         opp.reasons = "; ".join(reasons)
+        opp.track = tracks_mod.detect(meta["groups_title"], meta["groups_body"])
+        opp.equipment = 1 if meta["equipment"] else 0
         opp.beneficiary, opp.beneficiary_why = classify(opp.title, opp.summary, opp.programme)
         hint = hints.get(opp.source_id)
         if opp.beneficiary == "unknown" and hint:
@@ -124,14 +127,16 @@ def rescore(db: Database | None = None) -> int:
             status=r["status"] or "", published_at=r["published_at"],
             deadline_at=r["deadline_at"],
         )
-        score, band, reasons = scorer.score(opp, weights.get(r["source_id"], 1.0))
+        score, band, reasons, meta = scorer.score(opp, weights.get(r["source_id"], 1.0))
+        track = tracks_mod.detect(meta["groups_title"], meta["groups_body"])
+        equipment = 1 if meta["equipment"] else 0
         benef, benef_why = classify(opp.title, opp.summary, opp.programme)
         if benef == "unknown" and hints.get(r["source_id"]):
             benef, benef_why = hints[r["source_id"]], "за типом джерела"
         db.conn.execute(
             "UPDATE opportunities SET score=?, band=?, reasons=?, beneficiary=?, "
-            "beneficiary_why=? WHERE uid=?",
-            (score, band, "; ".join(reasons), benef, benef_why, r["uid"]),
+            "beneficiary_why=?, track=?, equipment=? WHERE uid=?",
+            (score, band, "; ".join(reasons), benef, benef_why, track, equipment, r["uid"]),
         )
     db.conn.commit()
     log.info("Перераховано %d записів", len(rows))
