@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Грант-радар КП — моніторинг можливостей</title>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#171a21; --panel2:#1e222b; --line:#2a2f3a;
+    --txt:#e8eaef; --muted:#9aa3b2; --accent:#4f9cf9; --high:#ff6b4a;
+    --med:#f4b740; --low:#6b7280; --ok:#34d399;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);
+       font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  header{background:linear-gradient(135deg,#182033,#101520);border-bottom:1px solid var(--line);
+         padding:22px 28px}
+  h1{margin:0 0 4px;font-size:22px;letter-spacing:-.2px}
+  .sub{color:var(--muted);font-size:13px}
+  .wrap{max-width:1180px;margin:0 auto;padding:22px 28px 60px}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:22px}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .stat b{display:block;font-size:26px;line-height:1.1}
+  .stat span{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.4px}
+  form.filters{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+               padding:14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:20px}
+  input,select,button{background:var(--panel2);color:var(--txt);border:1px solid var(--line);
+                      border-radius:8px;padding:8px 11px;font-size:14px}
+  input[type=text]{min-width:230px}
+  button{cursor:pointer;background:var(--accent);border-color:var(--accent);color:#06101f;font-weight:600}
+  button.ghost{background:transparent;color:var(--muted);border-color:var(--line);font-weight:400}
+  .card{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--low);
+        border-radius:12px;padding:16px 18px;margin-bottom:12px}
+  .card.high{border-left-color:var(--high)}
+  .card.medium{border-left-color:var(--med)}
+  .card h3{margin:0 0 6px;font-size:16.5px;line-height:1.35}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0;font-size:12.5px;color:var(--muted)}
+  .tag{background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+  .tag.score{background:#20283a;color:#cfe3ff;border-color:#2e3b55;font-weight:600}
+  .tag.dl{background:#2a1d1d;color:#ffb9a6;border-color:#4a2a24}
+  .tag.dl.soon{background:#3a1c14;color:#ff8c69;border-color:#6b3324}
+  .tag.ok{background:#15291f;color:#7ee2b8;border-color:#23523c}
+  .sum{color:#c7cdd9;font-size:14px;margin:8px 0 0}
+  .llm{background:#121a26;border:1px solid #1f3147;border-radius:10px;padding:10px 12px;margin-top:10px;font-size:13.5px}
+  .llm b{color:#8fc0ff}
+  .why{color:var(--muted);font-size:12px;margin-top:8px;font-style:italic}
+  .acts{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+  .acts a{font-size:12px;border:1px solid var(--line);border-radius:7px;padding:4px 10px;color:var(--muted)}
+  .acts a:hover{color:var(--txt);border-color:var(--accent);text-decoration:none}
+  .acts a.cur{background:var(--accent);color:#06101f;border-color:var(--accent);font-weight:600}
+  h2.gh{font-size:15px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);
+        margin:26px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  h2.gh span{background:var(--panel2);border:1px solid var(--line);border-radius:999px;
+             padding:1px 9px;font-size:12px;margin-left:6px}
+  .tag.benef{font-weight:600}
+  .tag.track{font-weight:600;background:#1b2520;color:#b9e7c4;border-color:#2c4635}
+  .tag.t-education{background:#241c30;color:#dcb6f8;border-color:#3f2b52}
+  .tag.t-transport{background:#1d2430;color:#a9c8f0;border-color:#30415a}
+  .tag.t-business{background:#2a2416;color:#f0cf96;border-color:#4b3d20}
+  .tag.t-other{background:var(--panel2);color:var(--muted)}
+  .tag.origin{background:#132a1f;color:#8ff0b5;border-color:#1f5236;font-weight:600}
+  .links{margin:8px 0 2px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .applybtn{background:#1f7a4d;color:#eafff3;border:1px solid #2e9e66;border-radius:8px;
+            padding:6px 12px;font-size:13px;font-weight:600;text-decoration:none}
+  .applybtn:hover{background:#2a9960}
+  .donorbtn{background:#2a3350;border-color:#3d4a73;color:#dce6ff}
+  .donorbtn:hover{background:#36406a}
+  .src{color:var(--muted);font-size:12.5px;text-decoration:none;border-bottom:1px dotted #475}
+  .tag.money{background:#14262a;color:#8fe3e8;border-color:#1f4650;font-weight:600}
+  .tag.equip{background:#33230f;color:#ffc07a;border-color:#60421c;font-weight:600}
+  .tag.b-communal{background:#15291f;color:#7ee2b8;border-color:#23523c}
+  .tag.b-private{background:#1a2133;color:#9cc4ff;border-color:#2e3b55}
+  .tag.b-both{background:#2a2416;color:#f6cf7a;border-color:#51431f}
+  .acts a.draft{border-color:#2e4a6b;color:#9cc4ff}
+  .empty{text-align:center;color:var(--muted);padding:50px}
+  footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
+</style>
+</head>
+<body>
+<header>
+  <h1>🛰️ Грант-радар для комунальних підприємств</h1>
+  <div class="sub">{{ org.name }} · {{ org.region }} · профіль: {{ org.sector }}</div>
+</header>
+
+<div class="wrap">
+  <div class="stats">
+    <div class="stat"><b>{{ stats.actionable }}</b><span>можна подати заявку</span></div>
+    <div class="stat" title="новини без першоджерела, вакансії, протерміновані"><b style="color:#7a8599">{{ stats.hidden }}</b><span>🚫 відсіяно</span></div>
+    <div class="stat"><b style="color:var(--high)">{{ stats.high }}</b><span>висока релевантність</span></div>
+    <div class="stat"><b style="color:var(--med)">{{ stats.medium }}</b><span>середня</span></div>
+    <div class="stat"><b>{{ stats.deadline_30d }}</b><span>дедлайн ≤ 30 днів</span></div>
+    <div class="stat"><b style="color:#7ee2b8">{{ stats.communal }}</b><span>🏛 для комунальних</span></div>
+    <div class="stat"><b style="color:#8fc0ff">{{ stats.private }}</b><span>🏭 для приватних</span></div>
+    <div class="stat"><b style="color:#ffd966">{{ stats.ua }}</b><span>🇺🇦 українських</span></div>
+    <div class="stat"><b style="color:#8ff0b5">{{ stats.resolved }}</b><span>🔗 з першоджерелом</span></div>
+    <div class="stat"><b style="color:#9be8a0">{{ stats.waste }}</b><span>♻️ відходи</span></div>
+    <div class="stat"><b style="color:#d7a8f5">{{ stats.education }}</b><span>🎓 освіта</span></div>
+    <div class="stat"><b style="color:#ffc07a">{{ stats.equipment }}</b><span>🚛 техніка / контейнери</span></div>
+    <div class="stat"><b style="color:#8fe3e8">{{ stats.budgets.get('m', 0) + stats.budgets.get('s', 0) }}</b><span>💶 до 500 тис. €</span></div>
+    <div class="stat"><b style="font-size:14px;padding-top:7px">{{ last_run }}</b><span>останнє сканування</span></div>
+  </div>
+
+  <form class="filters" method="get">
+    <input type="text" name="q" placeholder="пошук: відходи, waste, Interreg…" value="{{ f.q or '' }}">
+    <select name="band">
+      <option value="">усі рівні</option>
+      {% for v,l in [('high','🔥 висока'),('medium','🟡 середня'),('low','⚪ низька')] %}
+      <option value="{{v}}" {% if f.band==v %}selected{% endif %}>{{l}}</option>{% endfor %}
+    </select>
+    <select name="region">
+      <option value="">усі регіони</option>
+      {% for v,l in [('EU','🇪🇺 ЄС'),('UA','🇺🇦 Україна'),('INT','🌍 міжнародні')] %}
+      <option value="{{v}}" {% if f.region==v %}selected{% endif %}>{{l}}</option>{% endfor %}
+    </select>
+    <select name="source">
+      <option value="">усі джерела</option>
+      {% for sid,sname in sources %}
+      <option value="{{sid}}" {% if f.source==sid %}selected{% endif %}>{{sname}}</option>{% endfor %}
+    </select>
+    <select name="track">
+      <option value="">усі напрями</option>
+      {% for tr in tracks %}
+      <option value="{{tr}}" {% if f.track==tr %}selected{% endif %}>{{ track_label.get(tr, tr) }}</option>{% endfor %}
+    </select>
+    <select name="budget">
+      <option value="">будь-який бюджет</option>
+      {% for b in budget_bands %}
+      <option value="{{b}}" {% if f.budget==b %}selected{% endif %}>{{ budget_label.get(b, b) }}</option>{% endfor %}
+    </select>
+    <label style="color:var(--muted);font-size:13px">
+      <input type="checkbox" name="equip" value="1" {% if f.equip %}checked{% endif %}> 🚛 лише з технікою
+    </label>
+    <label style="color:var(--muted);font-size:13px">
+      <input type="checkbox" name="apply" value="1" {% if f.apply %}checked{% endif %}> 🔗 є посилання на подачу
+    </label>
+    <label style="color:var(--muted);font-size:13px"
+           title="новини про вже видані гранти, вакансії та конкурси з минулим дедлайном">
+      <input type="checkbox" name="hidden" value="1" {% if f.hidden %}checked{% endif %}> 🚫 показати відсіяні
+    </label>
+    <select name="benef">
+      <option value="">усі типи заявників</option>
+      {% for v,l in [('communal','🏛 комунальні / ОМС'),('private','🏭 приватний бізнес'),('both','🤝 обидва'),('unknown','❔ уточнити')] %}
+      <option value="{{v}}" {% if f.benef==v %}selected{% endif %}>{{l}}</option>{% endfor %}
+    </select>
+    <select name="group">
+      <option value="track" {% if f.group=='track' %}selected{% endif %}>групувати за напрямом</option>
+      <option value="benef" {% if f.group=='benef' %}selected{% endif %}>групувати за типом заявника</option>
+      <option value="0" {% if f.group=='0' %}selected{% endif %}>єдиним списком</option>
+    </select>
+    <select name="status">
+      <option value="">будь-який статус</option>
+      {% for v,l in [('new','нові'),('interesting','цікаво'),('in_progress','готуємо заявку'),('submitted','подано'),('rejected','відмова'),('ignored','не актуально')] %}
+      <option value="{{v}}" {% if f.status==v %}selected{% endif %}>{{l}}</option>{% endfor %}
+    </select>
+    <select name="order">
+      {% for v,l in [('score','за релевантністю'),('deadline','за дедлайном'),('newest','найновіші'),('budget','за бюджетом ↓'),('budget_asc','за бюджетом ↑')] %}
+      <option value="{{v}}" {% if f.order==v %}selected{% endif %}>{{l}}</option>{% endfor %}
+    </select>
+    <label style="color:var(--muted);font-size:13px">
+      <input type="checkbox" name="all" value="1" {% if f.all %}checked{% endif %}> показати прострочені
+    </label>
+    <button type="submit">Фільтрувати</button>
+    <a class="acts" href="/" style="margin-left:auto"><button type="button" class="ghost">Скинути</button></a>
+  </form>
+
+  {% if not items %}
+    <div class="empty">Нічого не знайдено. Спробуйте зняти фільтри або запустіть сканування:
+      <code>python -m grant_radar collect</code></div>
+  {% endif %}
+
+  {% for group_title, group_items in groups %}
+  {% if group_title %}<h2 class="gh">{{ group_title }} <span>{{ group_items|length }}</span></h2>{% endif %}
+  {% for it in group_items %}
+  <div class="card {{ it.band }}">
+    <h3><a href="{{ it.apply_url or it.article_url or it.url }}" target="_blank" rel="noopener">{{ it.title }}</a></h3>
+    <div class="meta">
+      <span class="tag score">{{ it.score }}/100 {{ band_label[it.band] }}</span>
+      <span class="tag track t-{{ it.track }}">{{ track_short.get(it.track, '') }}</span>
+      {% if it.equipment %}<span class="tag equip">🚛 техніка / контейнери</span>{% endif %}
+      {% if it.apply_host %}<span class="tag origin" title="першоджерело — тут подають заявку">🔗 {{ it.apply_host }}</span>{% endif %}
+      {% if it.budget_eur %}<span class="tag money" title="орієнтовна сума на проєкт">💶 {{ budget_human(it.budget_eur) }}</span>{% endif %}
+      <span class="tag benef b-{{ it.beneficiary }}">{{ benef_label.get(it.beneficiary, '') }}</span>
+      <span class="tag">{{ it.source_name }}</span>
+      {% if it.programme %}<span class="tag">{{ it.programme[:60] }}</span>{% endif %}
+      {% if it.status and it.status != 'news' %}<span class="tag ok">{{ status_label.get(it.status, it.status) }}</span>{% endif %}
+      {% if it.days_left is not none %}
+        <span class="tag dl {% if it.days_left <= 21 %}soon{% endif %}">
+          ⏳ {% if it.days_left < 0 %}прострочено{% else %}{{ it.days_left }} дн. — {{ it.deadline_at[:10] }}{% endif %}</span>
+      {% endif %}
+      {% if it.user_status and it.user_status != 'new' %}<span class="tag ok">{{ user_label.get(it.user_status, it.user_status) }}</span>{% endif %}
+    </div>
+    {% if it.llm_summary %}
+      <div class="llm"><b>AI-аналіз:</b> {{ it.llm_summary }}
+        {% if it.llm_fit %}<div style="margin-top:6px"><b>Чи підходить:</b> {{ it.llm_fit }}</div>{% endif %}
+        {% if it.llm_actions %}<div style="margin-top:6px"><b>Наступні кроки:</b> {{ it.llm_actions }}</div>{% endif %}
+      </div>
+    {% elif it.summary %}
+      <p class="sum">{{ it.summary[:420] }}{% if it.summary|length > 420 %}…{% endif %}</p>
+    {% endif %}
+    {% if it.hide_reason %}
+    <div class="tag" style="background:#3a2430;color:#ffb3b3;border-color:#5c3340">
+      🚫 відсіяно: {{ hide_reason_label.get(it.hide_reason, it.hide_reason) }}</div>
+    {% endif %}
+    {% if it.apply_url %}
+    <div class="links">
+      {% if it.apply_label and it.apply_label.startswith('сторінка донора') %}
+      <a class="applybtn donorbtn" href="{{ it.apply_url }}" target="_blank" rel="noopener"
+         title="{{ it.apply_label }}">🏛 Сайт донора — шукати конкурс</a>
+      {% else %}
+      <a class="applybtn" href="{{ it.apply_url }}" target="_blank" rel="noopener"
+         title="{{ it.apply_label }}">🔗 Подати заявку / першоджерело</a>
+      {% endif %}
+      <a class="src" href="{{ it.article_url or it.url }}" target="_blank" rel="noopener">ℹ️ анонс ({{ it.source_name }})</a>
+    </div>
+    {% endif %}
+    <div class="why">чому показано: {{ it.reasons }}</div>
+    <div class="acts">
+      {% for v,l in [('interesting','⭐ цікаво'),('in_progress','✍️ готуємо'),('submitted','📨 подано'),('ignored','🗑 не актуально')] %}
+      <a href="/mark/{{ it.uid }}?status={{ v }}&{{ qs }}" class="{% if it.user_status==v %}cur{% endif %}">{{ l }}</a>
+      {% endfor %}
+      <a href="/api/draft/{{ it.uid }}" target="_blank" class="draft">📝 чернетка заявки</a>
+    </div>
+  </div>
+  {% endfor %}
+  {% endfor %}
+</div>
+<footer>Грант-радар КП · оновлюється автоматично через GitHub Actions · {{ items|length }} записів на сторінці</footer>
+</body>
+</html>

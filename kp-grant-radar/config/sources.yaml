@@ -1,0 +1,494 @@
+# Джерела моніторингу грантів для комунальних підприємств
+# type: sedia | rss
+# enabled: true/false — вмикайте/вимикайте без зміни коду
+# weight: множник довіри до джерела (0.8–1.2), впливає на фінальний скоринг
+# region: EU | UA | INT  (для фільтрів у дашборді)
+
+sources:
+
+  # ───────────────────────── ЄС: офіційний портал грантів і тендерів ──────────
+  - id: eu_ft_portal
+    name: "EU Funding & Tenders Portal (SEDIA)"
+    type: sedia
+    region: EU
+    enabled: true
+    weight: 1.2
+    params:
+      # type: 1 = гранти (topics), 2 = тендери/зовнішні дії, 8 = cascade funding
+      types: ["1", "2", "8"]
+      # 31094501 = Forthcoming, 31094502 = Open
+      statuses: ["31094501", "31094502"]
+      page_size: 100
+      max_pages: 8
+      # пошукові запити (кожен виконується окремо). *** = без текстового фільтра
+      queries:
+        # ── відходи та циркулярна економіка ──
+        - "waste management"
+        - "separate waste collection"
+        - "recycling infrastructure"
+        - "circular economy municipal"
+        - "landfill remediation"
+        - "biowaste composting"
+        - "plastic packaging waste"
+        - "construction and demolition waste"
+        # ── благоустрій, вода, міське середовище ──
+        - "green urban space"
+        - "nature based solutions cities"
+        - "water supply and sewerage"
+        - "wastewater treatment municipality"
+        - "climate adaptation cities"
+        - "public lighting energy efficiency"
+        # ── транспорт і техніка ──
+        - "urban mobility public transport"
+        - "clean buses electric fleet"
+        - "waste collection equipment"
+        - "procurement of vehicles municipalities"
+        - "machinery and equipment municipalities"
+        # ── громади, відновлення, Україна ──
+        - "municipal infrastructure Ukraine"
+        - "local authorities recovery"
+        - "Ukraine reconstruction"
+        - "Ukraine municipalities support"
+        - "twinning cities cooperation"
+        - "civil protection shelters"
+        # ── освіта ──
+        - "vocational education and training"
+        - "school education infrastructure"
+        - "skills development local"
+        - "green skills training"
+        - "digital education capacity"
+        # ── інклюзивність і соціальна сфера ──
+        - "accessibility persons with disabilities"
+        - "inclusive public services"
+        - "social inclusion local communities"
+        - "assistive technologies accessibility"
+        # ── вода, річки, довкілля ──
+        - "river basin restoration"
+        - "water resources management"
+        - "nature restoration biodiversity"
+        - "green infrastructure cities"
+        # ── безпека, укриття, розмінування ──
+        - "civil protection local level"
+        - "humanitarian demining"
+        - "disaster risk reduction municipalities"
+        # ── здоров'я, культура, молодь, ветерани ──
+        - "mental health community services"
+        - "cultural heritage restoration"
+        - "youth participation local"
+        - "veterans reintegration support"
+        # ── житло, цифровізація, туризм ──
+        - "building renovation energy poverty"
+        - "digital public services municipalities"
+        - "sustainable tourism regions"
+        # ── бізнес і енергетика ──
+        - "SME circular economy support"
+        - "energy efficiency buildings municipalities"
+        - "renewable energy local communities"
+
+  # ───────────────────────── ЄС: тендери (безкоштовний API, без ключа) ────────
+  - id: ted
+    name: "TED — тендери та закупівлі ЄС"
+    type: ted
+    region: EU
+    enabled: true
+    weight: 0.9
+    beneficiary_hint: private      # підряди найчастіше для бізнесу
+    params:
+      limit: 40
+      # синтаксис експерт-запитів TED; today(-30) = за останні 30 днів
+      queries:
+        - "notice-title ~ (waste) AND publication-date>=today(-30)"
+        - "notice-title ~ (municipal) AND publication-date>=today(-30)"
+        - "notice-title ~ (recycling) AND publication-date>=today(-30)"
+        - "notice-title ~ (municipal waste collection)"
+        - "notice-title ~ (refuse OR garbage)"
+        - "place-of-performance-country-lot=UKR"
+        - "buyer-country=UKR"
+        # CPV: 34144510 сміттєвози, 44613700 контейнери для сміття,
+        # 42914000 обладнання для переробки, 90500000 послуги з відходів
+        - "classification-cpv IN (34144510 44613700) AND publication-date>=today(-60)"
+        - "classification-cpv IN (42914000) AND publication-date>=today(-60)"
+
+  # ───────────────────────── ЄС / транскордонні програми ──────────────────────
+  - id: huskroua
+    name: "Interreg NEXT HUSKROUA (Угорщина–Словаччина–Румунія–Україна)"
+    type: rss
+    region: EU
+    enabled: true
+    weight: 1.2   # найрелевантніша програма для Закарпаття
+    url: "https://next.huskroua-cbc.eu/feed/"
+
+  - id: keep_eu
+    name: "Keep.eu (Interreg / територіальна співпраця)"
+    type: rss
+    region: EU
+    enabled: true
+    weight: 1.0
+    url: "https://www.keep.eu/rss"
+
+  - id: ec_presscorner
+    name: "European Commission — Press corner"
+    type: rss
+    region: EU
+    enabled: true
+    weight: 0.8
+    url: "https://ec.europa.eu/commission/presscorner/api/rss?language=en"
+
+  - id: eu4digital
+    name: "EU4Digital"
+    type: rss
+    region: EU
+    enabled: false
+    weight: 0.7
+    url: "https://eufordigital.eu/feed/"
+
+  - id: danube_region
+    name: "EU Strategy for the Danube Region (EUSDR)"
+    type: rss
+    region: EU
+    enabled: true
+    weight: 0.9
+    url: "https://danube-region.eu/feed/"
+
+  - id: euneighbours_east
+    name: "EU NEIGHBOURS east — можливості Східного партнерства"
+    type: rss
+    region: EU
+    enabled: true
+    weight: 1.1
+    url: "https://euneighbourseast.eu/feed/"
+
+  - id: eu4environment
+    name: "EU4Environment"
+    type: rss
+    region: EU
+    enabled: true
+    weight: 1.1
+    url: "https://www.eu4environment.org/feed/"
+
+  # ───────────────────────── МФО / міжнародні донори ──────────────────────────
+  - id: worldbank
+    name: "Світовий банк — проєкти в Україні"
+    type: worldbank
+    region: INT
+    enabled: true
+    weight: 1.0
+    params:
+      country: "UA"
+      rows: 60
+
+  - id: eib
+    name: "Європейський інвестиційний банк (EIB) — новини"
+    type: rss
+    region: EU
+    enabled: true
+    weight: 0.8
+    url: "https://www.eib.org/en/press/all/index.rss"
+
+  - id: nefco
+    name: "NEFCO (Nordic Environment Finance Corporation)"
+    type: rss
+    region: INT
+    enabled: true
+    weight: 1.1
+    url: "https://www.nefco.int/feed/"
+
+  - id: boell_ua
+    name: "Heinrich-Böll-Stiftung Україна"
+    type: rss
+    region: INT
+    enabled: false
+    weight: 0.7
+    url: "https://ua.boell.org/uk/rss.xml"
+
+  # ───────────────────────── Освіта ───────────────────────────────────────────
+  - id: erasmus_ua
+    name: "Національний Еразмус+ офіс в Україні"
+    type: rss
+    region: UA
+    enabled: true
+    weight: 1.1
+    url: "https://erasmusplus.org.ua/feed/"
+
+  - id: nus
+    name: "Нова українська школа"
+    type: rss
+    region: UA
+    enabled: false          # вмикайте, якщо потрібні новини шкільної освіти
+    weight: 0.7
+    url: "https://nus.org.ua/feed/"
+
+  - id: iea
+    name: "Інститут освітньої аналітики"
+    type: rss
+    region: UA
+    enabled: false
+    weight: 0.7
+    url: "https://iea.gov.ua/feed/"
+
+  # ───────────────────────── Україна ──────────────────────────────────────────
+  - id: prostir_grants
+    name: "Громадський простір — Конкурси та гранти"
+    type: rss
+    region: UA
+    enabled: true
+    weight: 1.1
+    url: "https://www.prostir.ua/feed/?post_type=grant"
+
+  - id: prostir_all
+    name: "Громадський простір — усі новини"
+    type: rss
+    region: UA
+    enabled: true
+    weight: 0.9
+    url: "https://www.prostir.ua/feed/"
+
+  - id: prostir_tenders
+    name: "Громадський простір — тендери й закупівлі"
+    type: rss
+    region: UA
+    enabled: true
+    weight: 1.0
+    url: "https://www.prostir.ua/feed/?post_type=tender"
+
+  - id: hromady
+    name: "Hromady.org — дайджести можливостей для громад"
+    type: rss
+    region: UA
+    enabled: true
+    weight: 1.1
+    url: "https://hromady.org/feed/"
+
+  - id: ecoaction
+    name: "Екодія — довкіллєві ініціативи та фінансування"
+    type: rss
+    region: UA
+    enabled: true
+    weight: 0.8
+    url: "https://ecoaction.org.ua/feed"
+
+  - id: eef
+    name: "Фонд енергоефективності"
+    type: rss
+    region: UA
+    enabled: true
+    weight: 1.0
+    url: "https://eef.org.ua/feed/"
+
+  - id: mepr
+    name: "Міндовкілля (Міністерство захисту довкілля та природних ресурсів)"
+    type: rss
+    region: UA
+    enabled: true
+    weight: 0.9
+    url: "https://mepr.gov.ua/feed/"
+
+  # ─────────── Пошук по новинах: знаходить оголошення без власних RSS ─────────
+  # Безкоштовно, без ключа. Кожен рядок queries — окремий пошук.
+  # Оператори: "точна фраза", OR, -виключити, site:example.com, when:30d
+  - id: gnews_ua
+    name: "Пошук новин про гранти (укр.)"
+    type: gnews
+    region: UA
+    enabled: true
+    weight: 0.85
+    params:
+      lang: uk
+      country: UA
+      per_query: 20
+      queries:
+        - "грант громада відходи OR сміття when:120d"
+        - "\"конкурс грантів\" комунальне підприємство when:120d"
+        - "грант сміттєвоз OR контейнери OR спецтехніка громада when:180d"
+        - "грант благоустрій парк OR сквер громада when:120d"
+        - "грант водопостачання OR каналізація громада when:180d"
+        - "грант енергоефективність громада when:120d"
+        - "грант школа OR ліцей обладнання when:120d"
+        - "грант освіта громада конкурс заявок when:120d"
+        - "міжнародна технічна допомога громада конкурс when:120d"
+        - "програма підтримки громад донор конкурс заявок when:120d"
+        - "грантова програма приватне підприємство переробка when:180d"
+        - "Закарпаття грант проєкт громада when:180d"
+        # нові теми
+        - "грант інклюзивність OR безбар'єрність громада when:180d"
+        - "грант доступність для людей з інвалідністю заклад when:180d"
+        - "грант відновлення річки OR водойми OR берегоукріплення when:180d"
+        - "грант очисні споруди OR водоканал громада when:180d"
+        - "грант укриття OR захисна споруда школа громада when:180d"
+        - "грант розмінування OR генератор громада when:180d"
+        - "грант молодіжний центр OR спортивний майданчик when:180d"
+        - "грант бібліотека OR будинок культури проєкт when:180d"
+        - "грант ветерани простір OR реінтеграція громада when:180d"
+        - "грант ОСББ термомодернізація будинку when:180d"
+        - "грант цифровізація OR електронні послуги громада when:180d"
+        - "грант амбулаторія OR медичне обладнання громада when:180d"
+        - "грант туризм OR велосипедний маршрут громада when:180d"
+
+  - id: gnews_en
+    name: "Пошук новин про гранти (англ.)"
+    type: gnews
+    region: INT
+    enabled: true
+    weight: 0.8
+    params:
+      lang: en
+      country: US
+      per_query: 15
+      queries:
+        - "Ukraine municipalities grant call for proposals when:120d"
+        - "grant Ukraine waste management equipment when:180d"
+        - "funding Ukraine local communities reconstruction when:120d"
+        - "call for proposals Ukraine vocational education when:180d"
+        - "grant Ukraine accessibility inclusion disabilities when:180d"
+        - "grant Ukraine river restoration water resources when:180d"
+        - "grant Ukraine shelters civil protection communities when:180d"
+        - "grant Ukraine cultural heritage youth community when:180d"
+
+  # ───────────── Українські грантові каталоги (RSS) ──────────────────────────
+  - id: chaszmin
+    name: "Час Змін — каталог актуальних грантів"
+    type: rss
+    region: UA
+    enabled: true
+    weight: 1.25          # чисті грантові оголошення українською
+    url: "https://chaszmin.com.ua/feed/"
+
+  - id: veteranfund
+    name: "Український ветеранський фонд"
+    type: rss
+    region: UA
+    enabled: true
+    weight: 1.0
+    url: "https://veteranfund.com.ua/feed/"
+
+  - id: zagoriy
+    name: "Фундація Загорій — благодійність і громади"
+    type: rss
+    region: UA
+    enabled: false
+    weight: 0.7
+    url: "https://zagoriy.foundation/feed/"
+
+  # ───────── Українські каталоги без RSS: читаємо HTML за селекторами ────────
+  - id: gurt_grants
+    name: "ГУРТ — гранти"
+    type: html
+    region: UA
+    enabled: true
+    weight: 1.25
+    url: "https://m.gurt.org.ua/news/grants/all"
+    params:
+      urls:
+        - "https://m.gurt.org.ua/news/grants/all"
+        - "https://m.gurt.org.ua/news/grants/all?page=2"
+        - "https://m.gurt.org.ua/news/grants/all?page=3"
+      item: "div.grid a[href*='/news/grants/']"
+      limit: 40
+      min_title_len: 20
+
+  - id: getgrant
+    name: "GetGrant — каталог грантів для українців"
+    type: html
+    region: UA
+    enabled: true
+    weight: 1.2
+    url: "https://getgrant.ua/grants-and-funding/"
+    params:
+      urls:
+        - "https://getgrant.ua/grants-and-funding/"
+        - "https://getgrant.ua/grants-and-funding/?page=2"
+        - "https://getgrant.ua/grants-and-funding/?page=3"
+      item: "div.gc-title"
+      limit: 40
+      min_title_len: 20
+
+  - id: ucf
+    name: "Український культурний фонд — програми та лоти"
+    type: html
+    region: UA
+    enabled: true
+    weight: 1.1
+    url: "https://ucf.in.ua/programs"
+    params:
+      item: "a[href*='/m_lots/'], a[href*='/m_programs/']"
+      limit: 40
+      min_title_len: 12
+
+  - id: decentralization
+    name: "Портал «Децентралізація» — новини для громад"
+    type: html
+    region: UA
+    enabled: true
+    weight: 1.0
+    url: "https://decentralization.ua/news"
+    params:
+      item: "div.one-article, div.month-article, div.week-article__info"
+      limit: 40
+      min_title_len: 25
+
+  - id: eu4business_ua
+    name: "EU4Business Україна"
+    type: html
+    region: UA
+    enabled: true
+    weight: 1.0
+    url: "https://eu4business.org.ua/news/"
+    params:
+      item: "a[href*='/news/']"
+      limit: 30
+      min_title_len: 25
+
+  # ───────── Пошук у вебі без ключа (DuckDuckGo): «довгий хвіст» грантів ─────
+  # УВАГА: DuckDuckGo блокує запити з деяких IP (хмарні сервери) — тоді джерело
+  # просто віддає 0 записів. На домашньому комп'ютері чи іншому раннері працює,
+  # тож вмикайте за потреби: enabled: true
+  - id: websearch_ua
+    name: "Пошук грантів у вебі (укр.)"
+    type: websearch
+    region: UA
+    enabled: false
+    weight: 0.95
+    params:
+      region: "ua-uk"
+      per_query: 12
+      queries:
+        - "гранти для громад 2026 прийом заявок дедлайн"
+        - "грант комунальному підприємству конкурс заявок"
+        - "грант поводження з відходами громада прийом заявок"
+        - "грант на сміттєвози контейнери спецтехніку для громади"
+        - "грант водопостачання очисні споруди громада конкурс"
+        - "грант інклюзивність безбар'єрність громада конкурс заявок"
+        - "грант укриття школа громада конкурс заявок"
+        - "грант енергоефективність ОСББ громада прийом заявок"
+        - "грант благоустрій парк громадський простір конкурс"
+        - "грант освіта школа обладнання прийом заявок 2026"
+        - "грант молодіжний центр громада конкурс проєктів"
+        - "грант ветеранський простір громада конкурс заявок"
+        - "міжнародна технічна допомога громадам конкурс проєктів 2026"
+        - "site:gurt.org.ua гранти громада відходи"
+        - "site:prostir.ua конкурс грантів громада"
+        - "site:chaszmin.com.ua гранти громада обладнання"
+
+  - id: websearch_en
+    name: "Пошук грантів у вебі (англ.)"
+    type: websearch
+    region: INT
+    enabled: false
+    weight: 0.9
+    params:
+      region: "wt-wt"
+      per_query: 10
+      queries:
+        - "grants for Ukrainian municipalities call for applications 2026"
+        - "funding opportunity Ukraine local government waste management"
+        - "grant program Ukraine communities equipment procurement"
+        - "call for proposals Ukraine municipalities deadline 2026"
+
+  # ───────────────────────── Шаблон для власних джерел ────────────────────────
+  # - id: my_source
+  #   name: "Назва"
+  #   type: rss
+  #   region: UA
+  #   enabled: true
+  #   weight: 1.0
+  #   url: "https://example.org/feed/"

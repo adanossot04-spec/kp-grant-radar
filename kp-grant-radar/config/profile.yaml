@@ -1,0 +1,639 @@
+# Профіль організації — під нього рахується релевантність.
+# Змінюйте ваги та слова під своє КП, код чіпати не треба.
+
+organization:
+  name: "Комунальне підприємство"
+  country: "Україна"
+  region: "Закарпатська область"
+  sector: "Поводження з ТПВ, благоустрій, міський транспорт (а також моніторинг можливостей для приватних підприємств громади)"
+  description: >
+    Комунальне підприємство територіальної громади в Україні. Основні напрями:
+    збирання, сортування, перевезення та захоронення твердих побутових відходів,
+    рециклінг і циркулярна економіка, благоустрій і озеленення населених пунктів,
+    утримання доріг і громадських просторів, комунальний автотранспорт і спецтехніка,
+    енергоефективність власних об'єктів. Цікавлять гранти, технічна допомога,
+    пільгові кредити та програми ЄС/МФО, доступні для муніципалітетів та
+    комунальних підприємств України, у т.ч. транскордонні проєкти.
+    Додатково відстежуються можливості для приватного бізнесу громади:
+    МСП, переробка вторсировини, модернізація обладнання, енергоефективність
+    виробництва, вихід на ринки ЄС.
+
+# ─────────────── Тематичні групи ключових слів (uk + en) ────────────────
+# points — скільки балів дає група (нараховується один раз на групу)
+keyword_groups:
+
+  waste:
+    points: 30
+    terms:
+      - "тпв"
+      - "тверді побутові відходи"
+      - "побутові відходи"
+      - "поводження з відходами"
+      - "управління відходами"
+      - "сміттєзвалищ"
+      - "полігон"
+      - "сміттєпереробк"
+      - "сортування сміття"
+      - "роздільне збирання"
+      - "рециклінг"
+      - "переробка відходів"
+      - "циркулярна економіка"
+      - "сміттєвоз"
+      - "waste management"
+      - "municipal waste"
+      - "solid waste"
+      - "waste collection"
+      - "waste sorting"
+      - "landfill"
+      - "recycling"
+      - "circular economy"
+      - "resource efficiency"
+      - "zero waste"
+      - "biowaste"
+      - "composting"
+
+  municipal:
+    points: 25
+    terms:
+      - "комунальн"
+      # точні форми слова «громада» — щоб НЕ матчити «громадська організація»,
+      # «громадянське суспільство», «громадський простір»
+      - 're:громад(а|и|і|у|ою|ам|ами|ах)\b'
+      - "територіальн громад"
+      - "тергромад"
+      - "отг"
+      - "старост"
+      - "муніципал"
+      - "місцев самовряд"
+      - "орган місцевого самоврядування"
+      - "міськрада"
+      - "municipal"
+      - "municipalit"
+      - "local authorit"
+      - "local government"
+      - "cities and regions"
+      - "city council"
+      - "smart cities"
+      - "urban authorit"
+      - "utility company"
+      - "public utility"
+      - "communal enterprise"
+
+  urban:
+    points: 18
+    terms:
+      - "благоустрій"
+      - "озеленення"
+      - "громадський простір"
+      - "паркова зона"
+      - "вуличне освітлення"
+      - "urban development"
+      - "public space"
+      - "green space"
+      - "urban greening"
+      - "street lighting"
+      - "urban regeneration"
+      - "nature-based solutions"
+
+  transport:
+    points: 18
+    terms:
+      - "громадський транспорт"
+      - "комунальний транспорт"
+      - "спецтехнік"
+      - "автопарк"
+      - "електробус"
+      - "тролейбус"
+      - "public transport"
+      - "urban mobility"
+      - "clean vehicles"
+      - "electric bus"
+      - "fleet renewal"
+      - "sustainable mobility"
+      - "вантажн перевезенн"
+      - "логістик"
+      - "freight"
+      - "logistics"
+      - "multimodal"
+      - "mobility hub"
+
+  business:
+    points: 22
+    terms:
+      - "мсп"
+      - "малого та середнього"
+      - "малий та середній бізнес"
+      - "підприємництв"
+      - 're:підприємц(ів|ям|і|я|ями)\b'
+      - 're:\bбізнес'
+      - "малого бізнесу"
+      - "модернізація обладнання"
+      - "виробництв"
+      - "експорт"
+      - "стартап"
+      - "релокац"
+      - "sme"
+      - "smes"
+      - "small and medium-sized"
+      - "business support"
+      - "business development"
+      - "entrepreneur"
+      - "competitiveness"
+      - "manufacturing"
+      - "industrial modernisation"
+      - "value chain"
+      - "innovation voucher"
+      - "private sector development"
+
+  equipment:
+    points: 20
+    terms:
+      - "контейнер"
+      - "сміттєвоз"
+      - "спецтехнік"
+      - "спеціалізован технік"
+      - "автопарк"
+      - "закупівля обладнання"
+      - "придбання обладнання"
+      - "закупівля технік"
+      - "придбання технік"
+      - "закупівля транспорт"
+      - "придбання транспорт"
+      - "машини та механізми"
+      - "бак для сміття"
+      - "сміттєсортувальн лінія"
+      - "преспідбирач"
+      - "сміттєперевантажн"
+      - "обладнання для"
+      - "equipment procurement"
+      - "procurement of equipment"
+      - "purchase of equipment"
+      - "purchase of vehicles"
+      - "procurement of vehicles"
+      - "machinery"
+      - "waste containers"
+      - "waste bins"
+      - "collection vehicles"
+      - "refuse truck"
+      - "garbage truck"
+      - "compactor"
+      - "sorting line"
+      - "sorting facility"
+      - "recycling facility"
+      - "vehicle fleet"
+      - "fleet renewal"
+      - "rolling stock"
+      - "capital investment"
+      - "equipment and machinery"
+      - "equipment"
+      - "обладнанн"
+      - "устаткуванн"
+      - "технічне оснащенн"
+      - "vehicle"
+      - "vehicles"
+      - "containers"
+      - "fleet"
+      - "infrastructure investment"
+
+  education:
+    points: 24
+    terms:
+      - "освіт"
+      - "заклад освіти"
+      - "школ"
+      - "ліцей"
+      - "гімназі"
+      - "дитяч садок"
+      - "дошкільн"
+      - "коледж"
+      - "профтех"
+      - "професійн освіт"
+      - "учн"
+      - "педагог"
+      - "вчител"
+      - "викладач"
+      - "інклюзивн освіт"
+      - "цифров грамотн"
+      - "education"
+      - "educational"
+      - "school"
+      - "schools"
+      - "schoolchildren"
+      - "kindergarten"
+      - "pupils"
+      - "teacher"
+      - "teachers"
+      - "vocational education"
+      - "vocational training"
+      - "vet provider"
+      - "vet school"
+      - "erasmus"
+      - "youth exchange"
+      - "stem education"
+      - "re:\\bstem\\b"
+
+  # «м'які» навчальні терміни: дають бали, але НЕ роблять напрям «Освіта»
+  skills:
+    points: 8
+    terms:
+      - "навчальн"
+      - "навчання персоналу"
+      - "підвищення кваліфікації"
+      - "тренінг"
+      - "стажування персоналу"
+      - "capacity building"
+      - "training programme"
+      - "training course"
+      - "skills development"
+      - "digital skills"
+      - "green skills"
+      - "lifelong learning"
+      - "upskilling"
+      - "reskilling"
+
+  # ── Інклюзивність і безбар'єрність ──
+  inclusion:
+    points: 20
+    terms:
+      - "інклюзивн"
+      - "безбар'єрн"
+      - "безбарʼєрн"
+      - "доступн середовищ"
+      - "люди з інвалідністю"
+      - "осіб з інвалідністю"
+      - "маломобільн"
+      - "пандус"
+      - "універсальн дизайн"
+      - "реабілітаційн"
+      - "жестов мов"
+      - "шрифт брайл"
+      - "соціальн послуг"
+      - "соціальн інтеграц"
+      - "inclusion"
+      - "inclusive"
+      - "accessibility"
+      - "accessible environment"
+      - "barrier-free"
+      - "universal design"
+      - "persons with disabilities"
+      - "disability"
+      - "social services"
+      - "social inclusion"
+      - "assistive technolog"
+
+  # ── Відновлення водних ресурсів, річки, водойми ──
+  nature:
+    points: 18
+    terms:
+      - "відновленн водн"
+      - "водн ресурс"
+      - "річк"
+      - "водойм"
+      - "озер"
+      - "ставк"
+      - "берегоукріпл"
+      - "заплав"
+      - "басейн річк"
+      - "біорізноманіт"
+      - "зелен зон"
+      - "лісовідновленн"
+      - "насадженн дерев"
+      - "природоохоронн"
+      - "екосистем"
+      - "заповідн"
+      - "смарагдов мереж"
+      - "river restoration"
+      - "water bodies"
+      - "river basin"
+      - "freshwater"
+      - "wetland"
+      - "biodiversity"
+      - "ecosystem restoration"
+      - "nature restoration"
+      - "green infrastructure"
+      - "reforestation"
+      - "protected areas"
+      - "emerald network"
+
+  # ── Безпека, укриття, розмінування, ЦЗ ──
+  safety:
+    points: 18
+    terms:
+      - "укритт"
+      - "захисн споруд"
+      - "бомбосховищ"
+      - "цивільн захист"
+      - "цивільного захисту"
+      - "розмінуванн"
+      - "гуманітарне розмінування"
+      - "пожежн безпек"
+      - "рятувальн"
+      - "аварійно-рятувальн"
+      - "резервн живленн"
+      - "генератор"
+      - "civil protection"
+      - "shelter"
+      - "bomb shelter"
+      - "demining"
+      - "mine action"
+      - "explosive ordnance"
+      - "emergency response"
+      - "fire safety"
+      - "disaster risk"
+      - "early warning"
+
+  # ── Цифровізація та е-послуги ──
+  digital:
+    points: 14
+    terms:
+      - "цифровізаці"
+      - "цифров трансформац"
+      - "електронн послуг"
+      - "е-послуг"
+      - "цифров сервіс"
+      - "геоінформаційн"
+      - "gis"
+      - "смарт сіті"
+      - "розумне місто"
+      - "автоматизац обліку"
+      - "система моніторингу"
+      - "digitalisation"
+      - "digitalization"
+      - "digital transformation"
+      - "e-services"
+      - "smart city"
+      - "open data"
+      - "digital public services"
+      - "geospatial"
+
+  # ── Охорона здоров'я та психічне здоров'я громади ──
+  health:
+    points: 14
+    terms:
+      - "охорон здоров"
+      - "медичн заклад"
+      - "амбулатор"
+      - "лікарн"
+      - "первинн медичн допомог"
+      - "психічн здоров"
+      - "ментальн здоров"
+      - "фізичн терапі"
+      - "медичн обладнанн"
+      - "healthcare"
+      - "health services"
+      - "primary health care"
+      - "mental health"
+      - "rehabilitation services"
+      - "medical equipment"
+
+  # ── Культура, спадщина, громадські простори культури ──
+  culture:
+    points: 14
+    terms:
+      - "культурн спадщин"
+      - "культурн проєкт"
+      - "будинок культури"
+      - "бібліотек"
+      - "музе"
+      - "креативн індустрі"
+      - "мистецьк"
+      - "фестивал"
+      - "пам'ятк архітектур"
+      - "cultural heritage"
+      - "creative industries"
+      - "cultural sector"
+      - "library"
+      - "museum"
+      - "new european bauhaus"
+
+  # ── Молодь, спорт, громадська активність ──
+  youth:
+    points: 14
+    terms:
+      - "молодіжн"
+      - "молодіжн центр"
+      - "молод громади"
+      - "спортивн майданчик"
+      - "спортивн інфраструктур"
+      - "фізичн культур"
+      - "волонтерськ"
+      - "громадськ активніст"
+      - "youth"
+      - "youth centre"
+      - "youth center"
+      - "sport infrastructure"
+      - "volunteering"
+      - "civic engagement"
+      - "community participation"
+
+  # ── Ветерани та соціальна підтримка ──
+  veterans:
+    points: 14
+    terms:
+      - "ветеран"
+      - "ветеранськ політик"
+      - "реінтеграц військов"
+      - "внутрішньо переміщен"
+      - "вп о"
+      - "переселенц"
+      - "соціальн житл"
+      - "veterans"
+      - "veteran support"
+      - "internally displaced"
+      - "idp"
+      - "social housing"
+      - "reintegration"
+
+  # ── Житло, ОСББ, модернізація будинків ──
+  housing:
+    points: 12
+    terms:
+      - "осбб"
+      - "житлов фонд"
+      - "багатоквартирн будинк"
+      - "капітальн ремонт будинк"
+      - "теплов модернізац"
+      - "ремонт покрівл"
+      - "ліфтов господарств"
+      - "housing"
+      - "residential buildings"
+      - "building renovation"
+      - "deep renovation"
+      - "housing associations"
+
+  # ── Туризм і локальний розвиток ──
+  tourism:
+    points: 10
+    terms:
+      - "туризм"
+      - "туристичн"
+      - "зелений туризм"
+      - "велосипедн маршрут"
+      - "туристичн інфраструктур"
+      - "рекреац"
+      - "tourism"
+      - "rural tourism"
+      - "cycling route"
+      - "recreation"
+      - "destination management"
+
+  energy:
+    points: 12
+    terms:
+      - "енергоефективн"
+      - "енергозбереж"
+      - "теплопостачання"
+      - "відновлювальн джерел"
+      - "сонячн"
+      - "energy efficiency"
+      - "renewable energy"
+      - "district heating"
+      - "solar"
+      - "biogas"
+      - "energy audit"
+
+  water:
+    points: 14
+    terms:
+      - "водопостачанн"
+      - "водовідведенн"
+      - "каналізац"
+      - "очисн споруд"
+      - "питн вод"
+      - "свердловин"
+      - "водоканал"
+      - "зливов каналізац"
+      - "water supply"
+      - "sewerage"
+      - "wastewater"
+      - "drinking water"
+      - "water treatment"
+      - "water infrastructure"
+      - "stormwater"
+      - "water loss reduction"
+
+  recovery:
+    points: 15
+    terms:
+      - "відновлення україни"
+      - "відбудова"
+      - "повоєнн"
+      - "recovery of ukraine"
+      - "reconstruction"
+      - "resilience"
+      - "war-affected"
+      - "ukraine facility"
+
+  cross_border:
+    points: 12
+    terms:
+      - "транскордон"
+      - "cross-border"
+      - "interreg"
+      - "danube"
+      - "huskroua"
+      - "eastern partnership"
+      - "twinning"
+      - "partner search"
+
+# ─────────────── Географічна відповідність ────────────────
+geo:
+  points: 20
+  terms:
+    - "україн"
+    - "ukraine"
+    - "ukrainian"
+    - "eastern partnership"
+    - "candidate countries"
+    - "widening countries"
+    - "third countries"
+    - "associated countries"
+    - "neighbourhood"
+
+# ─────────────── Сигнали «це справді можливість фінансування» ────────────────
+funding_signal:
+  points: 15
+  terms:
+    - "грант"
+    - "конкурс"
+    - "заявк"
+    - "дедлайн"
+    - "фінансуванн"
+    - "call for proposals"
+    - "call for applications"
+    - "grant"
+    - "funding opportunity"
+    - "deadline"
+    - "eligible applicants"
+    - "budget"
+    - "co-financing"
+    - "tender"
+    - "expression of interest"
+
+# ─────────────── Мінус-слова (знижують бал) ────────────────
+negative:
+  points: -28
+  terms:
+    # наука заради науки / індивідуальні гранти
+    - "phd"
+    - "doctoral"
+    - "postdoctoral"
+    - "стипенді"
+    - "erc grant"
+    - "marie skłodowska"
+    - "fellowship"
+    - "clinical trial"
+    - "cancer"
+    - "vaccine"
+    - "genomic"
+    - "quantum"
+    - "semiconductor"
+    - "space mission"
+    - "satellite"
+    - "astronom"
+    # оборона / безпека / правоохоронні
+    - "missile"
+    - "ammunition"
+    - "bombs"
+    - "weapon"
+    - "defence industry"
+    - "military"
+    - "law enforcement"
+    - "police authorit"
+    - "border guard"
+    - "counter-terror"
+    - "demining"
+    # не наш формат
+    - "artists residency"
+    - "резиденція для митців"
+    - "вакансі"
+    - "vacancy"
+    - "стажуванн"
+    - "запит комерційних пропозицій"
+    - "запит цінових пропозицій"
+    - "закупівля послуг"
+    - "кава-пауз"
+    - "друковані матеріали"
+    # соціально-гуманітарні теми, не профільні для КП та виробничого бізнесу
+    - "психосоціальн"
+    - "психологічн послуг"
+    - "воєнних злочин"
+    - "права дитини"
+    - "юридичних консульт"
+    - "менторськ"
+    - "адвокаційн"
+    - "гендерн насильств"
+    - "ветеранськ простір"
+
+# ─────────────── Пороги та налаштування ────────────────
+scoring:
+  scale: 0.92              # загальний масштаб балів (щоб не впиратись у стелю 100)
+  high_threshold: 60      # 🔥 висока релевантність
+  medium_threshold: 35    # 🟡 середня
+  deadline_bonus_days: 45 # дедлайн ближче ніж N днів → +бонус за терміновість
+  deadline_bonus: 8
+  expired_penalty: -100   # прострочені дедлайни ховаємо
+  call_bonus: 12           # конкурс/грант прямо в заголовку разом із профільною темою
+  equipment_bonus: 10      # додаткові бали, якщо грант дає техніку/контейнери/обладнання
+  llm_min_score: 30       # LLM-аналіз лише для записів з базовим балом >= цього
+  llm_max_items: 25       # ліміт LLM-викликів за один запуск (економія токенів)
