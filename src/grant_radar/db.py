@@ -31,6 +31,8 @@ CREATE TABLE IF NOT EXISTS opportunities (
     beneficiary_why TEXT,
     track         TEXT DEFAULT 'other',
     equipment     INTEGER DEFAULT 0,
+    budget_eur    INTEGER,
+    budget_band   TEXT DEFAULT 'unknown',
     llm_score     INTEGER,
     llm_summary   TEXT,
     llm_fit       TEXT,
@@ -59,6 +61,7 @@ CREATE INDEX IF NOT EXISTS idx_opp_deadline ON opportunities(deadline_at);
 CREATE INDEX IF NOT EXISTS idx_opp_source   ON opportunities(source_id);
 CREATE INDEX IF NOT EXISTS idx_opp_benef    ON opportunities(beneficiary);
 CREATE INDEX IF NOT EXISTS idx_opp_track    ON opportunities(track);
+CREATE INDEX IF NOT EXISTS idx_opp_budget   ON opportunities(budget_band);
 """
 
 
@@ -83,7 +86,9 @@ class Database:
         for col, ddl in (("beneficiary", "TEXT DEFAULT 'unknown'"),
                          ("beneficiary_why", "TEXT"),
                          ("track", "TEXT DEFAULT 'other'"),
-                         ("equipment", "INTEGER DEFAULT 0")):
+                         ("equipment", "INTEGER DEFAULT 0"),
+                         ("budget_eur", "INTEGER"),
+                         ("budget_band", "TEXT DEFAULT 'unknown'")):
             if col not in have:
                 self.conn.execute(f"ALTER TABLE opportunities ADD COLUMN {col} {ddl}")
 
@@ -114,6 +119,8 @@ class Database:
             "beneficiary_why": opp.beneficiary_why,
             "track": opp.track,
             "equipment": opp.equipment,
+            "budget_eur": opp.budget_eur,
+            "budget_band": opp.budget_band,
             "llm_score": opp.llm_score,
             "llm_summary": opp.llm_summary,
             "llm_fit": opp.llm_fit,
@@ -170,6 +177,7 @@ class Database:
         beneficiary: str | None = None,
         track: str | None = None,
         equipment_only: bool = False,
+        budget_band: str | None = None,
         user_status: str | None = None,
         search: str | None = None,
         only_active: bool = True,
@@ -200,6 +208,9 @@ class Database:
             args.append(track)
         if equipment_only:
             sql += " AND equipment = 1"
+        if budget_band:
+            sql += " AND COALESCE(budget_band, 'unknown') = ?"
+            args.append(budget_band)
         if user_status:
             sql += " AND user_status = ?"
             args.append(user_status)
@@ -214,6 +225,8 @@ class Database:
             "score": "score DESC, deadline_at IS NULL, deadline_at ASC",
             "deadline": "deadline_at IS NULL, deadline_at ASC, score DESC",
             "newest": "first_seen DESC, score DESC",
+            "budget": "budget_eur IS NULL, budget_eur DESC, score DESC",
+            "budget_asc": "budget_eur IS NULL, budget_eur ASC, score DESC",
         }
         sql += f" ORDER BY {orders.get(order, orders['score'])} LIMIT ?"
         args.append(limit)
@@ -261,16 +274,25 @@ class Database:
         tracks = {r[0]: r[1] for r in c(
             "SELECT track, COUNT(*) FROM opportunities GROUP BY track")}
         equip = c("SELECT COUNT(*) FROM opportunities WHERE equipment = 1").fetchone()[0]
+        budgets = {r[0] or "unknown": r[1] for r in c(
+            "SELECT COALESCE(budget_band,'unknown'), COUNT(*) FROM opportunities "
+            "GROUP BY COALESCE(budget_band,'unknown')")}
         benef = {r[0]: r[1] for r in c(
             "SELECT beneficiary, COUNT(*) FROM opportunities GROUP BY beneficiary")}
         return {
             "total": total, "high": high, "medium": med, "deadline_30d": soon,
             "tracks": tracks, "equipment": equip,
+            "budgets": budgets,
+            "budget_known": sum(v for k, v in budgets.items() if k != "unknown"),
             "waste": tracks.get("waste", 0), "education": tracks.get("education", 0),
             "communal": benef.get("communal", 0) + benef.get("both", 0),
             "private": benef.get("private", 0) + benef.get("both", 0),
             "last_run": dict(last) if last else None, "by_source": by_source,
         }
+
+    def budget_bands_in_db(self) -> list[str]:
+        return [r[0] or "unknown" for r in self.conn.execute(
+            "SELECT DISTINCT COALESCE(budget_band,'unknown') FROM opportunities")]
 
     def tracks_in_db(self) -> list[str]:
         return [r[0] for r in self.conn.execute(

@@ -12,6 +12,10 @@ from .llm import LLMAnalyzer
 from .models import Opportunity
 from .scoring import Scorer
 from . import tracks as tracks_mod
+from . import budget as budget_mod
+
+# валюта сирого поля budget у джерел, де вона не євро
+SOURCE_CURRENCY = {"worldbank": "USD"}
 
 log = logging.getLogger(__name__)
 
@@ -56,6 +60,10 @@ def run(db: Database | None = None, use_llm: bool = True) -> dict[str, Any]:
         opp.reasons = "; ".join(reasons)
         opp.track = tracks_mod.detect(meta["groups_title"], meta["groups_body"])
         opp.equipment = 1 if meta["equipment"] else 0
+        opp.budget_eur = budget_mod.parse(
+            opp.budget, f"{opp.title} {opp.summary}",
+            SOURCE_CURRENCY.get(opp.source_id, "EUR"))
+        opp.budget_band = budget_mod.band(opp.budget_eur)
         opp.beneficiary, opp.beneficiary_why = classify(opp.title, opp.summary, opp.programme)
         hint = hints.get(opp.source_id)
         if opp.beneficiary == "unknown" and hint:
@@ -130,13 +138,19 @@ def rescore(db: Database | None = None) -> int:
         score, band, reasons, meta = scorer.score(opp, weights.get(r["source_id"], 1.0))
         track = tracks_mod.detect(meta["groups_title"], meta["groups_body"])
         equipment = 1 if meta["equipment"] else 0
+        bud_eur = budget_mod.parse(
+            r.get("budget") or "", f"{opp.title} {opp.summary}",
+            SOURCE_CURRENCY.get(r["source_id"], "EUR"))
+        bud_band = budget_mod.band(bud_eur)
         benef, benef_why = classify(opp.title, opp.summary, opp.programme)
         if benef == "unknown" and hints.get(r["source_id"]):
             benef, benef_why = hints[r["source_id"]], "за типом джерела"
         db.conn.execute(
             "UPDATE opportunities SET score=?, band=?, reasons=?, beneficiary=?, "
-            "beneficiary_why=?, track=?, equipment=? WHERE uid=?",
-            (score, band, "; ".join(reasons), benef, benef_why, track, equipment, r["uid"]),
+            "beneficiary_why=?, track=?, equipment=?, budget_eur=?, budget_band=? "
+            "WHERE uid=?",
+            (score, band, "; ".join(reasons), benef, benef_why, track, equipment,
+             bud_eur, bud_band, r["uid"]),
         )
     db.conn.commit()
     log.info("Перераховано %d записів", len(rows))

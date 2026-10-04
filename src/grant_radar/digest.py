@@ -9,6 +9,7 @@ import requests
 
 from .db import Database
 from . import tracks as tracks_mod
+from . import budget as budget_mod
 from .classify import LABEL as BENEF_LABEL
 from .scoring import BAND_LABEL
 
@@ -41,6 +42,9 @@ def build_markdown(db: Database, min_score: int = 40, only_new: bool = True) -> 
             marks = tracks_mod.SHORT.get(it.get("track") or "other", "")
             if it.get("equipment"):
                 marks += " · 🚛 техніка/контейнери"
+            money = budget_mod.human(it.get("budget_eur"))
+            if money:
+                marks += f" · 💶 {money}"
             lines.append(f"*{marks} · {it['source_name']}{dl}*")
             lines.append("")
             text = it.get("llm_summary") or (it.get("summary") or "")[:400]

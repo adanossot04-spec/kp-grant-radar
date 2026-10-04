@@ -11,6 +11,7 @@ from pathlib import Path
 
 from . import config
 from . import tracks as tracks_mod
+from . import budget as budget_mod
 from .db import Database
 
 HTML = """<!DOCTYPE html>
@@ -51,6 +52,7 @@ h2.gh span{background:var(--panel2);border:1px solid var(--line);border-radius:9
 .tag.t-transport{background:#1d2430;color:#a9c8f0;border-color:#30415a}
 .tag.t-business{background:#2a2416;color:#f0cf96;border-color:#4b3d20}
 .tag.t-other{background:#1e222b;color:#9aa3b2}
+.tag.money{background:#14262a;color:#8fe3e8;border-color:#1f4650;font-weight:600}
 .tag.equip{background:#33230f;color:#ffc07a;border-color:#60421c;font-weight:600}.tag.b-communal{background:#15291f;color:#7ee2b8;border-color:#23523c}
 .tag.b-private{background:#1a2133;color:#9cc4ff;border-color:#2e3b55}
 .tag.b-both{background:#2a2416;color:#f6cf7a;border-color:#51431f}
@@ -71,6 +73,7 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
 <div class="stat"><b style="color:#9be8a0">__WASTE__</b><span>♻️ відходи</span></div>
 <div class="stat"><b style="color:#d7a8f5">__EDU__</b><span>🎓 освіта</span></div>
 <div class="stat"><b style="color:#ffc07a">__EQUIP__</b><span>🚛 техніка / контейнери</span></div>
+<div class="stat"><b style="color:#8fe3e8">__BUDSM__</b><span>💶 до 500 тис. €</span></div>
 </div>
 <div class="filters">
 <input type="text" id="q" placeholder="пошук: відходи, waste, Interreg…">
@@ -79,6 +82,11 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
 <select id="region"><option value="">усі регіони</option><option value="EU">🇪🇺 ЄС</option>
 <option value="UA">🇺🇦 Україна</option><option value="INT">🌍 міжнародні</option></select>
 <select id="track"><option value="">усі напрями</option>__TRACK_OPTIONS__</select>
+<select id="budget"><option value="">будь-який бюджет</option>
+<option value="s">💶 до 100 тис. €</option>
+<option value="m">💶 100–500 тис. €</option>
+<option value="l">💶 понад 500 тис. €</option>
+<option value="unknown">💶 суму не вказано</option></select>
 <label style="color:#9aa3b2;font-size:13px;display:flex;align-items:center;gap:6px">
 <input type="checkbox" id="equip"> 🚛 лише з технікою</label>
 <select id="groupby"><option value="track">групувати за напрямом</option>
@@ -88,7 +96,8 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
 <option value="communal">🏛 комунальні / ОМС</option><option value="private">🏭 приватний бізнес</option>
 <option value="both">🤝 обидва</option><option value="unknown">❔ уточнити</option></select>
 <select id="order"><option value="score">за релевантністю</option>
-<option value="deadline">за дедлайном</option><option value="newest">найновіші</option></select>
+<option value="deadline">за дедлайном</option><option value="newest">найновіші</option>
+<option value="budget">за бюджетом ↓</option><option value="budget_asc">за бюджетом ↑</option></select>
 </div>
 <div id="list"></div></div>
 <footer>Згенеровано агентом «Грант-радар КП» · <a href="data.json">data.json</a></footer>
@@ -108,6 +117,7 @@ function card(d){return `
         <span class="tag score">${d.score}/100 ${BL[d.band]||""}</span>
         <span class="tag track t-${d.track||"other"}">${TS[d.track||"other"]||""}</span>
         ${d.equipment?'<span class="tag equip">🚛 техніка / контейнери</span>':""}
+        ${d.budget_human?`<span class="tag money" title="орієнтовна сума на проєкт">💶 ${d.budget_human}</span>`:""}
         <span class="tag benef b-${d.beneficiary||"unknown"}">${NL[d.beneficiary||"unknown"]}</span>
         <span class="tag">${esc(d.source_name)}</span>
         ${d.days_left!=null?`<span class="tag dl">⏳ ${d.days_left} дн. — ${(d.deadline_at||"").slice(0,10)}</span>`:""}
@@ -126,15 +136,19 @@ function render(){
         b=document.getElementById("band").value,
         r=document.getElementById("region").value,
         tr=document.getElementById("track").value,
+        bu=document.getElementById("budget").value,
         eq=document.getElementById("equip").checked,
         n=document.getElementById("benef").value,
         g=document.getElementById("groupby").value,
         o=document.getElementById("order").value;
   let rows=DATA.filter(d=>(!b||d.band===b)&&(!r||d.region===r)&&
     (!tr||(d.track||"other")===tr)&&(!eq||d.equipment)&&
+    (!bu||(d.budget_band||"unknown")===bu)&&
     (!n||d.beneficiary===n||(n!=="unknown"&&d.beneficiary==="both"))&&
     (!q||((d.title+" "+(d.summary||"")+" "+(d.llm_summary||"")).toLowerCase().includes(q))));
   rows.sort((x,y)=> o==="score" ? y.score-x.score
+    : o==="budget" ? ((y.budget_eur??-1)-(x.budget_eur??-1))
+    : o==="budget_asc" ? ((x.budget_eur??Infinity)-(y.budget_eur??Infinity))
     : o==="deadline" ? ((x.days_left??9999)-(y.days_left??9999))
     : String(y.first_seen||"").localeCompare(String(x.first_seen||"")));
   let html="";
@@ -154,7 +168,7 @@ function render(){
   document.getElementById("list").innerHTML = html ||
     '<p style="color:#9aa3b2;text-align:center;padding:40px">Нічого не знайдено</p>';
 }
-["q","band","region","track","equip","benef","groupby","order"].forEach(id=>{
+["q","band","region","track","budget","equip","benef","groupby","order"].forEach(id=>{
   const el=document.getElementById(id);
   el.addEventListener("input",render); el.addEventListener("change",render);
 });
@@ -169,6 +183,7 @@ def export(db: Database, out_dir: Path | None = None, min_score: int = 20, limit
     rows = db.query(min_score=min_score, limit=limit, only_active=True)
     for r in rows:
         r.pop("raw_json", None)
+        r["budget_human"] = budget_mod.human(r.get("budget_eur"))
     stats = db.stats()
     org = config.load_profile().get("organization", {})
 
@@ -194,6 +209,8 @@ def export(db: Database, out_dir: Path | None = None, min_score: int = 20, limit
             .replace("__WASTE__", str(stats.get("waste", 0)))
             .replace("__EDU__", str(stats.get("education", 0)))
             .replace("__EQUIP__", str(stats.get("equipment", 0)))
+            .replace("__BUDSM__", str(sum(
+                stats.get("budgets", {}).get(k, 0) for k in ("s", "m"))))
             .replace("__TRACK_LABELS__", json.dumps(tracks_mod.LABEL, ensure_ascii=False))
             .replace("__TRACK_SHORT__", json.dumps(tracks_mod.SHORT, ensure_ascii=False))
             .replace("__TRACK_ORDER__", json.dumps(

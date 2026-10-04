@@ -42,6 +42,8 @@ class Opportunity:
     beneficiary_why: str = ""
     track: str = "other"              # напрям: waste | education | transport | ...
     equipment: int = 0                # 1 — грант дає техніку/контейнери/обладнання
+    budget_eur: int | None = None     # орієнтовна сума на проєкт, €
+    budget_band: str = "unknown"      # s (<100k) | m (100–500k) | l (>500k) | unknown
     score: int = 0
     band: str = ""
     reasons: str = ""

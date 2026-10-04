@@ -10,6 +10,7 @@ from fastapi.templating import Jinja2Templates
 from . import config
 from .db import Database
 from . import tracks as tracks_mod
+from . import budget as budget_mod
 from .classify import LABEL as BENEF_LABEL
 from .scoring import BAND_LABEL
 
@@ -25,12 +26,13 @@ USER_LABEL = {"interesting": "⭐ цікаво", "in_progress": "✍️ готу
 @app.get("/", response_class=HTMLResponse)
 def index(request: Request, q: str = "", band: str = "", region: str = "",
           source: str = "", status: str = "", order: str = "score", all: str = "",
-          benef: str = "", group: str = "track", track: str = "", equip: str = ""):
+          benef: str = "", group: str = "track", track: str = "", equip: str = "",
+          budget: str = ""):
     items = db.query(
         search=q or None, band=band or None, region=region or None,
         source_id=source or None, user_status=status or None,
         beneficiary=benef or None, track=track or None,
-        equipment_only=bool(equip), order=order,
+        equipment_only=bool(equip), budget_band=budget or None, order=order,
         only_active=not bool(all), limit=400,
     )
     # групування підсумкового списку
@@ -57,7 +59,7 @@ def index(request: Request, q: str = "", band: str = "", region: str = "",
                     {"q": q, "band": band, "region": region, "source": source,
                      "status": status, "order": order, "all": all,
                      "benef": benef, "group": group, "track": track,
-                     "equip": equip}.items() if v})
+                     "equip": equip, "budget": budget}.items() if v})
     return templates.TemplateResponse(request, "dashboard.html", {
         "items": items, "stats": stats,
         "org": profile.get("organization", {}),
@@ -66,9 +68,12 @@ def index(request: Request, q: str = "", band: str = "", region: str = "",
         "groups": groups, "benef_label": BENEF_LABEL,
         "track_label": tracks_mod.LABEL, "track_short": tracks_mod.SHORT,
         "tracks": tracks_mod.ordered_tracks(db.tracks_in_db()),
+        "budget_label": budget_mod.BAND_LABEL, "budget_short": budget_mod.BAND_SHORT,
+        "budget_bands": [b for b in budget_mod.BAND_ORDER if b in db.budget_bands_in_db()],
+        "budget_human": budget_mod.human,
         "f": {"q": q, "band": band, "region": region, "source": source,
               "status": status, "order": order, "all": all, "benef": benef,
-              "group": group, "track": track, "equip": equip},
+              "group": group, "track": track, "equip": equip, "budget": budget},
         "qs": qs,
         "last_run": (last.get("finished_at") or "—")[:16].replace("T", " "),
     })
@@ -86,11 +91,12 @@ def mark(request: Request, uid: str, status: str = "interesting"):
 @app.get("/api/opportunities")
 def api_items(min_score: int = 0, band: str = "", region: str = "",
               beneficiary: str = "", track: str = "", equipment: bool = False,
-              limit: int = 100):
+              budget: str = "", order: str = "score", limit: int = 100):
     return JSONResponse(db.query(min_score=min_score, band=band or None,
                                  region=region or None,
                                  beneficiary=beneficiary or None,
                                  track=track or None, equipment_only=equipment,
+                                 budget_band=budget or None, order=order,
                                  limit=limit))
 
 
