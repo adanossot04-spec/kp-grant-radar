@@ -1,6 +1,6 @@
 # Чернетка заявки — Deploying innovative wastewater management, treatment and valorisation solutions in European cities and regions in the context of climate change
 
-> Згенеровано агентом «Грант-радар» 04.10.2026 07:32 · заповненість пам'яті: **15%**
+> Згенеровано агентом «Грант-радар» 04.10.2026 08:02 · заповненість пам'яті: **15%**
 
 ## 0. Паспорт можливості
 
