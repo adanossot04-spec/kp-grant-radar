@@ -10,6 +10,7 @@
 """
 from __future__ import annotations
 
+import json
 import logging
 import re
 import threading
@@ -143,6 +144,39 @@ def extract_primary(html: str, page_url: str) -> tuple[str, str]:
         if sc > best[0]:
             best = (sc, href, text[:120])
     return (best[1], best[2]) if best[0] >= 2 else ("", "")
+
+
+def _gnews_decode(url: str, timeout: int = 25) -> str:
+    """Розкодовує посилання news.google.com у справжню адресу статті.
+
+    Google News віддає токен `CBMi...`, а не URL. Офіційний спосіб дістати
+    оригінал — внутрішній виклик `batchexecute`: зі сторінки статті беремо
+    підпис (`data-n-a-sg`), мітку часу й id, і запитуємо ними адресу.
+    """
+    try:
+        r = requests.get(url, headers=HEADERS, timeout=timeout)
+        r.raise_for_status()
+        div = BeautifulSoup(r.text, "html.parser").select_one("c-wiz > div")
+        if not div:
+            return ""
+        sig, ts, aid = div.get("data-n-a-sg"), div.get("data-n-a-ts"), div.get("data-n-a-id")
+        if not (sig and ts and aid):
+            return ""
+        payload = ["Fbv4je",
+                   f'["garturlreq",[["X","X",["X","X"],null,null,1,1,"US:en",null,1,'
+                   f'null,null,null,null,null,0,1],"X","X",1,[1,1,1],1,1,null,0,0,null,0],'
+                   f'"{aid}",{ts},"{sig}"]']
+        rr = requests.post("https://news.google.com/_/DotsSplashUi/data/batchexecute",
+                           headers={**HEADERS,
+                                    "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"},
+                           data={"f.req": json.dumps([[payload]])}, timeout=timeout)
+        rr.raise_for_status()
+        part = json.loads(rr.text.split("\n\n")[1])[:2]
+        out = json.loads(part[0][2])[1]
+        return out if isinstance(out, str) and out.startswith("http") else ""
+    except Exception as exc:
+        log.debug("gnews decode %s: %s", url[-25:], exc)
+        return ""
 
 
 def _bing_direct_link(title: str) -> str:
@@ -352,7 +386,8 @@ def resolve_one(item: dict[str, Any], timeout: int = 25) -> dict[str, str]:
 
     # Google News віддає SPA — відновлюємо пряме посилання на статтю
     if "news.google.com" in url:
-        page_url = _bing_direct_link(item.get("title") or "") or ""
+        # 1) офіційне розкодування токена Google News, 2) запасний пошук у Bing
+        page_url = _gnews_decode(url) or _bing_direct_link(item.get("title") or "") or ""
         if not page_url:
             return {}
 
@@ -379,6 +414,7 @@ def resolve_one(item: dict[str, Any], timeout: int = 25) -> dict[str, str]:
 
     apply_url, label = extract_primary(html, page_url)
     apply_url = _unshorten(apply_url)
+    body = _body_text(html)
     if not apply_url and item.get("allow_search"):
         # 1) звичайний веб-пошук (працює, доки пошуковик не блокує IP)
         apply_url, label = _search_official(item.get("title") or "", _host(page_url))
@@ -388,8 +424,12 @@ def resolve_one(item: dict[str, Any], timeout: int = 25) -> dict[str, str]:
     # 3) останній шанс — офіційна сторінка донора за згадкою в тексті
     if not apply_url and item.get("allow_donor", True):
         apply_url, label = _donor_page(item.get("title"), item.get("summary"),
-                                       _body_text(html)[:3000])
+                                       body[:3000])
     out: dict[str, str] = {}
+    from .screening import extract_deadline          # дедлайн зі сторінки оголошення
+    deadline = extract_deadline(item.get("title") or "", body)
+    if deadline:
+        out["deadline_at"] = deadline
     if page_url != url:
         out["article_url"] = page_url
     if apply_url:
@@ -425,9 +465,10 @@ def resolve(db, min_score: int = 35, limit: int = 120, workers: int = 8,
     for row, res in zip(rows, results):
         db.conn.execute(
             "UPDATE opportunities SET apply_url=?, apply_host=?, apply_label=?, "
-            "article_url=?, resolved_at=? WHERE uid=?",
+            "article_url=?, resolved_at=?, deadline_at=COALESCE(?, deadline_at) WHERE uid=?",
             (res.get("apply_url", ""), res.get("apply_host", ""),
-             res.get("apply_label", ""), res.get("article_url", ""), ts, row["uid"]))
+             res.get("apply_label", ""), res.get("article_url", ""), ts,
+             res.get("deadline_at"), row["uid"]))
         if res.get("apply_url"):
             found += 1
     db.conn.commit()

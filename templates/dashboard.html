@@ -86,7 +86,8 @@
 
 <div class="wrap">
   <div class="stats">
-    <div class="stat"><b>{{ stats.total }}</b><span>усього в базі</span></div>
+    <div class="stat"><b>{{ stats.actionable }}</b><span>можна подати заявку</span></div>
+    <div class="stat" title="новини без першоджерела, вакансії, протерміновані"><b style="color:#7a8599">{{ stats.hidden }}</b><span>🚫 відсіяно</span></div>
     <div class="stat"><b style="color:var(--high)">{{ stats.high }}</b><span>висока релевантність</span></div>
     <div class="stat"><b style="color:var(--med)">{{ stats.medium }}</b><span>середня</span></div>
     <div class="stat"><b>{{ stats.deadline_30d }}</b><span>дедлайн ≤ 30 днів</span></div>
@@ -133,6 +134,10 @@
     </label>
     <label style="color:var(--muted);font-size:13px">
       <input type="checkbox" name="apply" value="1" {% if f.apply %}checked{% endif %}> 🔗 є посилання на подачу
+    </label>
+    <label style="color:var(--muted);font-size:13px"
+           title="новини про вже видані гранти, вакансії та конкурси з минулим дедлайном">
+      <input type="checkbox" name="hidden" value="1" {% if f.hidden %}checked{% endif %}> 🚫 показати відсіяні
     </label>
     <select name="benef">
       <option value="">усі типи заявників</option>
@@ -193,6 +198,10 @@
       </div>
     {% elif it.summary %}
       <p class="sum">{{ it.summary[:420] }}{% if it.summary|length > 420 %}…{% endif %}</p>
+    {% endif %}
+    {% if it.hide_reason %}
+    <div class="tag" style="background:#3a2430;color:#ffb3b3;border-color:#5c3340">
+      🚫 відсіяно: {{ hide_reason_label.get(it.hide_reason, it.hide_reason) }}</div>
     {% endif %}
     {% if it.apply_url %}
     <div class="links">

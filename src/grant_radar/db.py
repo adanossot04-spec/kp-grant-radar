@@ -38,6 +38,8 @@ CREATE TABLE IF NOT EXISTS opportunities (
     apply_label   TEXT DEFAULT '',
     article_url   TEXT DEFAULT '',
     resolved_at   TEXT,
+    actionable    INTEGER DEFAULT 1,   -- 0 = новина/протерміноване, у стрічці не показуємо
+    hide_reason   TEXT DEFAULT '',
     llm_score     INTEGER,
     llm_summary   TEXT,
     llm_fit       TEXT,
@@ -98,7 +100,9 @@ class Database:
                          ("apply_host", "TEXT DEFAULT ''"),
                          ("apply_label", "TEXT DEFAULT ''"),
                          ("article_url", "TEXT DEFAULT ''"),
-                         ("resolved_at", "TEXT")):
+                         ("resolved_at", "TEXT"),
+                         ("actionable", "INTEGER DEFAULT 1"),
+                         ("hide_reason", "TEXT DEFAULT ''")):
             if col not in have:
                 self.conn.execute(f"ALTER TABLE opportunities ADD COLUMN {col} {ddl}")
 
@@ -189,6 +193,7 @@ class Database:
         equipment_only: bool = False,
         budget_band: str | None = None,
         apply_only: bool = False,
+        include_hidden: bool = False,
         user_status: str | None = None,
         search: str | None = None,
         only_active: bool = True,
@@ -221,6 +226,8 @@ class Database:
             sql += " AND equipment = 1"
         if apply_only:
             sql += " AND apply_url IS NOT NULL AND apply_url <> ''"
+        if not include_hidden:
+            sql += " AND COALESCE(actionable, 1) = 1"
         if budget_band:
             sql += " AND COALESCE(budget_band, 'unknown') = ?"
             args.append(budget_band)
@@ -261,6 +268,8 @@ class Database:
     def unnotified(self, min_score: int) -> list[dict[str, Any]]:
         rows = self.conn.execute(
             "SELECT * FROM opportunities WHERE notified = 0 AND score >= ? "
+            "AND COALESCE(actionable, 1) = 1 "
+            "AND (deadline_at IS NULL OR deadline_at = '' OR deadline_at >= date('now')) "
             "ORDER BY score DESC LIMIT 50",
             (min_score,),
         )
@@ -289,6 +298,9 @@ class Database:
         equip = c("SELECT COUNT(*) FROM opportunities WHERE equipment = 1").fetchone()[0]
         resolved = c("SELECT COUNT(*) FROM opportunities "
                      "WHERE apply_url IS NOT NULL AND apply_url <> ''").fetchone()[0]
+        hidden = {r[0] or "?": r[1] for r in c(
+            "SELECT hide_reason, COUNT(*) FROM opportunities "
+            "WHERE COALESCE(actionable,1)=0 GROUP BY hide_reason")}
         budgets = {r[0] or "unknown": r[1] for r in c(
             "SELECT COALESCE(budget_band,'unknown'), COUNT(*) FROM opportunities "
             "GROUP BY COALESCE(budget_band,'unknown')")}
@@ -300,6 +312,9 @@ class Database:
             "total": total, "high": high, "medium": med, "deadline_30d": soon,
             "tracks": tracks, "equipment": equip,
             "regions": regions, "ua": regions.get("UA", 0), "resolved": resolved,
+            "hidden": sum(hidden.values()), "hidden_by_reason": hidden,
+            "actionable": c("SELECT COUNT(*) FROM opportunities "
+                            "WHERE COALESCE(actionable,1)=1").fetchone()[0],
             "budgets": budgets,
             "budget_known": sum(v for k, v in budgets.items() if k != "unknown"),
             "waste": tracks.get("waste", 0), "education": tracks.get("education", 0),

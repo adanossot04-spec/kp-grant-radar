@@ -112,9 +112,16 @@ def run(db: Database | None = None, use_llm: bool = True) -> dict[str, Any]:
         if db.upsert(opp):
             new_count += 1
 
+    # відсів: новини без першоджерела, вакансії, протерміноване
+    from .screening import screen_all
+    sift = screen_all(db)
+    log.info("  У стрічці: %d; приховано новин %d, без першоджерела %d, "
+             "вакансій %d, протермінованих %d",
+             sift["shown"], sift["news"], sift["no_source"], sift["vacancy"], sift["expired"])
+
     db.log_run(started, len(scored), new_count, errors)
     stats = {"collected": len(scored), "new": new_count, "errors": errors,
-             "llm": analyzer.enabled and use_llm}
+             "llm": analyzer.enabled and use_llm, "screen": sift}
     log.info("Готово: %d записів, %d нових, помилок: %d",
              len(scored), new_count, len(errors))
     return stats
@@ -155,5 +162,7 @@ def rescore(db: Database | None = None) -> int:
              bud_eur, bud_band, r["uid"]),
         )
     db.conn.commit()
+    from .screening import screen_all
+    screen_all(db)
     log.info("Перераховано %d записів", len(rows))
     return len(rows)

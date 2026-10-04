@@ -3,6 +3,7 @@
     python -m grant_radar collect      # зібрати та оцінити можливості
     python -m grant_radar rescore      # перерахувати бали після правок profile.yaml
     python -m grant_radar resolve      # знайти першоджерела (де подавати заявку)
+    python -m grant_radar screen       # відсіяти новини, вакансії та протерміноване
     python -m grant_radar serve        # веб-дашборд на http://0.0.0.0:8000
     python -m grant_radar export       # статичний сайт у docs/ (GitHub Pages)
     python -m grant_radar digest       # дайджест у Markdown + Telegram
@@ -26,7 +27,7 @@ from .scoring import BAND_LABEL
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="grant_radar", description="Грант-радар для КП")
     ap.add_argument("command",
-                    choices=["collect", "rescore", "resolve", "serve", "export", "digest",
+                    choices=["collect", "rescore", "resolve", "screen", "serve", "export", "digest",
                              "sources", "top", "memory", "draft"])
     ap.add_argument("--no-llm", action="store_true", help="не викликати LLM навіть за наявності ключа")
     ap.add_argument("--host", default="0.0.0.0")
@@ -35,6 +36,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--min-score", type=int, default=40)
     ap.add_argument("--all", action="store_true",
                     help="для resolve: перевіряти й ті записи, що вже опрацьовані")
+    ap.add_argument("--fetch", type=int, default=0,
+                    help="для screen: скільки сторінок довантажити заради пошуку дедлайну")
     ap.add_argument("--search-min", type=int, default=35,
                     help="для resolve: з якого бала вмикати пошук донора в інтернеті")
     ap.add_argument("--out", default=None, help="куди писати дайджест/експорт")
@@ -74,6 +77,16 @@ def main(argv: list[str] | None = None) -> int:
         found = resolve(db, min_score=args.min_score, limit=max(args.limit, 120),
                         only_unresolved=not args.all, search_min=args.search_min)
         log.info("🔗 Знайдено першоджерел: %d", found)
+        return 0
+
+    if args.command == "screen":
+        from .screening import REASON_TEXT, screen_all
+        res = screen_all(db, fetch=args.fetch)
+        log.info("✅ У стрічці залишається: %d", res["shown"])
+        for key, text in REASON_TEXT.items():
+            if res.get(key):
+                log.info("   — приховано %4d: %s", res[key], text)
+        log.info("🗓 Дедлайнів знайдено в тексті: %d", res["deadlines"])
         return 0
 
     if args.command == "serve":

@@ -78,6 +78,7 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
 <div class="stat"><b style="color:#9cc4ff">__PRIV__</b><span>🏭 для приватних</span></div>
 <div class="stat"><b style="color:#ffd966">__UA__</b><span>🇺🇦 українських</span></div>
 <div class="stat"><b style="color:#8ff0b5">__RESOLVED__</b><span>🔗 з першоджерелом</span></div>
+<div class="stat" title="новини без першоджерела, вакансії, протерміновані"><b style="color:#7a8599">__HIDDEN__</b><span>🚫 відсіяно</span></div>
 <div class="stat"><b style="color:#9be8a0">__WASTE__</b><span>♻️ відходи</span></div>
 <div class="stat"><b style="color:#d7a8f5">__EDU__</b><span>🎓 освіта</span></div>
 <div class="stat"><b style="color:#ffc07a">__EQUIP__</b><span>🚛 техніка / контейнери</span></div>
@@ -225,6 +226,7 @@ def export(db: Database, out_dir: Path | None = None, min_score: int = 20, limit
             .replace("__PRIV__", str(stats.get("private", 0)))
             .replace("__UA__", str(stats.get("ua", 0)))
             .replace("__RESOLVED__", str(stats.get("resolved", 0)))
+            .replace("__HIDDEN__", str(stats.get("hidden", 0)))
             .replace("__WASTE__", str(stats.get("waste", 0)))
             .replace("__EDU__", str(stats.get("education", 0)))
             .replace("__EQUIP__", str(stats.get("equipment", 0)))
