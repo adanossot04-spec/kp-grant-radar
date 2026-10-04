@@ -55,7 +55,9 @@ jobs:
         run: |
           python -m grant_radar collect
           python -m grant_radar top -n 10
-
+            - name: Перерахувати бали за актуальним профілем
+     run: python -m grant_radar rescore
+     
       - name: Чернетки заявок для найкращих можливостей
         continue-on-error: true
         run: |
