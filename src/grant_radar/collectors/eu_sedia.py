@@ -116,7 +116,7 @@ def _parse(item: dict[str, Any], source: dict[str, Any]) -> Opportunity | None:
         status=STATUS_MAP.get(_first(meta, "status"), _first(meta, "status")),
         published_at=_iso(_first(meta, "startDate")),
         deadline_at=_iso(_first(meta, "deadlineDate")),
-        budget=_first(meta, "budgetOverview")[:300],
+        budget=_first(meta, "budgetOverview")[:6000],
         raw={"metadata": {k: meta.get(k) for k in
                           ("identifier", "callIdentifier", "typesOfAction", "deadlineModel",
                            "frameworkProgramme", "status", "crossCuttingPriorities")}},
