@@ -21,7 +21,9 @@ from typing import Any, Pattern
 
 from .models import Opportunity
 
-CORE_GROUPS = ("waste", "municipal", "urban", "transport", "business", "education")
+CORE_GROUPS = ("waste", "municipal", "urban", "transport", "business", "education",
+               "inclusion", "nature", "water", "safety", "health", "culture",
+               "youth", "veterans", "housing", "digital", "tourism")
 BAND_LABEL = {"high": "🔥 Висока", "medium": "🟡 Середня", "low": "⚪ Низька"}
 
 # Пороги для новинних записів (RSS), які не є офіційними конкурсами
@@ -125,6 +127,13 @@ class Scorer:
             base -= 18
             reasons.append("немає ознак конкурсу/фінансування")
 
+        # «Оголошено конкурс / гранти на …» просто в заголовку разом із профільною
+        # темою — це майже завжди справжня можливість, а не фонова новина.
+        explicit_call = bool(sig_th) and core_title
+        if explicit_call:
+            base += float(self.cfg.get("call_bonus", 12))
+            reasons.append("📣 конкурс/грант прямо в заголовку")
+
         neg_th, neg_bh = self._hits(self.negative["terms"], title, body)
         if neg_th or neg_bh:
             base += self.negative["points"] * (1.0 if neg_th else 0.6) * min(len(neg_th + neg_bh), 3)
@@ -157,7 +166,7 @@ class Scorer:
         if not core_title:
             # профільного слова немає в заголовку → максимум «середня»
             points = min(points, high - 1)
-        if is_news:
+        if is_news and not explicit_call:
             # новина без профільного слова в заголовку — майже завжди шум
             if not core_title and points > NEWS_CAP_NO_CORE_TITLE:
                 points = NEWS_CAP_NO_CORE_TITLE

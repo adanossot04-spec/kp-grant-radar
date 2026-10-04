@@ -6,25 +6,41 @@
 from __future__ import annotations
 
 # порядок = пріоритет при визначенні основного напряму
-TRACK_ORDER = ["waste", "education", "transport", "urban", "water", "energy",
-               "business", "recovery", "other"]
+TRACK_ORDER = ["waste", "education", "inclusion", "water", "nature", "transport",
+               "urban", "safety", "energy", "health", "veterans", "housing",
+               "culture", "youth", "digital", "tourism", "business",
+               "recovery", "other"]
 
 LABEL = {
     "waste": "♻️ Відходи та циркулярна економіка",
     "education": "🎓 Освіта та навчання",
+    "inclusion": "♿ Інклюзивність і безбар'єрність",
+    "water": "💧 Вода, водовідведення, водні ресурси",
+    "nature": "🌿 Довкілля, річки та біорізноманіття",
     "transport": "🚌 Транспорт і мобільність",
     "urban": "🌳 Благоустрій та громадські простори",
-    "water": "💧 Вода та водовідведення",
+    "safety": "🛡 Безпека, укриття, розмінування",
     "energy": "⚡ Енергоефективність",
+    "health": "🏥 Охорона здоров'я",
+    "culture": "🎭 Культура та спадщина",
+    "youth": "🧑\u200d🤝\u200d🧑 Молодь, спорт, громадська активність",
+    "veterans": "🎖 Ветерани та соціальна підтримка",
+    "housing": "🏘 Житло, ОСББ, модернізація будинків",
+    "digital": "💻 Цифровізація та е-послуги",
+    "tourism": "🧭 Туризм і рекреація",
     "business": "🏭 Розвиток бізнесу",
     "recovery": "🏗 Відновлення та стійкість",
     "other": "📋 Інше",
 }
 
 SHORT = {
-    "waste": "♻️ Відходи", "education": "🎓 Освіта", "transport": "🚌 Транспорт",
-    "urban": "🌳 Благоустрій", "water": "💧 Вода", "energy": "⚡ Енергетика",
-    "business": "🏭 Бізнес", "recovery": "🏗 Відновлення", "other": "📋 Інше",
+    "waste": "♻️ Відходи", "education": "🎓 Освіта", "inclusion": "♿ Інклюзія",
+    "water": "💧 Вода", "nature": "🌿 Довкілля", "transport": "🚌 Транспорт",
+    "urban": "🌳 Благоустрій", "safety": "🛡 Безпека", "energy": "⚡ Енергетика",
+    "health": "🏥 Здоров'я", "culture": "🎭 Культура", "youth": "🧑\u200d🤝\u200d🧑 Молодь",
+    "veterans": "🎖 Ветерани", "housing": "🏘 Житло", "digital": "💻 Цифровізація",
+    "tourism": "🧭 Туризм", "business": "🏭 Бізнес", "recovery": "🏗 Відновлення",
+    "other": "📋 Інше",
 }
 
 # напрями, які виводяться першими у підсумковому файлі перегляду
