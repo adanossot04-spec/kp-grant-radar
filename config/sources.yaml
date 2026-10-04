@@ -344,6 +344,146 @@ sources:
         - "grant Ukraine shelters civil protection communities when:180d"
         - "grant Ukraine cultural heritage youth community when:180d"
 
+  # ───────────── Українські грантові каталоги (RSS) ──────────────────────────
+  - id: chaszmin
+    name: "Час Змін — каталог актуальних грантів"
+    type: rss
+    region: UA
+    enabled: true
+    weight: 1.25          # чисті грантові оголошення українською
+    url: "https://chaszmin.com.ua/feed/"
+
+  - id: veteranfund
+    name: "Український ветеранський фонд"
+    type: rss
+    region: UA
+    enabled: true
+    weight: 1.0
+    url: "https://veteranfund.com.ua/feed/"
+
+  - id: zagoriy
+    name: "Фундація Загорій — благодійність і громади"
+    type: rss
+    region: UA
+    enabled: false
+    weight: 0.7
+    url: "https://zagoriy.foundation/feed/"
+
+  # ───────── Українські каталоги без RSS: читаємо HTML за селекторами ────────
+  - id: gurt_grants
+    name: "ГУРТ — гранти"
+    type: html
+    region: UA
+    enabled: true
+    weight: 1.25
+    url: "https://m.gurt.org.ua/news/grants/all"
+    params:
+      urls:
+        - "https://m.gurt.org.ua/news/grants/all"
+        - "https://m.gurt.org.ua/news/grants/all?page=2"
+        - "https://m.gurt.org.ua/news/grants/all?page=3"
+      item: "div.grid a[href*='/news/grants/']"
+      limit: 40
+      min_title_len: 20
+
+  - id: getgrant
+    name: "GetGrant — каталог грантів для українців"
+    type: html
+    region: UA
+    enabled: true
+    weight: 1.2
+    url: "https://getgrant.ua/grants-and-funding/"
+    params:
+      urls:
+        - "https://getgrant.ua/grants-and-funding/"
+        - "https://getgrant.ua/grants-and-funding/?page=2"
+        - "https://getgrant.ua/grants-and-funding/?page=3"
+      item: "div.gc-title"
+      limit: 40
+      min_title_len: 20
+
+  - id: ucf
+    name: "Український культурний фонд — програми та лоти"
+    type: html
+    region: UA
+    enabled: true
+    weight: 1.1
+    url: "https://ucf.in.ua/programs"
+    params:
+      item: "a[href*='/m_lots/'], a[href*='/m_programs/']"
+      limit: 40
+      min_title_len: 12
+
+  - id: decentralization
+    name: "Портал «Децентралізація» — новини для громад"
+    type: html
+    region: UA
+    enabled: true
+    weight: 1.0
+    url: "https://decentralization.ua/news"
+    params:
+      item: "div.one-article, div.month-article, div.week-article__info"
+      limit: 40
+      min_title_len: 25
+
+  - id: eu4business_ua
+    name: "EU4Business Україна"
+    type: html
+    region: UA
+    enabled: true
+    weight: 1.0
+    url: "https://eu4business.org.ua/news/"
+    params:
+      item: "a[href*='/news/']"
+      limit: 30
+      min_title_len: 25
+
+  # ───────── Пошук у вебі без ключа (DuckDuckGo): «довгий хвіст» грантів ─────
+  # УВАГА: DuckDuckGo блокує запити з деяких IP (хмарні сервери) — тоді джерело
+  # просто віддає 0 записів. На домашньому комп'ютері чи іншому раннері працює,
+  # тож вмикайте за потреби: enabled: true
+  - id: websearch_ua
+    name: "Пошук грантів у вебі (укр.)"
+    type: websearch
+    region: UA
+    enabled: false
+    weight: 0.95
+    params:
+      region: "ua-uk"
+      per_query: 12
+      queries:
+        - "гранти для громад 2026 прийом заявок дедлайн"
+        - "грант комунальному підприємству конкурс заявок"
+        - "грант поводження з відходами громада прийом заявок"
+        - "грант на сміттєвози контейнери спецтехніку для громади"
+        - "грант водопостачання очисні споруди громада конкурс"
+        - "грант інклюзивність безбар'єрність громада конкурс заявок"
+        - "грант укриття школа громада конкурс заявок"
+        - "грант енергоефективність ОСББ громада прийом заявок"
+        - "грант благоустрій парк громадський простір конкурс"
+        - "грант освіта школа обладнання прийом заявок 2026"
+        - "грант молодіжний центр громада конкурс проєктів"
+        - "грант ветеранський простір громада конкурс заявок"
+        - "міжнародна технічна допомога громадам конкурс проєктів 2026"
+        - "site:gurt.org.ua гранти громада відходи"
+        - "site:prostir.ua конкурс грантів громада"
+        - "site:chaszmin.com.ua гранти громада обладнання"
+
+  - id: websearch_en
+    name: "Пошук грантів у вебі (англ.)"
+    type: websearch
+    region: INT
+    enabled: false
+    weight: 0.9
+    params:
+      region: "wt-wt"
+      per_query: 10
+      queries:
+        - "grants for Ukrainian municipalities call for applications 2026"
+        - "funding opportunity Ukraine local government waste management"
+        - "grant program Ukraine communities equipment procurement"
+        - "call for proposals Ukraine municipalities deadline 2026"
+
   # ───────────────────────── Шаблон для власних джерел ────────────────────────
   # - id: my_source
   #   name: "Назва"

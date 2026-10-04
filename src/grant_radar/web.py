@@ -27,12 +27,13 @@ USER_LABEL = {"interesting": "⭐ цікаво", "in_progress": "✍️ готу
 def index(request: Request, q: str = "", band: str = "", region: str = "",
           source: str = "", status: str = "", order: str = "score", all: str = "",
           benef: str = "", group: str = "track", track: str = "", equip: str = "",
-          budget: str = ""):
+          budget: str = "", apply: str = ""):
     items = db.query(
         search=q or None, band=band or None, region=region or None,
         source_id=source or None, user_status=status or None,
         beneficiary=benef or None, track=track or None,
-        equipment_only=bool(equip), budget_band=budget or None, order=order,
+        equipment_only=bool(equip), budget_band=budget or None,
+        apply_only=bool(apply), order=order,
         only_active=not bool(all), limit=400,
     )
     # групування підсумкового списку
@@ -59,7 +60,7 @@ def index(request: Request, q: str = "", band: str = "", region: str = "",
                     {"q": q, "band": band, "region": region, "source": source,
                      "status": status, "order": order, "all": all,
                      "benef": benef, "group": group, "track": track,
-                     "equip": equip, "budget": budget}.items() if v})
+                     "equip": equip, "budget": budget, "apply": apply}.items() if v})
     return templates.TemplateResponse(request, "dashboard.html", {
         "items": items, "stats": stats,
         "org": profile.get("organization", {}),
@@ -73,7 +74,8 @@ def index(request: Request, q: str = "", band: str = "", region: str = "",
         "budget_human": budget_mod.human,
         "f": {"q": q, "band": band, "region": region, "source": source,
               "status": status, "order": order, "all": all, "benef": benef,
-              "group": group, "track": track, "equip": equip, "budget": budget},
+              "group": group, "track": track, "equip": equip, "budget": budget,
+              "apply": apply},
         "qs": qs,
         "last_run": (last.get("finished_at") or "—")[:16].replace("T", " "),
     })
@@ -91,12 +93,14 @@ def mark(request: Request, uid: str, status: str = "interesting"):
 @app.get("/api/opportunities")
 def api_items(min_score: int = 0, band: str = "", region: str = "",
               beneficiary: str = "", track: str = "", equipment: bool = False,
-              budget: str = "", order: str = "score", limit: int = 100):
+              budget: str = "", apply: bool = False,
+              order: str = "score", limit: int = 100):
     return JSONResponse(db.query(min_score=min_score, band=band or None,
                                  region=region or None,
                                  beneficiary=beneficiary or None,
                                  track=track or None, equipment_only=equipment,
-                                 budget_band=budget or None, order=order,
+                                 budget_band=budget or None, apply_only=apply,
+                                 order=order,
                                  limit=limit))
 
 

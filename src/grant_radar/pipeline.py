@@ -6,7 +6,7 @@ from typing import Any
 
 from . import config
 from .classify import classify
-from .collectors import eu_sedia, rss, ted, worldbank
+from .collectors import eu_sedia, gnews, html_list, rss, ted, websearch, worldbank
 from .db import Database, now_iso
 from .llm import LLMAnalyzer
 from .models import Opportunity
@@ -20,7 +20,9 @@ SOURCE_CURRENCY = {"worldbank": "USD"}
 log = logging.getLogger(__name__)
 
 COLLECTORS = {"sedia": eu_sedia.collect, "rss": rss.collect,
-              "ted": ted.collect, "worldbank": worldbank.collect}
+              "ted": ted.collect, "worldbank": worldbank.collect,
+              "gnews": gnews.collect, "html": html_list.collect,
+              "websearch": websearch.collect}
 
 
 def run(db: Database | None = None, use_llm: bool = True) -> dict[str, Any]:

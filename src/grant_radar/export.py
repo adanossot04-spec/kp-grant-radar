@@ -52,6 +52,12 @@ h2.gh span{background:var(--panel2);border:1px solid var(--line);border-radius:9
 .tag.t-transport{background:#1d2430;color:#a9c8f0;border-color:#30415a}
 .tag.t-business{background:#2a2416;color:#f0cf96;border-color:#4b3d20}
 .tag.t-other{background:#1e222b;color:#9aa3b2}
+.tag.origin{background:#132a1f;color:#8ff0b5;border-color:#1f5236;font-weight:600}
+.links{margin:8px 0 2px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.donorbtn{background:#2a3350!important;border-color:#3d4a73!important;color:#dce6ff!important}
+.applybtn{background:#1f7a4d;color:#eafff3;border:1px solid #2e9e66;border-radius:8px;
+          padding:6px 12px;font-size:13px;font-weight:600;text-decoration:none}
+.src{color:#9aa3b2;font-size:12.5px;text-decoration:none;border-bottom:1px dotted #475}
 .tag.money{background:#14262a;color:#8fe3e8;border-color:#1f4650;font-weight:600}
 .tag.equip{background:#33230f;color:#ffc07a;border-color:#60421c;font-weight:600}.tag.b-communal{background:#15291f;color:#7ee2b8;border-color:#23523c}
 .tag.b-private{background:#1a2133;color:#9cc4ff;border-color:#2e3b55}
@@ -70,6 +76,8 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
 <div class="stat"><b>__SOON__</b><span>дедлайн ≤ 30 днів</span></div>
 <div class="stat"><b style="color:#7ee2b8">__COMM__</b><span>🏛 для комунальних</span></div>
 <div class="stat"><b style="color:#9cc4ff">__PRIV__</b><span>🏭 для приватних</span></div>
+<div class="stat"><b style="color:#ffd966">__UA__</b><span>🇺🇦 українських</span></div>
+<div class="stat"><b style="color:#8ff0b5">__RESOLVED__</b><span>🔗 з першоджерелом</span></div>
 <div class="stat"><b style="color:#9be8a0">__WASTE__</b><span>♻️ відходи</span></div>
 <div class="stat"><b style="color:#d7a8f5">__EDU__</b><span>🎓 освіта</span></div>
 <div class="stat"><b style="color:#ffc07a">__EQUIP__</b><span>🚛 техніка / контейнери</span></div>
@@ -89,6 +97,8 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
 <option value="unknown">💶 суму не вказано</option></select>
 <label style="color:#9aa3b2;font-size:13px;display:flex;align-items:center;gap:6px">
 <input type="checkbox" id="equip"> 🚛 лише з технікою</label>
+<label style="color:#9aa3b2;font-size:13px;display:flex;align-items:center;gap:6px">
+<input type="checkbox" id="applyonly"> 🔗 є посилання на подачу</label>
 <select id="groupby"><option value="track">групувати за напрямом</option>
 <option value="benef">групувати за типом заявника</option>
 <option value="">єдиним списком</option></select>
@@ -112,11 +122,12 @@ const TORDER = __TRACK_ORDER__;
 const esc = s => (s||"").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function card(d){return `
     <div class="card ${d.band}">
-      <h3><a href="${esc(d.url)}" target="_blank" rel="noopener">${esc(d.title)}</a></h3>
+      <h3><a href="${esc(d.apply_url || d.article_url || d.url)}" target="_blank" rel="noopener">${esc(d.title)}</a></h3>
       <div class="meta">
         <span class="tag score">${d.score}/100 ${BL[d.band]||""}</span>
         <span class="tag track t-${d.track||"other"}">${TS[d.track||"other"]||""}</span>
         ${d.equipment?'<span class="tag equip">🚛 техніка / контейнери</span>':""}
+        ${d.apply_host?`<span class="tag origin" title="першоджерело — тут подають заявку">🔗 ${esc(d.apply_host)}</span>`:""}
         ${d.budget_human?`<span class="tag money" title="орієнтовна сума на проєкт">💶 ${d.budget_human}</span>`:""}
         <span class="tag benef b-${d.beneficiary||"unknown"}">${NL[d.beneficiary||"unknown"]}</span>
         <span class="tag">${esc(d.source_name)}</span>
@@ -126,6 +137,11 @@ function card(d){return `
         ${d.llm_fit?`<div style="margin-top:6px"><b>Чи підходить:</b> ${esc(d.llm_fit)}</div>`:""}
         ${d.llm_actions?`<div style="margin-top:6px"><b>Наступні кроки:</b> ${esc(d.llm_actions)}</div>`:""}</div>`
         :`<p class="sum">${esc((d.summary||"").slice(0,400))}</p>`}
+      ${d.apply_url?`<div class="links">
+        <a class="applybtn ${(d.apply_label||"").startsWith("сторінка донора")?"donorbtn":""}" href="${esc(d.apply_url)}"
+           target="_blank" rel="noopener" title="${esc(d.apply_label||"")}">${(d.apply_label||"").startsWith("сторінка донора")?"🏛 Сайт донора — шукати конкурс":"🔗 Подати заявку / першоджерело"}</a>
+        <a class="src" href="${esc(d.article_url||d.url)}" target="_blank" rel="noopener">ℹ️ анонс (${esc(d.source_name)})</a>
+      </div>`:""}
       <div class="why">чому показано: ${esc(d.reasons||"")}</div>
     </div>`;}
 function section(title, items){
@@ -137,13 +153,14 @@ function render(){
         r=document.getElementById("region").value,
         tr=document.getElementById("track").value,
         bu=document.getElementById("budget").value,
+        ap=document.getElementById("applyonly").checked,
         eq=document.getElementById("equip").checked,
         n=document.getElementById("benef").value,
         g=document.getElementById("groupby").value,
         o=document.getElementById("order").value;
   let rows=DATA.filter(d=>(!b||d.band===b)&&(!r||d.region===r)&&
     (!tr||(d.track||"other")===tr)&&(!eq||d.equipment)&&
-    (!bu||(d.budget_band||"unknown")===bu)&&
+    (!bu||(d.budget_band||"unknown")===bu)&&(!ap||d.apply_url)&&
     (!n||d.beneficiary===n||(n!=="unknown"&&d.beneficiary==="both"))&&
     (!q||((d.title+" "+(d.summary||"")+" "+(d.llm_summary||"")).toLowerCase().includes(q))));
   rows.sort((x,y)=> o==="score" ? y.score-x.score
@@ -168,7 +185,7 @@ function render(){
   document.getElementById("list").innerHTML = html ||
     '<p style="color:#9aa3b2;text-align:center;padding:40px">Нічого не знайдено</p>';
 }
-["q","band","region","track","budget","equip","benef","groupby","order"].forEach(id=>{
+["q","band","region","track","budget","equip","applyonly","benef","groupby","order"].forEach(id=>{
   const el=document.getElementById(id);
   el.addEventListener("input",render); el.addEventListener("change",render);
 });
@@ -177,7 +194,7 @@ render();
 """
 
 
-def export(db: Database, out_dir: Path | None = None, min_score: int = 20, limit: int = 400) -> Path:
+def export(db: Database, out_dir: Path | None = None, min_score: int = 20, limit: int = 800) -> Path:
     out_dir = Path(out_dir or config.DOCS_DIR)
     out_dir.mkdir(parents=True, exist_ok=True)
     rows = db.query(min_score=min_score, limit=limit, only_active=True)
@@ -206,6 +223,8 @@ def export(db: Database, out_dir: Path | None = None, min_score: int = 20, limit
             .replace("__SOON__", str(stats["deadline_30d"]))
             .replace("__COMM__", str(stats.get("communal", 0)))
             .replace("__PRIV__", str(stats.get("private", 0)))
+            .replace("__UA__", str(stats.get("ua", 0)))
+            .replace("__RESOLVED__", str(stats.get("resolved", 0)))
             .replace("__WASTE__", str(stats.get("waste", 0)))
             .replace("__EDU__", str(stats.get("education", 0)))
             .replace("__EQUIP__", str(stats.get("equipment", 0)))

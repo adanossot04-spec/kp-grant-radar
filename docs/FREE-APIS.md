@@ -120,3 +120,24 @@
 curl -sL "https://example.org/feed/" | head -c 500
 PYTHONPATH=src python -m grant_radar collect --no-llm
 ```
+
+
+## Пошук по новинах без ключа (підключено, тип `gnews`)
+`https://news.google.com/rss/search?q=<запит>&hl=uk&gl=UA&ceid=UA:uk` — безкоштовно,
+без реєстрації, підтримує оператори Google (`"фраза"`, `OR`, `-`, `site:`, `when:120d`).
+
+## Перевірені, але малокорисні
+* **Grants.gov** `POST api.grants.gov/v1/api/search2` — працює без ключа,
+  але по запиту «Ukraine» лише 4 позиції (гранти уряду США), тож джерело не додане.
+
+## Нові робочі RSS (підключені)
+* `https://euneighbourseast.eu/feed/` — EU NEIGHBOURS east, 15 позицій
+* `https://www.eu4environment.org/feed/` — EU4Environment, 10
+* `https://hromady.org/feed/` — дайджести можливостей для громад, 10
+* `https://www.prostir.ua/feed/?post_type=tender` — тендери «Громадського простору», 10
+* `https://ecoaction.org.ua/feed` — Екодія, 10
+
+## Перевірені й мертві (не додавати)
+interregeurope.eu/rss.xml, interreg-danube.eu/rss, visegradfund.org/feed, undp.org/ukraine/rss.xml,
+decentralization.ua/feed, gurt.org.ua/rss, u-lead.org.ua/feed, ebrd.com news.rss, coebank.org rss,
+epale.ec.europa.eu/en/rss.xml (403), cinea/eismea/cordis RSS (0 items), minregion.gov.ua/feed (403).

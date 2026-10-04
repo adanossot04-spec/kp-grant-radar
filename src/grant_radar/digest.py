@@ -42,6 +42,10 @@ def build_markdown(db: Database, min_score: int = 40, only_new: bool = True) -> 
             marks = tracks_mod.SHORT.get(it.get("track") or "other", "")
             if it.get("equipment"):
                 marks += " · 🚛 техніка/контейнери"
+            if it.get("apply_host"):
+                _lbl = it.get("apply_label") or ""
+                _ico = "🏛 донор" if _lbl.startswith("сторінка донора") else "🔗 подати"
+                marks += f" · {_ico}: {it['apply_host']}"
             money = budget_mod.human(it.get("budget_eur"))
             if money:
                 marks += f" · 💶 {money}"

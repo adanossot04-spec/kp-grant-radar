@@ -60,6 +60,14 @@
   .tag.t-transport{background:#1d2430;color:#a9c8f0;border-color:#30415a}
   .tag.t-business{background:#2a2416;color:#f0cf96;border-color:#4b3d20}
   .tag.t-other{background:var(--panel2);color:var(--muted)}
+  .tag.origin{background:#132a1f;color:#8ff0b5;border-color:#1f5236;font-weight:600}
+  .links{margin:8px 0 2px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .applybtn{background:#1f7a4d;color:#eafff3;border:1px solid #2e9e66;border-radius:8px;
+            padding:6px 12px;font-size:13px;font-weight:600;text-decoration:none}
+  .applybtn:hover{background:#2a9960}
+  .donorbtn{background:#2a3350;border-color:#3d4a73;color:#dce6ff}
+  .donorbtn:hover{background:#36406a}
+  .src{color:var(--muted);font-size:12.5px;text-decoration:none;border-bottom:1px dotted #475}
   .tag.money{background:#14262a;color:#8fe3e8;border-color:#1f4650;font-weight:600}
   .tag.equip{background:#33230f;color:#ffc07a;border-color:#60421c;font-weight:600}
   .tag.b-communal{background:#15291f;color:#7ee2b8;border-color:#23523c}
@@ -84,6 +92,8 @@
     <div class="stat"><b>{{ stats.deadline_30d }}</b><span>дедлайн ≤ 30 днів</span></div>
     <div class="stat"><b style="color:#7ee2b8">{{ stats.communal }}</b><span>🏛 для комунальних</span></div>
     <div class="stat"><b style="color:#8fc0ff">{{ stats.private }}</b><span>🏭 для приватних</span></div>
+    <div class="stat"><b style="color:#ffd966">{{ stats.ua }}</b><span>🇺🇦 українських</span></div>
+    <div class="stat"><b style="color:#8ff0b5">{{ stats.resolved }}</b><span>🔗 з першоджерелом</span></div>
     <div class="stat"><b style="color:#9be8a0">{{ stats.waste }}</b><span>♻️ відходи</span></div>
     <div class="stat"><b style="color:#d7a8f5">{{ stats.education }}</b><span>🎓 освіта</span></div>
     <div class="stat"><b style="color:#ffc07a">{{ stats.equipment }}</b><span>🚛 техніка / контейнери</span></div>
@@ -121,6 +131,9 @@
     <label style="color:var(--muted);font-size:13px">
       <input type="checkbox" name="equip" value="1" {% if f.equip %}checked{% endif %}> 🚛 лише з технікою
     </label>
+    <label style="color:var(--muted);font-size:13px">
+      <input type="checkbox" name="apply" value="1" {% if f.apply %}checked{% endif %}> 🔗 є посилання на подачу
+    </label>
     <select name="benef">
       <option value="">усі типи заявників</option>
       {% for v,l in [('communal','🏛 комунальні / ОМС'),('private','🏭 приватний бізнес'),('both','🤝 обидва'),('unknown','❔ уточнити')] %}
@@ -156,11 +169,12 @@
   {% if group_title %}<h2 class="gh">{{ group_title }} <span>{{ group_items|length }}</span></h2>{% endif %}
   {% for it in group_items %}
   <div class="card {{ it.band }}">
-    <h3><a href="{{ it.url }}" target="_blank" rel="noopener">{{ it.title }}</a></h3>
+    <h3><a href="{{ it.apply_url or it.article_url or it.url }}" target="_blank" rel="noopener">{{ it.title }}</a></h3>
     <div class="meta">
       <span class="tag score">{{ it.score }}/100 {{ band_label[it.band] }}</span>
       <span class="tag track t-{{ it.track }}">{{ track_short.get(it.track, '') }}</span>
       {% if it.equipment %}<span class="tag equip">🚛 техніка / контейнери</span>{% endif %}
+      {% if it.apply_host %}<span class="tag origin" title="першоджерело — тут подають заявку">🔗 {{ it.apply_host }}</span>{% endif %}
       {% if it.budget_eur %}<span class="tag money" title="орієнтовна сума на проєкт">💶 {{ budget_human(it.budget_eur) }}</span>{% endif %}
       <span class="tag benef b-{{ it.beneficiary }}">{{ benef_label.get(it.beneficiary, '') }}</span>
       <span class="tag">{{ it.source_name }}</span>
@@ -179,6 +193,18 @@
       </div>
     {% elif it.summary %}
       <p class="sum">{{ it.summary[:420] }}{% if it.summary|length > 420 %}…{% endif %}</p>
+    {% endif %}
+    {% if it.apply_url %}
+    <div class="links">
+      {% if it.apply_label and it.apply_label.startswith('сторінка донора') %}
+      <a class="applybtn donorbtn" href="{{ it.apply_url }}" target="_blank" rel="noopener"
+         title="{{ it.apply_label }}">🏛 Сайт донора — шукати конкурс</a>
+      {% else %}
+      <a class="applybtn" href="{{ it.apply_url }}" target="_blank" rel="noopener"
+         title="{{ it.apply_label }}">🔗 Подати заявку / першоджерело</a>
+      {% endif %}
+      <a class="src" href="{{ it.article_url or it.url }}" target="_blank" rel="noopener">ℹ️ анонс ({{ it.source_name }})</a>
+    </div>
     {% endif %}
     <div class="why">чому показано: {{ it.reasons }}</div>
     <div class="acts">

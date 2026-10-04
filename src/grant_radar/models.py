@@ -44,6 +44,10 @@ class Opportunity:
     equipment: int = 0                # 1 — грант дає техніку/контейнери/обладнання
     budget_eur: int | None = None     # орієнтовна сума на проєкт, €
     budget_band: str = "unknown"      # s (<100k) | m (100–500k) | l (>500k) | unknown
+    apply_url: str = ""               # сторінка першоджерела / подачі заявки
+    apply_host: str = ""
+    apply_label: str = ""
+    article_url: str = ""             # пряме посилання на статтю (замість Google News)
     score: int = 0
     band: str = ""
     reasons: str = ""

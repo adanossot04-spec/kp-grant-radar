@@ -2,6 +2,7 @@
 
     python -m grant_radar collect      # зібрати та оцінити можливості
     python -m grant_radar rescore      # перерахувати бали після правок profile.yaml
+    python -m grant_radar resolve      # знайти першоджерела (де подавати заявку)
     python -m grant_radar serve        # веб-дашборд на http://0.0.0.0:8000
     python -m grant_radar export       # статичний сайт у docs/ (GitHub Pages)
     python -m grant_radar digest       # дайджест у Markdown + Telegram
@@ -25,13 +26,17 @@ from .scoring import BAND_LABEL
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="grant_radar", description="Грант-радар для КП")
     ap.add_argument("command",
-                    choices=["collect", "rescore", "serve", "export", "digest", "sources",
-                             "top", "memory", "draft"])
+                    choices=["collect", "rescore", "resolve", "serve", "export", "digest",
+                             "sources", "top", "memory", "draft"])
     ap.add_argument("--no-llm", action="store_true", help="не викликати LLM навіть за наявності ключа")
     ap.add_argument("--host", default="0.0.0.0")
     ap.add_argument("--port", type=int, default=8000)
     ap.add_argument("-n", "--limit", type=int, default=15)
     ap.add_argument("--min-score", type=int, default=40)
+    ap.add_argument("--all", action="store_true",
+                    help="для resolve: перевіряти й ті записи, що вже опрацьовані")
+    ap.add_argument("--search-min", type=int, default=35,
+                    help="для resolve: з якого бала вмикати пошук донора в інтернеті")
     ap.add_argument("--out", default=None, help="куди писати дайджест/експорт")
     ap.add_argument("--uid", default=None, help="id можливості для команди draft")
     ap.add_argument("--org", default=None, help="id організації з memory.yaml")
@@ -62,6 +67,13 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "rescore":
         from .pipeline import rescore
         rescore(db)
+        return 0
+
+    if args.command == "resolve":
+        from .resolve import resolve
+        found = resolve(db, min_score=args.min_score, limit=max(args.limit, 120),
+                        only_unresolved=not args.all, search_min=args.search_min)
+        log.info("🔗 Знайдено першоджерел: %d", found)
         return 0
 
     if args.command == "serve":

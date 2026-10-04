@@ -33,6 +33,11 @@ CREATE TABLE IF NOT EXISTS opportunities (
     equipment     INTEGER DEFAULT 0,
     budget_eur    INTEGER,
     budget_band   TEXT DEFAULT 'unknown',
+    apply_url     TEXT DEFAULT '',
+    apply_host    TEXT DEFAULT '',
+    apply_label   TEXT DEFAULT '',
+    article_url   TEXT DEFAULT '',
+    resolved_at   TEXT,
     llm_score     INTEGER,
     llm_summary   TEXT,
     llm_fit       TEXT,
@@ -88,7 +93,12 @@ class Database:
                          ("track", "TEXT DEFAULT 'other'"),
                          ("equipment", "INTEGER DEFAULT 0"),
                          ("budget_eur", "INTEGER"),
-                         ("budget_band", "TEXT DEFAULT 'unknown'")):
+                         ("budget_band", "TEXT DEFAULT 'unknown'"),
+                         ("apply_url", "TEXT DEFAULT ''"),
+                         ("apply_host", "TEXT DEFAULT ''"),
+                         ("apply_label", "TEXT DEFAULT ''"),
+                         ("article_url", "TEXT DEFAULT ''"),
+                         ("resolved_at", "TEXT")):
             if col not in have:
                 self.conn.execute(f"ALTER TABLE opportunities ADD COLUMN {col} {ddl}")
 
@@ -178,6 +188,7 @@ class Database:
         track: str | None = None,
         equipment_only: bool = False,
         budget_band: str | None = None,
+        apply_only: bool = False,
         user_status: str | None = None,
         search: str | None = None,
         only_active: bool = True,
@@ -208,6 +219,8 @@ class Database:
             args.append(track)
         if equipment_only:
             sql += " AND equipment = 1"
+        if apply_only:
+            sql += " AND apply_url IS NOT NULL AND apply_url <> ''"
         if budget_band:
             sql += " AND COALESCE(budget_band, 'unknown') = ?"
             args.append(budget_band)
@@ -274,14 +287,19 @@ class Database:
         tracks = {r[0]: r[1] for r in c(
             "SELECT track, COUNT(*) FROM opportunities GROUP BY track")}
         equip = c("SELECT COUNT(*) FROM opportunities WHERE equipment = 1").fetchone()[0]
+        resolved = c("SELECT COUNT(*) FROM opportunities "
+                     "WHERE apply_url IS NOT NULL AND apply_url <> ''").fetchone()[0]
         budgets = {r[0] or "unknown": r[1] for r in c(
             "SELECT COALESCE(budget_band,'unknown'), COUNT(*) FROM opportunities "
             "GROUP BY COALESCE(budget_band,'unknown')")}
+        regions = {r[0] or "?": r[1] for r in c(
+            "SELECT region, COUNT(*) FROM opportunities GROUP BY region")}
         benef = {r[0]: r[1] for r in c(
             "SELECT beneficiary, COUNT(*) FROM opportunities GROUP BY beneficiary")}
         return {
             "total": total, "high": high, "medium": med, "deadline_30d": soon,
             "tracks": tracks, "equipment": equip,
+            "regions": regions, "ua": regions.get("UA", 0), "resolved": resolved,
             "budgets": budgets,
             "budget_known": sum(v for k, v in budgets.items() if k != "unknown"),
             "waste": tracks.get("waste", 0), "education": tracks.get("education", 0),
