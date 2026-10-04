@@ -60,6 +60,7 @@
   .tag.t-transport{background:#1d2430;color:#a9c8f0;border-color:#30415a}
   .tag.t-business{background:#2a2416;color:#f0cf96;border-color:#4b3d20}
   .tag.t-other{background:var(--panel2);color:var(--muted)}
+  .tag.money{background:#14262a;color:#8fe3e8;border-color:#1f4650;font-weight:600}
   .tag.equip{background:#33230f;color:#ffc07a;border-color:#60421c;font-weight:600}
   .tag.b-communal{background:#15291f;color:#7ee2b8;border-color:#23523c}
   .tag.b-private{background:#1a2133;color:#9cc4ff;border-color:#2e3b55}
@@ -86,6 +87,7 @@
     <div class="stat"><b style="color:#9be8a0">{{ stats.waste }}</b><span>♻️ відходи</span></div>
     <div class="stat"><b style="color:#d7a8f5">{{ stats.education }}</b><span>🎓 освіта</span></div>
     <div class="stat"><b style="color:#ffc07a">{{ stats.equipment }}</b><span>🚛 техніка / контейнери</span></div>
+    <div class="stat"><b style="color:#8fe3e8">{{ stats.budgets.get('m', 0) + stats.budgets.get('s', 0) }}</b><span>💶 до 500 тис. €</span></div>
     <div class="stat"><b style="font-size:14px;padding-top:7px">{{ last_run }}</b><span>останнє сканування</span></div>
   </div>
 
@@ -111,6 +113,11 @@
       {% for tr in tracks %}
       <option value="{{tr}}" {% if f.track==tr %}selected{% endif %}>{{ track_label.get(tr, tr) }}</option>{% endfor %}
     </select>
+    <select name="budget">
+      <option value="">будь-який бюджет</option>
+      {% for b in budget_bands %}
+      <option value="{{b}}" {% if f.budget==b %}selected{% endif %}>{{ budget_label.get(b, b) }}</option>{% endfor %}
+    </select>
     <label style="color:var(--muted);font-size:13px">
       <input type="checkbox" name="equip" value="1" {% if f.equip %}checked{% endif %}> 🚛 лише з технікою
     </label>
@@ -130,7 +137,7 @@
       <option value="{{v}}" {% if f.status==v %}selected{% endif %}>{{l}}</option>{% endfor %}
     </select>
     <select name="order">
-      {% for v,l in [('score','за релевантністю'),('deadline','за дедлайном'),('newest','найновіші')] %}
+      {% for v,l in [('score','за релевантністю'),('deadline','за дедлайном'),('newest','найновіші'),('budget','за бюджетом ↓'),('budget_asc','за бюджетом ↑')] %}
       <option value="{{v}}" {% if f.order==v %}selected{% endif %}>{{l}}</option>{% endfor %}
     </select>
     <label style="color:var(--muted);font-size:13px">
@@ -154,6 +161,7 @@
       <span class="tag score">{{ it.score }}/100 {{ band_label[it.band] }}</span>
       <span class="tag track t-{{ it.track }}">{{ track_short.get(it.track, '') }}</span>
       {% if it.equipment %}<span class="tag equip">🚛 техніка / контейнери</span>{% endif %}
+      {% if it.budget_eur %}<span class="tag money" title="орієнтовна сума на проєкт">💶 {{ budget_human(it.budget_eur) }}</span>{% endif %}
       <span class="tag benef b-{{ it.beneficiary }}">{{ benef_label.get(it.beneficiary, '') }}</span>
       <span class="tag">{{ it.source_name }}</span>
       {% if it.programme %}<span class="tag">{{ it.programme[:60] }}</span>{% endif %}
