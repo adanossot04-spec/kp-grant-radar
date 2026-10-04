@@ -1,8 +1,0 @@
-[project]
-name = "kp-grant-radar"
-version = "1.0.0"
-description = "AI-агент моніторингу грантів для комунальних підприємств (ЄС + Україна)"
-requires-python = ">=3.10"
-
-[tool.setuptools.packages.find]
-where = ["src"]
