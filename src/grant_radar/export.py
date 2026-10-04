@@ -95,7 +95,9 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
   <button class="tab on" data-feed="ua">🇺🇦 Україна — пряме фінансування <b id="cnt_ua">0</b></button>
   <button class="tab" data-feed="eu">🇪🇺 ЄС — консорціумні проєкти <b id="cnt_eu">0</b></button>
   <button class="tab" data-feed="aid">🤝 Побратими та техніка <b id="cnt_aid">0</b></button>
+  <button class="tab" data-feed="edu">🎓 Освітній напрям <b id="cnt_edu">0</b></button>
   <button class="tab" data-feed="all">🌍 Усе разом <b id="cnt_all">0</b></button>
+  <a class="tab" href="donors.html" style="text-decoration:none">📇 Реєстр донорів <b id="cnt_don">0</b></a>
 </div>
 <div class="filters">
 <input type="text" id="q" placeholder="пошук: відходи, waste, Interreg…">
@@ -211,7 +213,9 @@ window.FEED="ua";
 document.getElementById("cnt_ua").textContent  = DATA.filter(d=>(d.feed||"ua")==="ua").length;
 document.getElementById("cnt_eu").textContent  = DATA.filter(d=>(d.feed||"ua")==="eu").length;
 document.getElementById("cnt_aid").textContent = DATA.filter(d=>(d.feed||"ua")==="aid").length;
+document.getElementById("cnt_edu").textContent = DATA.filter(d=>(d.feed||"ua")==="edu").length;
 document.getElementById("cnt_all").textContent = DATA.length;
+if(window.DONOR_COUNT!==undefined){document.getElementById("cnt_don").textContent=window.DONOR_COUNT;}
 document.querySelectorAll(".tab").forEach(btn=>{
   btn.addEventListener("click",()=>{
     document.querySelectorAll(".tab").forEach(b=>b.classList.remove("on"));
@@ -233,6 +237,9 @@ def export(db: Database, out_dir: Path | None = None, min_score: int = 12, limit
     # новина про передану техніку є контактом донора, тож беремо всі записи
     seen = {r["uid"] for r in rows}
     rows += [r for r in db.query(feed="aid", min_score=0, limit=400, only_active=True)
+             if r["uid"] not in seen]
+    seen |= {r["uid"] for r in rows}
+    rows += [r for r in db.query(feed="edu", min_score=0, limit=400, only_active=True)
              if r["uid"] not in seen]
     rows.sort(key=lambda r: -(r.get("score") or 0))
     for r in rows:
@@ -273,6 +280,144 @@ def export(db: Database, out_dir: Path | None = None, min_score: int = 12, limit
             .replace("__TRACK_ORDER__", json.dumps(
                 tracks_mod.ordered_tracks(tracks_mod.TRACK_ORDER), ensure_ascii=False))
             .replace("__TRACK_OPTIONS__", track_options))
+    html = html.replace("window.FEED=\"ua\";",
+                        f'window.FEED="ua";window.DONOR_COUNT={db.donor_count()};')
     path = out_dir / "index.html"
     path.write_text(html, encoding="utf-8")
+    export_donors(db, out_dir)
+    return path
+
+
+DONORS_HTML = """<!DOCTYPE html>
+<html lang="uk"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🤝 Реєстр донорів — Грант-радар</title>
+<style>
+ :root{--bg:#0f1115;--panel:#171a21;--panel2:#1e222b;--line:#2a2f3a;--txt:#e8eaef;--muted:#9aa3b2;--accent:#4f9cf9}
+ *{box-sizing:border-box}
+ body{margin:0;background:var(--bg);color:var(--txt);font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+ a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+ header{background:linear-gradient(135deg,#1b2433,#101520);border-bottom:1px solid var(--line);padding:22px 28px}
+ h1{margin:0 0 4px;font-size:22px}.sub{color:var(--muted);font-size:13.5px}
+ .wrap{max-width:1450px;margin:0 auto;padding:18px 22px 60px}
+ .nav{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+ .nav a{padding:9px 15px;border-radius:10px;border:1px solid #273043;background:#141924;color:#9aa3b2;font-size:14px}
+ .nav a.on{background:#17304a;border-color:#2f6ea6;color:#e8f1ff}
+ .stats{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+ .stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 14px;min-width:115px}
+ .stat b{display:block;font-size:20px}.stat span{color:var(--muted);font-size:12px}
+ .filters{display:flex;gap:8px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;margin:12px 0}
+ .filters input,.filters select{background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:14px}
+ table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+ th,td{padding:10px 11px;border-bottom:1px solid var(--line);vertical-align:top;font-size:13.5px}
+ th{background:#141a24;color:var(--muted);text-align:left;white-space:nowrap}
+ tr:hover td{background:#1a1f29}
+ .pri{font-weight:700;font-size:16px;border-radius:8px;padding:3px 9px;display:inline-block}
+ .hot{background:#3a1a14;color:#ff9d84;border:1px solid #7a2f1f}
+ .warm{background:#332a12;color:#f6cf7a;border:1px solid #6b571f}
+ .cold{background:#20242e;color:#9aa3b2;border:1px solid #333a48}
+ .formula{color:var(--muted);font-size:11.5px}
+ .badge{display:inline-block;background:var(--panel2);border:1px solid var(--line);border-radius:20px;padding:2px 9px;font-size:12px;color:#cfd8e8;margin:0 4px 3px 0}
+ button.copy{background:#14301f;border:1px solid #2e9e66;color:#9be8bb;border-radius:8px;padding:5px 10px;font-size:12.5px;cursor:pointer}
+ button.show{background:#182438;border:1px solid #2e4a6b;color:#cfe0ff;border-radius:8px;padding:5px 10px;font-size:12.5px;cursor:pointer;margin-top:4px}
+ .letter{display:none;white-space:pre-wrap;background:#10141c;border:1px solid var(--line);border-radius:10px;
+         padding:12px;margin-top:8px;font:12.5px/1.55 ui-monospace,Menlo,Consolas,monospace;color:#d7dee9}
+ .hint{background:#141a24;border:1px solid var(--line);border-radius:12px;padding:12px 15px;color:#b7c0cf;font-size:13px;margin:10px 0 14px}
+ footer{color:var(--muted);font-size:12px;text-align:center;padding:22px}
+</style></head><body>
+<header><h1>🤝 Реєстр донорів і партнерів</h1>
+<div class="sub">__ORG__ · пріоритет = Д (доведеність) + М (місток) + З (збіг потреби) − В (вартість входу) · оновлено __UPDATED__</div></header>
+<div class="wrap">
+ <div class="nav"><a href="index.html">← до стрічки грантів</a><a href="#" class="on">📇 Реєстр донорів</a></div>
+ <div class="stats">
+  <div class="stat"><b id="s_total">0</b><span>донорів</span></div>
+  <div class="stat"><b id="s_hot" style="color:#ff6b4a">0</b><span>🔥 гарячі (7+)</span></div>
+  <div class="stat"><b id="s_warm" style="color:#f4b740">0</b><span>🟡 теплі (4–6)</span></div>
+  <div class="stat"><b id="s_cold" style="color:#6b7280">0</b><span>⚪ холодні</span></div>
+ </div>
+ <div class="hint">Натисніть «✉️ лист» — відкриється готовий текст мовою донора: перевірте контакти й надсилайте.
+  Методологія пошуку: <b>docs/METODOLOGIA_DONORIV.md</b>, довідник каналів: <b>docs/PARTNERSTVA.md</b>.</div>
+ <div class="filters">
+  <input type="text" id="q" placeholder="пошук: донор, подія, отримувач…">
+  <select id="circle"><option value="">усі кола</option></select>
+  <select id="goods"><option value="">будь-яка допомога</option></select>
+  <select id="country"><option value="">усі країни</option></select>
+  <select id="minp"><option value="0">пріоритет ≥ 0</option><option value="4">пріоритет ≥ 4</option><option value="7">пріоритет ≥ 7</option></select>
+ </div>
+ <table><thead><tr><th>бал</th><th>донор</th><th>країна</th><th>тип</th><th>коло</th><th>допомога</th>
+   <th>привід (що і кому передав)</th><th>лист</th></tr></thead><tbody id="rows"></tbody></table>
+</div>
+<footer>Реєстр формується командою <code>python -m grant_radar donors</code> · CSV: <code>data/donors.csv</code></footer>
+<script>
+const D = __DONORS__, CIRCLES = __CIRCLES__, GOODS = __GOODS__, ORGS = __ORGS__, CN = __COUNTRIES__;
+const esc = s => (s||"").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function fill(sel, obj, used){const el=document.getElementById(sel);
+  Object.keys(obj).filter(k=>used.has(String(k))).forEach(k=>{
+    const o=document.createElement("option");o.value=k;o.textContent=obj[k];el.appendChild(o);});}
+fill("circle", CIRCLES, new Set(D.map(d=>String(d.circle))));
+fill("goods", GOODS, new Set(D.map(d=>d.goods)));
+fill("country", CN, new Set(D.map(d=>d.country)));
+document.getElementById("s_total").textContent = D.length;
+document.getElementById("s_hot").textContent = D.filter(d=>d.priority>=7).length;
+document.getElementById("s_warm").textContent = D.filter(d=>d.priority>=4&&d.priority<7).length;
+document.getElementById("s_cold").textContent = D.filter(d=>d.priority<4).length;
+function render(){
+  const q=document.getElementById("q").value.toLowerCase(),
+        ci=document.getElementById("circle").value, go=document.getElementById("goods").value,
+        co=document.getElementById("country").value, mp=+document.getElementById("minp").value;
+  const list=D.filter(d=>(!ci||String(d.circle)===ci)&&(!go||d.goods===go)&&(!co||d.country===co)
+      &&d.priority>=mp&&(!q||((d.name||"")+" "+(d.what||"")+" "+(d.recipient||"")).toLowerCase().includes(q)))
+      .sort((a,b)=>b.priority-a.priority);
+  document.getElementById("rows").innerHTML = list.map(d=>{
+    const cls = d.priority>=7?"hot":(d.priority>=4?"warm":"cold");
+    return `<tr><td><span class="pri ${cls}">${d.priority}</span>
+      <div class="formula">Д${d.proven} М${d.bridge} З${d.need} −В${d.cost}</div></td>
+      <td><b>${esc(d.name)}</b></td>
+      <td>${esc(CN[d.country]||d.country)}<div class="formula">мова: ${esc(d.lang)}</div></td>
+      <td><span class="badge">${esc(ORGS[d.org_type]||d.org_type)}</span></td>
+      <td><span class="badge">${esc(CIRCLES[d.circle]||d.circle)}</span></td>
+      <td><span class="badge">${esc(GOODS[d.goods]||d.goods)}</span></td>
+      <td>${esc(d.what)}${d.recipient?`<div class="formula">отримувач: ${esc(d.recipient)}</div>`:""}
+        ${d.event_date?`<div class="formula">${esc(d.event_date)}</div>`:""}
+        ${d.news_url?`<div><a href="${esc(d.news_url)}" target="_blank">джерело ↗</a></div>`:""}</td>
+      <td><button class="copy" data-id="${d.id}">📋 копіювати</button>
+        <button class="show" data-id="${d.id}">✉️ лист</button>
+        <div class="letter" id="L${d.id}">${esc(d.letter)}</div></td></tr>`;}).join("");
+  document.querySelectorAll("button.show").forEach(b=>b.onclick=()=>{
+    const el=document.getElementById("L"+b.dataset.id);
+    el.style.display = el.style.display==="block" ? "none" : "block";});
+  document.querySelectorAll("button.copy").forEach(b=>b.onclick=()=>{
+    const d=D.find(x=>String(x.id)===b.dataset.id);
+    navigator.clipboard && navigator.clipboard.writeText(d.letter);
+    b.textContent="✅ скопійовано"; setTimeout(()=>b.textContent="📋 копіювати",1500);});
+}
+["q","circle","goods","country","minp"].forEach(id=>{
+  const el=document.getElementById(id); el.addEventListener("input",render); el.addEventListener("change",render);});
+render();
+</script></body></html>
+"""
+
+
+def export_donors(db: Database, out_dir: Path | None = None) -> Path:
+    """Окрема статична сторінка реєстру донорів із готовими листами."""
+    from . import donors as donors_mod
+
+    out_dir = Path(out_dir or config.DOCS_DIR)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    rows = db.donors(limit=2000)
+    for r in rows:
+        r["letter"] = donors_mod.build_letter(r)
+    org = config.load_profile().get("community", {})
+    html = (DONORS_HTML
+            .replace("__DONORS__", json.dumps(rows, ensure_ascii=False))
+            .replace("__CIRCLES__", json.dumps(donors_mod.CIRCLE_LABEL, ensure_ascii=False))
+            .replace("__GOODS__", json.dumps(donors_mod.GOODS_LABEL, ensure_ascii=False))
+            .replace("__ORGS__", json.dumps(donors_mod.ORG_LABEL, ensure_ascii=False))
+            .replace("__COUNTRIES__", json.dumps(donors_mod.COUNTRY_NAME, ensure_ascii=False))
+            .replace("__ORG__", f"{org.get('name_uk', '')} · {org.get('region_uk', '')}")
+            .replace("__UPDATED__", datetime.now().strftime("%d.%m.%Y %H:%M")))
+    path = out_dir / "donors.html"
+    path.write_text(html, encoding="utf-8")
+    (out_dir / "donors.json").write_text(
+        json.dumps(rows, ensure_ascii=False, indent=1), encoding="utf-8")
     return path

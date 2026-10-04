@@ -29,7 +29,8 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="grant_radar", description="Грант-радар для КП")
     ap.add_argument("command",
                     choices=["collect", "rescore", "resolve", "screen", "check", "serve", "export", "digest",
-                             "sources", "top", "memory", "draft"])
+                             "sources", "top", "memory", "draft",
+                             "donors", "letter", "contacts"])
     ap.add_argument("--no-llm", action="store_true", help="не викликати LLM навіть за наявності ключа")
     ap.add_argument("--host", default="0.0.0.0")
     ap.add_argument("--port", type=int, default=8000)
@@ -46,6 +47,12 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--out", default=None, help="куди писати дайджест/експорт")
     ap.add_argument("--uid", default=None, help="id можливості для команди draft")
     ap.add_argument("--org", default=None, help="id організації з memory.yaml")
+    ap.add_argument("--donor", type=int, default=None,
+                    help="id донора з реєстру для команди letter")
+    ap.add_argument("--lang", default=None,
+                    help="мова листа: hu | de | pl | en | uk (типово — мова країни донора)")
+    ap.add_argument("--min-priority", type=int, default=4,
+                    help="для donors/letter: мінімальний пріоритет донора")
     ap.add_argument("--benef", default=None,
                     choices=["communal", "private", "both", "unknown"],
                     help="фільтр за типом заявника для команди top")
@@ -108,6 +115,63 @@ def main(argv: list[str] | None = None) -> int:
         import uvicorn
         log.info("🌐 Дашборд: http://%s:%s", args.host, args.port)
         uvicorn.run("grant_radar.web:app", host=args.host, port=args.port, log_level="info")
+        return 0
+
+    if args.command == "donors":
+        from . import donors as donors_mod
+        res = donors_mod.rebuild(db)
+        st = db.donor_stats()
+        log.info("🤝 Реєстр донорів: +%d нових, оновлено %d, усього %d",
+                 res["added"], res["updated"], res["total"])
+        log.info("   🔥 гарячих (7+): %d · 🟡 теплих (4–6): %d · ⚪ холодних: %d",
+                 st["hot"], st["warm"], st["cold"])
+        log.info("   кола: %s", ", ".join(
+            f"{donors_mod.CIRCLE_LABEL.get(k, k)} — {v}" for k, v in sorted(st["by_circle"].items())))
+        csv_path = donors_mod.export_csv(db)
+        log.info("   📊 CSV-реєстр: %s", csv_path)
+        log.info("")
+        log.info("   %-4s %-3s %-26s %-22s %s", "бал", "кр", "донор", "що передавав", "статус")
+        for d in db.donors(limit=args.limit, min_priority=None):
+            log.info("   %-4s %-3s %-26s %-22s %s", d["priority"], d["country"],
+                     (d["name"] or "—")[:26],
+                     donors_mod.GOODS_LABEL.get(d["goods"], d["goods"])[:22],
+                     donors_mod.STATUS_LABEL.get(d["status"], d["status"]))
+        return 0
+
+    if args.command == "letter":
+        from . import donors as donors_mod
+        if args.donor:
+            d = db.donor(args.donor)
+            if not d:
+                log.error("❌ Донора з id=%s немає в реєстрі", args.donor)
+                return 1
+            text = donors_mod.build_letter(d, lang=args.lang)
+            if args.out:
+                Path(args.out).write_text(text, encoding="utf-8")
+                log.info("✉️  Лист збережено: %s", args.out)
+            else:
+                print(text)
+            return 0
+        paths = donors_mod.write_letters(db, min_priority=args.min_priority,
+                                         limit=args.limit if args.limit > 15 else 50)
+        log.info("✉️  Підготовлено листів: %d (тека %s)",
+                 len(paths), paths[0].parent if paths else "—")
+        for p in paths[:10]:
+            log.info("   — %s", p.name)
+        return 0
+
+    if args.command == "contacts":
+        from . import donors as donors_mod
+        done = 0
+        for d in db.donors(min_priority=args.min_priority, limit=args.limit):
+            if not d.get("site") or d.get("contact_email"):
+                continue
+            emails = donors_mod.find_contacts(d["site"])
+            if emails:
+                db.set_donor(d["id"], contact_email=", ".join(emails))
+                log.info("   ✉️  %s → %s", d["name"], ", ".join(emails))
+                done += 1
+        log.info("🔎 Знайдено контактів: %d (заповніть поле site у реєстрі, щоб знайти більше)", done)
         return 0
 
     if args.command == "export":

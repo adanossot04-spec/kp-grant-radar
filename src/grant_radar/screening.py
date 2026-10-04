@@ -265,14 +265,17 @@ EU_CONSORTIUM_SOURCES = {"eu_ft_portal", "ec_presscorner", "danube_region",
 # повідомлення «місто N передало громаді M сміттєвоз» — це контакт донора,
 # у якого можна попросити таку саму техніку.
 AID_SOURCES = {"cities4cities", "frontlineua", "gnews_twin_ua", "gnews_twin_en",
-               "gnews_twin_de", "gnews_twin_pl"}
+               "gnews_twin_de", "gnews_twin_pl", "gnews_twin_hu", "gnews_twin_nl",
+               "gnews_twin_sv", "gnews_zakarpattia"}
 
 AID_MARK = re.compile(
     r"(побратим|твіннінг|партнерств\w* громад|громад\w*-партнер|партнерськ\w* громад|"
     r"міжмуніципальн|twinning|twin (?:town|city|cities)|sister cit|"
     r"partner (?:city|cities|town|municipalit)|municipal partnership|city-to-city|"
     r"cities4cities|united4ukraine|partnerstadt|partnergemeinde|"
-    r"st[äa]dtepartnerschaft|gmina partnerska|miasto partnerskie)", re.I)
+    r"st[äa]dtepartnerschaft|gmina partnerska|miasto partnerskie|"
+    r"testv[ée]rtelep[üu]l[ée]s|testv[ée]rv[áa]ros|testv[ée]riskola|"
+    r"v[äa]nort|zustergemeente|partnergemeente)", re.I)
 
 AID_GOODS = re.compile(
     r"(сміттєвоз|комунальн\w+ техн|спецтехнік|пожежн\w+ (?:авто|машин)|"
@@ -283,14 +286,30 @@ AID_GOODS = re.compile(
     r"municipal (?:equipment|vehicles|machinery)|decommissioned (?:equipment|vehicles)|"
     r"donat\w* (?:vehicles|equipment|buses|trucks|machinery)|equipment donation|"
     r"feuerwehrfahrzeug|m[üu]llwagen|hilfslieferung|hilfstransport|gespendet|"
-    r"wóz strażacki|śmieciark|sprzęt (?:przekazan|komunaln)|przekaza\w* pojazd)", re.I)
+    r"wóz strażacki|śmieciark|sprzęt (?:przekazan|komunaln)|przekaza\w* pojazd|"
+    r"kuk[áa]saut[óo]|t[űu]zolt[óo]aut[óo]|seg[ée]lysz[áa]ll[íi]tm[áa]ny|adom[áa]ny\w*|"
+    r"vuilniswagen|brandweerauto|gedoneerd|sopbil|brandbil|sk[äa]nk\w+)", re.I)
+
+
+# Запобіжник для іншомовних джерел: новина має стосуватися саме України,
+# інакше в стрічку 🤝 потрапляють ДТП зі сміттєвозами й місцеві пожежі.
+UKR_CONTEXT = re.compile(
+    r"(ukra|укра|oekra|ucrain|ukrán|k[áa]rp[áa]talj|закарпат|харків|kharkiv|harkiv|"
+    r"kyiv|kijev|lviv|lemberg|odes|dnipro|zaporizh|mykolaiv|poltava|ternopil|"
+    r"uzhhorod|ungv[áa]r|mukach|munk[áa]cs|bereh|beregsz[áa]sz|vylok|tisza[úu]jlak)", re.I)
+
+FOREIGN_AID_SOURCES = {"gnews_twin_en", "gnews_twin_de", "gnews_twin_pl",
+                       "gnews_twin_hu", "gnews_twin_nl", "gnews_twin_sv"}
 
 
 def is_aid(item: dict[str, Any]) -> bool:
     """Чи належить запис до вкладки «Побратими та техніка»."""
     title = item.get("title") or ""
     text = f"{title} {item.get('summary') or ''}"
-    if (item.get("source_id") or "") in AID_SOURCES:
+    source_id = item.get("source_id") or ""
+    if source_id in FOREIGN_AID_SOURCES and not UKR_CONTEXT.search(text):
+        return False  # місцева новина без стосунку до України
+    if source_id in AID_SOURCES:
         # спеціалізоване джерело: досить згадки партнерства або техніки
         return bool(AID_MARK.search(text) or AID_GOODS.search(text))
     # у звичайних джерелах — лише якщо партнерство прямо в заголовку
@@ -298,19 +317,39 @@ def is_aid(item: dict[str, Any]) -> bool:
     return bool(AID_MARK.search(title) and AID_GOODS.search(text))
 
 
+# ───────── Вкладка 🎓: освітній напрям (школи, учні, педагоги) ─────────
+# Для громади це окремий заявник (школа, а не КП) і окремий набір донорів,
+# тому освітні конкурси виділені в самостійну вкладку.
+EDU_MARK = re.compile(
+    r"(школ|шкіл|шкіль|учн|ліце[йю]|гімназ|педагог|вчител|виховател|освіт|"
+    r"дошкіл|садоч|позашкіл|студент|erasmus|etwinning|school|pupils?|teachers?|"
+    r"education|educational|classroom|iskol[áa]|tan[áa]r|di[áa]k)", re.I)
+
+
+def is_edu(item: dict[str, Any]) -> bool:
+    """Чи належить запис до вкладки «Освіта» (сильний маркер у заголовку)."""
+    return bool(EDU_MARK.search(item.get("title") or ""))
+
+
 def feed_of(item: dict[str, Any]) -> str:
-    """'ua' — пряме фінансування, 'eu' — консорціум, 'aid' — побратими й техніка."""
+    """Вкладки: 'ua' пряме фінансування, 'eu' консорціум, 'aid' побратими
+    й техніка, 'edu' освітній напрям."""
     if is_aid(item):
         return "aid"
+    if is_edu(item):
+        return "edu"
     if (item.get("region") or "") == "UA":
-        return "ua"
+        # освітній конкурс для української організації — у вкладку 🎓
+        return "edu" if (item.get("track") or "") == "education" else "ua"
     text = f"{item.get('title') or ''} {item.get('summary') or ''}"
     if item.get("source_id") in EU_CONSORTIUM_SOURCES:
         # навіть у порталі ЄС трапляються конкурси прямо для України
         return "ua" if re.search(r"(for ukraine|в україні|для україни|ukraine[ -]based|"
                                  r"ukrainian (?:organisations?|organizations?|companies|smes))",
                                  text, re.I) else "eu"
-    return "ua" if UA_MARK.search(text) else "eu"
+    if UA_MARK.search(text):
+        return "edu" if (item.get("track") or "") == "education" else "ua"
+    return "eu"
 
 
 def screen(item: dict[str, Any], today: date | None = None) -> tuple[bool, str, str | None]:
@@ -393,7 +432,7 @@ def screen_all(db, fetch: int = 0, workers: int = 8, redate: bool = False) -> di
     """
     rows = [dict(r) for r in db.conn.execute(
         "SELECT uid, title, summary, source_id, region, url, apply_url, deadline_at, "
-        "published_at, resolved_at, score FROM opportunities ORDER BY score DESC")]
+        "published_at, resolved_at, score, track FROM opportunities ORDER BY score DESC")]
 
     bodies: dict[str, str] = {}
     if fetch:

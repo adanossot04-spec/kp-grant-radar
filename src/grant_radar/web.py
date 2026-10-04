@@ -81,6 +81,7 @@ def index(request: Request, q: str = "", band: str = "", region: str = "",
               "group": group, "track": track, "equip": equip, "budget": budget,
               "apply": apply, "hidden": hidden, "feed": feed},
         "qs": qs,
+        "donor_total": db.donor_count(),
         "qs_without_feed": urlencode({k: v for k, v in
                                       {"q": q, "band": band, "region": region,
                                        "source": source, "status": status, "order": order,
@@ -131,3 +132,71 @@ def api_stats():
 def api_collect():
     from .pipeline import run
     return JSONResponse(run(db=db))
+
+# ───────────────────── реєстр донорів (вкладка 🤝) ─────────────────────
+@app.get("/donors", response_class=HTMLResponse)
+def donors_page(request: Request, q: str = "", circle: str = "", goods: str = "",
+                country: str = "", status: str = "", minp: int = 0):
+    from . import donors as donors_mod
+    rows = db.donors(search=q or None, circle=int(circle) if circle else None,
+                     goods=goods or None, country=country or None,
+                     status=status or None, min_priority=minp or None, limit=1000)
+    return templates.TemplateResponse(request, "donors.html", {
+        "donors": rows,
+        "dstats": db.donor_stats(),
+        "community": config.load_profile().get("community", {}),
+        "circles": donors_mod.CIRCLE_LABEL,
+        "goods_labels": donors_mod.GOODS_LABEL,
+        "org_labels": donors_mod.ORG_LABEL,
+        "status_labels": donors_mod.STATUS_LABEL,
+        "country_names": donors_mod.COUNTRY_NAME,
+        "f": {"q": q, "circle": circle, "goods": goods, "country": country,
+              "status": status, "minp": minp},
+    })
+
+
+@app.get("/donors/{donor_id}/letter", response_class=HTMLResponse)
+def donor_letter(donor_id: int, lang: str = ""):
+    """Готовий лист-запит до донора мовою його країни."""
+    from html import escape
+
+    from . import donors as donors_mod
+    d = db.donor(donor_id)
+    if not d:
+        return HTMLResponse("<h3>Донора не знайдено</h3>", status_code=404)
+    text = donors_mod.build_letter(d, lang=lang or None)
+    langs = "".join(
+        f'<a href="/donors/{donor_id}/letter?lang={code}" '
+        f'style="margin-right:10px">{label}</a>'
+        for code, label in [("hu", "угорською"), ("de", "німецькою"),
+                            ("pl", "польською"), ("en", "англійською"),
+                            ("uk", "українською")])
+    return HTMLResponse(
+        "<html><head><meta charset='utf-8'><title>Лист донору</title></head>"
+        "<body style='background:#0f1115;color:#e8eaef;font:15px/1.6 system-ui;padding:26px'>"
+        f"<div style='margin-bottom:14px'>Мова листа: {langs}</div>"
+        "<textarea style='width:100%;height:75vh;background:#171a21;color:#e8eaef;"
+        "border:1px solid #2a2f3a;border-radius:12px;padding:16px;font:14px/1.6 ui-monospace,"
+        f"Menlo,Consolas,monospace'>{escape(text)}</textarea>"
+        "<p style='color:#9aa3b2'>Скопіюйте текст, перевірте контактні дані "
+        "(вони беруться з <code>config/profile.yaml</code> → <code>community.contact</code>) "
+        "і надішліть. Після надсилання позначте донора як «📨 надіслано».</p>"
+        "</body></html>")
+
+
+@app.get("/donors/{donor_id}/status")
+def donor_status(donor_id: int, value: str = "letter_sent"):
+    from datetime import date, timedelta
+
+    fields: dict[str, object] = {"status": value}
+    if value == "letter_sent":
+        today = date.today()
+        fields["letter_sent_at"] = today.isoformat()
+        fields["followup_at"] = (today + timedelta(days=21)).isoformat()
+    db.set_donor(donor_id, **fields)
+    return RedirectResponse("/donors", status_code=303)
+
+
+@app.get("/api/donors")
+def api_donors(min_priority: int = 0, limit: int = 500):
+    return JSONResponse(db.donors(min_priority=min_priority or None, limit=limit))

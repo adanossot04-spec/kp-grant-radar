@@ -18,6 +18,62 @@ organization:
     МСП, переробка вторсировини, модернізація обладнання, енергоефективність
     виробництва, вихід на ринки ЄС.
 
+# ─────────────── Паспорт громади (для листів донорам) ───────────────
+# Використовується модулем donors.py при генерації листів-запитів.
+# Заповніть контакти — і листи будуть готові до надсилання.
+community:
+  name_uk: "Вилоцька селищна територіальна громада"
+  name_en: "Vylok hromada"
+  name_hu: "Tiszaújlaki települési közösség"
+  name_de: "Gemeinde Vylok"
+  center_uk: "смт Вилок"
+  center_en: "Vylok"
+  center_hu: "Tiszaújlak"
+  region_uk: "Берегівський район, Закарпатська область"
+  region_en: "Berehove raion, Zakarpattia oblast, Ukraine"
+  region_hu: "Kárpátalja, Ukrajna"
+  population: 14800
+  settlements: 11
+  border: "пункт пропуску Вилок–Тисабеч на кордоні з Угорщиною"
+  border_en: "Vylok–Tiszabecs border crossing with Hungary"
+  border_de: "Grenzübergang Vylok–Tiszabecs zu Ungarn"
+  border_hu: "a tiszabecsi határátkelő közvetlen szomszédságában"
+  languages: "українська, угорська, англійська"
+  fleet_uk: "сміттєзбиральні автомобілі 1991 та 1994 років випуску"
+  fleet_en: "waste collection vehicles built in 1991 and 1994"
+  fleet_de: "Abfallsammelfahrzeuge aus den Jahren 1991 und 1994"
+  fleet_hu: "1991-es és 1994-es gyártású hulladékgyűjtő gépjárművek"
+  needs:
+    waste_uk: ["сміттєвоз із заднім завантаженням — 1 од.",
+               "контейнери 1,1 м³ — 50 од.",
+               "трактор із причепом — 1 од."]
+    waste_en: ["refuse collection truck (rear loader) — 1 unit",
+               "waste containers 1.1 m3 — 50 units",
+               "tractor with trailer — 1 unit"]
+    waste_de: ["Abfallsammelfahrzeug (Hecklader) — 1 Stück",
+               "Abfallbehälter 1,1 m3 — 50 Stück",
+               "Traktor mit Anhänger — 1 Stück"]
+    waste_hu: ["hulladékgyűjtő gépjármű (hátsó ürítésű) — 1 db",
+               "1,1 m3-es hulladékgyűjtő konténerek — 50 db",
+               "traktor pótkocsival — 1 db"]
+    edu_uk: ["ноутбуки та БФП для шкіл", "обладнання кабінетів природничих наук та ІТ",
+             "шкільний автобус"]
+    edu_en: ["laptops and multifunctional printers for schools",
+             "equipment for science and IT classrooms", "school bus"]
+    edu_de: ["Laptops und Multifunktionsdrucker für Schulen",
+             "Ausstattung für Natur- und Informatikräume", "Schulbus"]
+    edu_hu: ["laptopok és multifunkciós nyomtatók az iskoláknak",
+             "természettudományi és informatikai szaktantermek felszerelése",
+             "iskolabusz"]
+  contact:
+    person_uk: ""            # ПІБ відповідальної особи
+    person_en: ""            # латиницею
+    position_uk: ""
+    position_en: ""
+    email: ""
+    phone: ""
+    website: ""
+
 # ─────────────── Тематичні групи ключових слів (uk + en) ────────────────
 # points — скільки балів дає група (нараховується один раз на групу)
 keyword_groups:

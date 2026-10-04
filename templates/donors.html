@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🤝 Реєстр донорів — Грант-радар</title>
+<style>
+  :root{--bg:#0f1115;--panel:#171a21;--panel2:#1e222b;--line:#2a2f3a;--txt:#e8eaef;
+        --muted:#9aa3b2;--accent:#4f9cf9;--hot:#ff6b4a;--warm:#f4b740;--cold:#6b7280;--ok:#34d399;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);
+       font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  header{background:linear-gradient(135deg,#1b2433,#101520);border-bottom:1px solid var(--line);padding:22px 28px}
+  h1{margin:0 0 4px;font-size:22px}
+  .sub{color:var(--muted);font-size:13.5px}
+  .wrap{max-width:1500px;margin:0 auto;padding:18px 24px 50px}
+  .nav{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+  .nav a{padding:9px 15px;border-radius:10px;border:1px solid #273043;background:#141924;color:#9aa3b2;font-size:14px}
+  .nav a.on{background:#17304a;border-color:#2f6ea6;color:#e8f1ff}
+  .stats{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 6px}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 14px;min-width:120px}
+  .stat b{display:block;font-size:20px} .stat span{color:var(--muted);font-size:12px}
+  .filters{display:flex;gap:8px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);
+           border-radius:12px;padding:12px;margin:12px 0}
+  .filters input,.filters select{background:var(--panel2);color:var(--txt);border:1px solid var(--line);
+           border-radius:8px;padding:8px 10px;font-size:14px}
+  .filters button{background:#2563eb;color:#fff;border:0;border-radius:8px;padding:8px 16px;font-size:14px;cursor:pointer}
+  table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  th,td{padding:10px 11px;border-bottom:1px solid var(--line);vertical-align:top;font-size:13.5px}
+  th{background:#141a24;color:var(--muted);text-align:left;font-weight:600;white-space:nowrap}
+  tr:hover td{background:#1a1f29}
+  .pri{font-weight:700;font-size:16px;border-radius:8px;padding:3px 9px;display:inline-block}
+  .pri.hot{background:#3a1a14;color:#ff9d84;border:1px solid #7a2f1f}
+  .pri.warm{background:#332a12;color:#f6cf7a;border:1px solid #6b571f}
+  .pri.cold{background:#20242e;color:#9aa3b2;border:1px solid #333a48}
+  .formula{color:var(--muted);font-size:11.5px;white-space:nowrap}
+  .badge{display:inline-block;background:var(--panel2);border:1px solid var(--line);border-radius:20px;
+         padding:2px 9px;font-size:12px;color:#cfd8e8;margin:0 4px 3px 0}
+  .st{font-size:12.5px}
+  .what{color:#cfd6e3;max-width:430px}
+  .act a{display:inline-block;margin:0 6px 5px 0;padding:5px 10px;border-radius:8px;border:1px solid #2e4a6b;
+         background:#182438;color:#cfe0ff;font-size:12.5px}
+  .act a.mail{border-color:#2e9e66;background:#14301f;color:#9be8bb}
+  .empty{text-align:center;color:var(--muted);padding:50px}
+  footer{color:var(--muted);font-size:12px;text-align:center;padding:22px}
+  .hint{background:#141a24;border:1px solid var(--line);border-radius:12px;padding:12px 15px;
+        color:#b7c0cf;font-size:13px;margin:10px 0 16px}
+</style>
+</head>
+<body>
+<header>
+  <h1>🤝 Реєстр донорів і партнерів</h1>
+  <div class="sub">{{ community.name_uk }} · {{ community.region_uk }} ·
+    пріоритет = Д (доведеність) + М (місток) + З (збіг потреби) − В (вартість входу)</div>
+</header>
+
+<div class="wrap">
+  <div class="nav">
+    <a href="/">← до стрічки грантів</a>
+    <a href="/donors" class="on">🤝 Реєстр донорів</a>
+    <a href="/?feed=aid">🤝 Новини про передачу техніки</a>
+    <a href="/?feed=edu">🎓 Освітній напрям</a>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b>{{ dstats.total }}</b><span>донорів у реєстрі</span></div>
+    <div class="stat"><b style="color:var(--hot)">{{ dstats.hot }}</b><span>🔥 гарячі (7+)</span></div>
+    <div class="stat"><b style="color:var(--warm)">{{ dstats.warm }}</b><span>🟡 теплі (4–6)</span></div>
+    <div class="stat"><b style="color:var(--cold)">{{ dstats.cold }}</b><span>⚪ холодні</span></div>
+    <div class="stat"><b style="color:var(--ok)">{{ dstats.by_status.get('letter_sent', 0) }}</b><span>📨 листів надіслано</span></div>
+    <div class="stat"><b style="color:#8ff0b5">{{ dstats.by_status.get('received', 0) }}</b><span>🎁 отримано допомогу</span></div>
+  </div>
+
+  <div class="hint">
+    Порядок роботи: <b>7+</b> — лист цього тижня, <b>4–6</b> — після гарячих,
+    <b>&lt;4</b> — резерв. Кнопка «✉️ лист» відкриває готовий текст мовою донора
+    (підставлено паспорт громади з <code>config/profile.yaml</code> → <code>community</code>).
+    Методологія: <code>docs/METODOLOGIA_DONORIV.md</code>.
+  </div>
+
+  <form class="filters" method="get">
+    <input type="text" name="q" placeholder="пошук: назва, подія, кому передали…" value="{{ f.q or '' }}">
+    <select name="circle">
+      <option value="">усі кола</option>
+      {% for k, v in circles.items() %}
+      <option value="{{ k }}" {% if f.circle == k|string %}selected{% endif %}>{{ v }}</option>
+      {% endfor %}
+    </select>
+    <select name="goods">
+      <option value="">будь-яка допомога</option>
+      {% for k, v in goods_labels.items() %}
+      <option value="{{ k }}" {% if f.goods == k %}selected{% endif %}>{{ v }}</option>
+      {% endfor %}
+    </select>
+    <select name="country">
+      <option value="">усі країни</option>
+      {% for code, cnt in dstats.by_country.items() %}
+      <option value="{{ code }}" {% if f.country == code %}selected{% endif %}>{{ country_names.get(code, code) }} ({{ cnt }})</option>
+      {% endfor %}
+    </select>
+    <select name="status">
+      <option value="">будь-який статус</option>
+      {% for k, v in status_labels.items() %}
+      <option value="{{ k }}" {% if f.status == k %}selected{% endif %}>{{ v }}</option>
+      {% endfor %}
+    </select>
+    <select name="minp">
+      {% for v in [0, 4, 7] %}
+      <option value="{{ v }}" {% if f.minp == v %}selected{% endif %}>пріоритет ≥ {{ v }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit">Показати</button>
+  </form>
+
+  {% if donors %}
+  <table>
+    <tr>
+      <th>бал</th><th>донор</th><th>країна</th><th>тип</th><th>коло</th>
+      <th>допомога</th><th>привід (що і кому передав)</th><th>контакти</th><th>статус</th><th>дії</th>
+    </tr>
+    {% for d in donors %}
+    <tr>
+      <td>
+        <span class="pri {{ 'hot' if d.priority >= 7 else ('warm' if d.priority >= 4 else 'cold') }}">{{ d.priority }}</span>
+        <div class="formula">Д{{ d.proven }} М{{ d.bridge }} З{{ d.need }} −В{{ d.cost }}</div>
+      </td>
+      <td><b>{{ d.name }}</b>{% if d.site %}<div><a href="{{ d.site }}" target="_blank">сайт</a></div>{% endif %}</td>
+      <td>{{ country_names.get(d.country, d.country) }}<div class="formula">мова: {{ d.lang }}</div></td>
+      <td><span class="badge">{{ org_labels.get(d.org_type, d.org_type) }}</span></td>
+      <td><span class="badge">{{ circles.get(d.circle, d.circle) }}</span></td>
+      <td><span class="badge">{{ goods_labels.get(d.goods, d.goods) }}</span></td>
+      <td class="what">{{ d.what }}
+        {% if d.recipient %}<div class="formula">отримувач: {{ d.recipient }}</div>{% endif %}
+        {% if d.event_date %}<div class="formula">{{ d.event_date }}</div>{% endif %}
+        {% if d.news_url %}<div><a href="{{ d.news_url }}" target="_blank">джерело новини ↗</a></div>{% endif %}
+      </td>
+      <td>
+        {% if d.contact_email %}<div>{{ d.contact_email }}</div>{% endif %}
+        {% if d.contact_person %}<div class="formula">{{ d.contact_person }}</div>{% endif %}
+        {% if not d.contact_email and not d.contact_person %}<span class="formula">—</span>{% endif %}
+      </td>
+      <td class="st">{{ status_labels.get(d.status, d.status) }}
+        {% if d.letter_sent_at %}<div class="formula">лист: {{ d.letter_sent_at[:10] }}</div>{% endif %}
+        {% if d.followup_at %}<div class="formula">нагадати: {{ d.followup_at }}</div>{% endif %}
+      </td>
+      <td class="act">
+        <a class="mail" href="/donors/{{ d.id }}/letter" target="_blank">✉️ лист</a>
+        <a href="/donors/{{ d.id }}/status?value=letter_sent">📨 надіслано</a>
+        <a href="/donors/{{ d.id }}/status?value=replied">💬 відповідь</a>
+        <a href="/donors/{{ d.id }}/status?value=received">🎁 отримано</a>
+        <a href="/donors/{{ d.id }}/status?value=refused">🚫 відмова</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+  <div class="empty">Донорів за цими фільтрами немає.<br>
+    Оновіть реєстр: <code>python -m grant_radar donors</code></div>
+  {% endif %}
+</div>
+<footer>Реєстр будується з вкладки 🤝 командою <code>python -m grant_radar donors</code> ·
+  листи: <code>python -m grant_radar letter --donor &lt;id&gt;</code> ·
+  CSV: <code>data/donors.csv</code></footer>
+</body>
+</html>

@@ -592,3 +592,74 @@ sources:
         - "samorząd przekazał pojazdy komunalne Ukrainie when:180d"
         - "miasto partnerskie Ukraina darowizna sprzętu when:180d"
         - "śmieciarka przekazana ukraińskiemu miastu when:180d"
+
+  # ───── Мовні канали пошуку донорів: угорська, нідерландська, шведська ─────
+  - id: gnews_twin_hu
+    name: "Testvértelepülés és adomány — hírek (HU)"
+    type: gnews
+    region: EU
+    enabled: true
+    weight: 1.1
+    beneficiary_hint: communal
+    params:
+      lang: hu
+      country: HU
+      per_query: 15
+      queries:
+        - "Kárpátalja adomány when:365d"
+        - "ukrán testvérváros when:365d"
+        - "segélyszállítmány Ukrajna when:365d"
+        - "kukásautó Ukrajna"
+        - "testvértelepülés ukrán település együttműködés when:365d"
+        - "tűzoltóautó ukrán when:365d"
+        - "iskola Kárpátalja támogatás eszköz when:365d"
+  - id: gnews_twin_nl
+    name: "Gemeenten en materieel voor Oekraïne (NL)"
+    type: gnews
+    region: EU
+    enabled: true
+    weight: 1.0
+    beneficiary_hint: communal
+    params:
+      lang: nl
+      country: NL
+      per_query: 15
+      queries:
+        - "brandweerwagen Oekraïne when:365d"
+        - "materieel Oekraïne gemeente when:365d"
+        - "gemeente schenkt Oekraïne voertuig when:365d"
+        - "vuilniswagen Oekraïne"
+  - id: gnews_twin_sv
+    name: "Vänorter och utrustning till Ukraina (SV)"
+    type: gnews
+    region: EU
+    enabled: true
+    weight: 1.0
+    beneficiary_hint: communal
+    params:
+      lang: sv
+      country: SE
+      per_query: 15
+      queries:
+        - "vänort Ukraina when:365d"
+        - "brandbil Ukraina when:365d"
+        - "Ukraina donation kommun when:365d"
+        - "sopbil Ukraina"
+  - id: gnews_zakarpattia
+    name: "Слід сусіда — техніка для громад Закарпаття"
+    type: gnews
+    region: UA
+    enabled: true
+    weight: 1.15
+    beneficiary_hint: communal
+    params:
+      lang: uk
+      country: UA
+      per_query: 15
+      queries:
+        - "Закарпаття громада отримала техніку when:365d"
+        - "закарпатська громада партнери допомога when:365d"
+        - "Закарпаття гуманітарна допомога техніка громаді when:365d"
+        - "Виноградів OR Берегове OR Хуст громада отримала обладнання when:365d"
+        - "Ужгород OR Мукачево передали техніку партнери when:365d"
+        - "Закарпаття школа отримала обладнання партнери when:365d"

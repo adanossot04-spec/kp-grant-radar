@@ -10,6 +10,36 @@ from typing import Any, Iterable
 from .models import Opportunity
 
 SCHEMA = """
+CREATE TABLE IF NOT EXISTS donors (
+    id             INTEGER PRIMARY KEY AUTOINCREMENT,
+    uid            TEXT UNIQUE,        -- запис стрічки 🤝, з якого взято донора
+    name           TEXT NOT NULL,
+    country        TEXT DEFAULT '??',
+    org_type       TEXT DEFAULT 'municipality',
+    circle         INTEGER DEFAULT 4,  -- коло близькості 1–5
+    goods          TEXT DEFAULT 'other',
+    what           TEXT,               -- що саме передавав (привід для листа)
+    recipient      TEXT,               -- кому передавав
+    event_date     TEXT,
+    news_url       TEXT,
+    site           TEXT DEFAULT '',
+    contact_person TEXT DEFAULT '',
+    contact_email  TEXT DEFAULT '',
+    contact_phone  TEXT DEFAULT '',
+    lang           TEXT DEFAULT 'en',
+    proven         INTEGER DEFAULT 0,  -- Д
+    bridge         INTEGER DEFAULT 0,  -- М
+    need           INTEGER DEFAULT 0,  -- З
+    cost           INTEGER DEFAULT 0,  -- В
+    priority       INTEGER DEFAULT 0,  -- Д + М + З − В
+    status         TEXT DEFAULT 'new',
+    letter_sent_at TEXT,
+    followup_at    TEXT,
+    notes          TEXT DEFAULT '',
+    created_at     TEXT,
+    updated_at     TEXT
+);
+
 CREATE TABLE IF NOT EXISTS opportunities (
     uid           TEXT PRIMARY KEY,
     source_id     TEXT,
@@ -232,7 +262,7 @@ class Database:
             sql += " AND apply_url IS NOT NULL AND apply_url <> ''"
         if not include_hidden:
             sql += " AND COALESCE(actionable, 1) = 1"
-        if feed in ("ua", "eu", "aid"):
+        if feed in ("ua", "eu", "aid", "edu"):
             sql += " AND COALESCE(feed, 'ua') = ?"
             args.append(feed)
         if budget_band:
@@ -285,6 +315,115 @@ class Database:
             r["days_left"] = _days_left(r["deadline_at"])
         return out
 
+    # ───────────────────── реєстр донорів (вкладка 🤝) ─────────────────────
+    def add_donor(self, card: dict[str, Any]) -> int:
+        now = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        fields = ["uid", "name", "country", "org_type", "circle", "goods", "what",
+                  "recipient", "event_date", "news_url", "site", "contact_person",
+                  "contact_email", "contact_phone", "lang", "proven", "bridge",
+                  "need", "cost", "priority", "status", "notes"]
+        values = [card.get(f) for f in fields]
+        cur = self.conn.execute(
+            f"INSERT OR IGNORE INTO donors ({', '.join(fields)}, created_at, updated_at) "
+            f"VALUES ({', '.join('?' * len(fields))}, ?, ?)", (*values, now, now))
+        self.conn.commit()
+        return int(cur.lastrowid or 0)
+
+    def update_donor_scores(self, card: dict[str, Any]) -> None:
+        """Оновлює лише автоматичні поля; ручні правки користувача не чіпає."""
+        now = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        self.conn.execute(
+            "UPDATE donors SET name=CASE WHEN name='—' THEN ? ELSE name END, "
+            "country=?, org_type=?, circle=?, goods=?, what=?, recipient=?, "
+            "event_date=?, news_url=?, proven=?, bridge=?, need=?, cost=?, "
+            "priority=?, updated_at=? WHERE uid=?",
+            (card["name"], card["country"], card["org_type"], card["circle"],
+             card["goods"], card["what"], card["recipient"], card["event_date"],
+             card["news_url"], card["proven"], card["bridge"], card["need"],
+             card["cost"], card["priority"], now, card["uid"]))
+        self.conn.commit()
+
+    def donor_by_uid(self, uid: str) -> dict[str, Any] | None:
+        row = self.conn.execute("SELECT * FROM donors WHERE uid = ?", (uid,)).fetchone()
+        return dict(row) if row else None
+
+    def donor(self, donor_id: int) -> dict[str, Any] | None:
+        row = self.conn.execute("SELECT * FROM donors WHERE id = ?", (donor_id,)).fetchone()
+        return dict(row) if row else None
+
+    def donor_count(self) -> int:
+        return int(self.conn.execute("SELECT COUNT(*) FROM donors").fetchone()[0])
+
+    def donors(self, *, min_priority: int | None = None, country: str | None = None,
+               circle: int | None = None, status: str | None = None,
+               goods: str | None = None, search: str | None = None,
+               order: str = "priority", limit: int = 500) -> list[dict[str, Any]]:
+        sql = "SELECT * FROM donors WHERE 1=1"
+        args: list[Any] = []
+        if min_priority is not None:
+            sql += " AND priority >= ?"
+            args.append(min_priority)
+        if country:
+            sql += " AND country = ?"
+            args.append(country)
+        if circle:
+            sql += " AND circle = ?"
+            args.append(circle)
+        if status:
+            sql += " AND status = ?"
+            args.append(status)
+        if goods:
+            sql += " AND goods = ?"
+            args.append(goods)
+        if search:
+            sql += " AND (name LIKE ? OR what LIKE ? OR recipient LIKE ?)"
+            args += [f"%{search}%"] * 3
+        order_sql = {"priority": "priority DESC, event_date DESC",
+                     "date": "event_date DESC",
+                     "country": "country, priority DESC"}.get(order, "priority DESC")
+        sql += f" ORDER BY {order_sql} LIMIT ?"
+        args.append(limit)
+        return [dict(r) for r in self.conn.execute(sql, args)]
+
+    def set_donor(self, donor_id: int, **fields: Any) -> None:
+        allowed = {"name", "country", "site", "contact_person", "contact_email",
+                   "contact_phone", "lang", "status", "letter_sent_at",
+                   "followup_at", "notes", "priority", "circle", "goods"}
+        sets = {k: v for k, v in fields.items() if k in allowed}
+        if not sets:
+            return
+        sets["updated_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        cols = ", ".join(f"{k} = ?" for k in sets)
+        self.conn.execute(f"UPDATE donors SET {cols} WHERE id = ?",
+                          (*sets.values(), donor_id))
+        self.conn.commit()
+
+    def prune_donors(self, live_uids: set[str]) -> int:
+        """Видаляє автоматичні картки (status='new', без правок), чиї новини
+        більше не належать стрічці 🤝 — щоб у реєстрі не накопичувався шум."""
+        rows = self.conn.execute(
+            "SELECT id, uid FROM donors WHERE status = 'new' AND contact_email = '' "
+            "AND notes = '' AND site = ''").fetchall()
+        drop = [r["id"] for r in rows if r["uid"] not in live_uids]
+        for did in drop:
+            self.conn.execute("DELETE FROM donors WHERE id = ?", (did,))
+        self.conn.commit()
+        return len(drop)
+
+    def donor_stats(self) -> dict[str, Any]:
+        c = self.conn.execute
+        by_status = {r[0]: r[1] for r in c("SELECT status, COUNT(*) FROM donors GROUP BY status")}
+        by_circle = {r[0]: r[1] for r in c("SELECT circle, COUNT(*) FROM donors GROUP BY circle")}
+        by_country = {r[0]: r[1] for r in c(
+            "SELECT country, COUNT(*) FROM donors GROUP BY country ORDER BY COUNT(*) DESC")}
+        return {
+            "total": self.donor_count(),
+            "hot": int(c("SELECT COUNT(*) FROM donors WHERE priority >= 7").fetchone()[0]),
+            "warm": int(c("SELECT COUNT(*) FROM donors WHERE priority BETWEEN 4 AND 6").fetchone()[0]),
+            "cold": int(c("SELECT COUNT(*) FROM donors WHERE priority < 4").fetchone()[0]),
+            "by_status": by_status, "by_circle": by_circle, "by_country": by_country,
+        }
+
     def stats(self) -> dict[str, Any]:
         c = self.conn.execute
         total = c("SELECT COUNT(*) FROM opportunities").fetchone()[0]
@@ -326,6 +465,8 @@ class Database:
                          "AND COALESCE(feed,'ua')='eu'").fetchone()[0],
             "feed_aid": c("SELECT COUNT(*) FROM opportunities WHERE COALESCE(actionable,1)=1 "
                           "AND COALESCE(feed,'ua')='aid'").fetchone()[0],
+            "feed_edu": c("SELECT COUNT(*) FROM opportunities WHERE COALESCE(actionable,1)=1 "
+                          "AND COALESCE(feed,'ua')='edu'").fetchone()[0],
             "actionable": c("SELECT COUNT(*) FROM opportunities "
                             "WHERE COALESCE(actionable,1)=1").fetchone()[0],
             "budgets": budgets,

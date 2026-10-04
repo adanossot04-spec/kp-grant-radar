@@ -114,11 +114,13 @@
         ('ua','🇺🇦','Україна — пряме фінансування', stats.feed_ua),
         ('eu','🇪🇺','ЄС — консорціумні проєкти', stats.feed_eu),
         ('aid','🤝','Побратими та техніка', stats.feed_aid),
-        ('all','🌍','Усе разом', stats.feed_ua + stats.feed_eu + stats.feed_aid)] %}
+        ('edu','🎓','Освітній напрям', stats.feed_edu),
+        ('all','🌍','Усе разом', stats.feed_ua + stats.feed_eu + stats.feed_aid + stats.feed_edu)] %}
     <a class="tab {% if (f.feed or 'ua') == key %}on{% endif %}"
        href="?{{ qs_without_feed }}{% if qs_without_feed %}&{% endif %}feed={{ key }}">
       {{ icon }} {{ label }} <b>{{ cnt }}</b></a>
     {% endfor %}
+    <a class="tab donorbtn" href="/donors">📇 Реєстр донорів <b>{{ donor_total }}</b></a>
   </div>
 
   <form class="filters" method="get">
