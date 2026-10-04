@@ -23,6 +23,7 @@ organization:
 # Заповніть контакти — і листи будуть готові до надсилання.
 community:
   name_uk: "Вилоцька селищна територіальна громада"
+  name_uk_gen: "Вилоцької селищної територіальної громади"   # родовий відмінок
   name_en: "Vylok hromada"
   name_hu: "Tiszaújlaki települési közösség"
   name_de: "Gemeinde Vylok"
@@ -35,6 +36,7 @@ community:
   population: 14800
   settlements: 11
   border: "пункт пропуску Вилок–Тисабеч на кордоні з Угорщиною"
+  border_uk: "поруч — пункт пропуску Вилок–Тисабеч на кордоні з Угорщиною"
   border_en: "Vylok–Tiszabecs border crossing with Hungary"
   border_de: "Grenzübergang Vylok–Tiszabecs zu Ungarn"
   border_hu: "a tiszabecsi határátkelő közvetlen szomszédságában"
@@ -65,6 +67,249 @@ community:
     edu_hu: ["laptopok és multifunkciós nyomtatók az iskoláknak",
              "természettudományi és informatikai szaktantermek felszerelése",
              "iskolabusz"]
+  # ── Опис ситуації для листів донорам (редагується вільно) ──────────────
+  # Цей блок підставляється в кожен лист замість короткої згадки про автопарк.
+  # Для освітніх донорів використовується situation_edu.
+  situation:
+    uk: |
+      Поточна ситуація та екологічні ризики
+
+      Сьогодні вивезення твердих побутових відходів у нашій та сусідніх
+      громадах не проводиться взагалі. Через відсутність централізованої
+      системи збирання та транспортування відходів масштаби екологічної
+      загрози зростають катастрофічно:
+
+        - стихійні звалища: сміття масово й неконтрольовано викидається в
+          лісосмугах, уздовж доріг і на відкритих територіях;
+        - загроза довкіллю: розклад відходів забруднює ґрунти та ґрунтові
+          води, а загоряння звалищ спричиняють викиди токсичних речовин;
+        - зниження якості життя: це пряма загроза здоров'ю людей і втрата
+          туристичного та рекреаційного потенціалу регіону.
+
+      Бачення рішення: спільне комунально-приватне підприємство
+
+      Зусиль однієї невеликої громади тут недостатньо. Стратегічним виходом
+      ми бачимо створення спільного комунально-приватного підприємства, яке
+      об'єднає ресурси нашої та сусідніх громад із можливостями приватного
+      сектору для збирання, вивезення та подальшого сортування відходів.
+      Такий формат оптимізує управлінські витрати й забезпечить якісну
+      послугу мешканцям кількох громад одночасно.
+
+      Потреба в підтримці
+
+      Реалізація проєкту потребує значних початкових капіталовкладень:
+      спеціалізована техніка (сміттєвози, контейнери) та інфраструктура
+      тимчасового зберігання і сортування. Стартові інвестиції завеликі для
+      бюджету нашої громади, тому ми звертаємося по фінансову, технічну або
+      експертну підтримку.
+
+      Ми відкриті до партнерства у таких форматах:
+        1. співфінансування закупівлі спеціалізованої техніки та обладнання
+           для збирання і вивезення ТПВ;
+        2. грантова підтримка інфраструктурних проєктів у сфері екології та
+           поводження з відходами;
+        3. експертно-консультаційна допомога в юридичному оформленні та
+           запуску комунально-приватного партнерства.
+    en: |
+      Current situation and environmental risks
+
+      Today household waste is not collected at all — neither in our hromada
+      nor in the neighbouring ones. With no centralised system of waste
+      collection and transport, the environmental damage is growing fast:
+
+        - illegal dumps: waste is dumped uncontrolled in forest belts, along
+          roads and on open land;
+        - damage to nature: decomposing waste pollutes soil and groundwater,
+          and burning dumpsites release toxic substances into the air;
+        - quality of life: this is a direct threat to public health and a
+          loss of the tourism and recreation potential of our region.
+
+      Our solution: a joint public-private utility company
+
+      A single small hromada cannot solve this alone. We see the way out in
+      establishing a joint public-private utility company that will combine
+      the resources of our and the neighbouring hromadas with the capacity of
+      the private sector for collection, transport and further sorting of
+      waste. This format reduces management costs and delivers a reliable
+      service to the residents of several hromadas at once.
+
+      Why we need support
+
+      The project requires substantial start-up investment: specialised
+      vehicles (refuse trucks, containers) and infrastructure for temporary
+      storage and sorting. Such initial investment is far beyond the budget
+      of our small hromada, so we are asking for financial, technical or
+      expert support.
+
+      We are open to partnership in the following forms:
+        1. co-financing the purchase of specialised vehicles and equipment
+           for waste collection and transport;
+        2. grant support for environmental and waste-management
+           infrastructure projects;
+        3. expert and advisory assistance in setting up and launching the
+           public-private partnership.
+    de: |
+      Aktuelle Lage und ökologische Risiken
+
+      Derzeit findet in unserer Gemeinde und in den Nachbargemeinden
+      überhaupt keine Abfallabfuhr statt. Da ein zentrales System der
+      Sammlung und Beförderung fehlt, wächst die Umweltgefahr dramatisch:
+
+        - wilde Deponien: Abfall wird unkontrolliert in Waldstreifen, entlang
+          der Straßen und auf freien Flächen abgeladen;
+        - Gefahr für die Umwelt: verrottender Abfall verunreinigt Böden und
+          Grundwasser, brennende Deponien setzen Giftstoffe frei;
+        - Lebensqualität: eine unmittelbare Gefahr für die Gesundheit der
+          Menschen und ein Verlust des touristischen Potenzials der Region.
+
+      Unsere Lösung: ein gemeinsames kommunal-privates Unternehmen
+
+      Eine einzelne kleine Gemeinde schafft das nicht allein. Wir sehen den
+      Ausweg in der Gründung eines gemeinsamen kommunal-privaten
+      Entsorgungsunternehmens, das die Mittel unserer und der benachbarten
+      Gemeinden mit den Kapazitäten der Privatwirtschaft verbindet — für
+      Sammlung, Abtransport und anschließende Sortierung der Abfälle. Das
+      senkt die Verwaltungskosten und sichert eine verlässliche Leistung für
+      die Einwohner mehrerer Gemeinden zugleich.
+
+      Warum wir Unterstützung brauchen
+
+      Das Vorhaben erfordert erhebliche Anfangsinvestitionen: Spezialtechnik
+      (Abfallsammelfahrzeuge, Behälter) sowie Infrastruktur für
+      Zwischenlagerung und Sortierung. Diese Startinvestitionen übersteigen
+      den Haushalt unserer kleinen Gemeinde bei weitem, deshalb bitten wir um
+      finanzielle, technische oder fachliche Unterstützung.
+
+      Wir sind offen für folgende Formen der Partnerschaft:
+        1. Kofinanzierung der Beschaffung von Spezialfahrzeugen und
+           Ausrüstung für die Abfallsammlung;
+        2. Förderung von Infrastrukturprojekten im Bereich Umwelt und
+           Abfallwirtschaft;
+        3. fachliche Beratung bei Gründung und Start der kommunal-privaten
+           Partnerschaft.
+    hu: |
+      Jelenlegi helyzet és környezeti kockázatok
+
+      Településeinken — nálunk és a szomszédos közösségekben — jelenleg
+      egyáltalán nincs szervezett hulladékszállítás. Központi gyűjtő- és
+      szállítórendszer hiányában a környezeti kockázat rohamosan nő:
+
+        - illegális lerakók: a hulladékot ellenőrizetlenül az erdősávokba,
+          az utak mentén és szabad területeken helyezik el;
+        - környezeti veszély: a bomló hulladék szennyezi a talajt és a
+          talajvizet, az égő lerakókból mérgező anyagok kerülnek a levegőbe;
+        - életminőség: mindez közvetlenül veszélyezteti a lakosság
+          egészségét, és rontja a térség turisztikai lehetőségeit.
+
+      Megoldási javaslatunk: közös önkormányzati-magán vállalkozás
+
+      Egyetlen kis közösség önmagában nem tudja megoldani a helyzetet.
+      Stratégiai kiútnak egy közös önkormányzati-magán hulladékgazdálkodási
+      vállalkozás létrehozását látjuk, amely a mi és a szomszédos közösségek
+      erőforrásait a magánszektor kapacitásaival egyesíti a hulladék
+      gyűjtésére, elszállítására és további válogatására. Ez csökkenti a
+      működési költségeket, és több közösség lakóinak biztosít megbízható
+      szolgáltatást.
+
+      Miért kérünk támogatást
+
+      A projekt jelentős kezdeti beruházást igényel: speciális járművek
+      (kukásautók, konténerek) és az átmeneti tárolás, válogatás
+      infrastruktúrája. Ez messze meghaladja kis közösségünk költségvetését,
+      ezért kérünk pénzügyi, technikai vagy szakmai támogatást.
+
+      Az együttműködés következő formái előtt nyitottak vagyunk:
+        1. a hulladékgyűjtő járművek és eszközök beszerzésének
+           társfinanszírozása;
+        2. pályázati támogatás környezetvédelmi és hulladékgazdálkodási
+           infrastruktúra-fejlesztésre;
+        3. szakértői és jogi tanácsadás a köz- és magánszféra közötti
+           partnerség létrehozásához és elindításához.
+    pl: |
+      Obecna sytuacja i zagrożenia ekologiczne
+
+      Obecnie w naszej i w sąsiednich gminach wywóz odpadów komunalnych nie
+      jest prowadzony w ogóle. Z powodu braku scentralizowanego systemu
+      zbiórki i transportu odpadów zagrożenie ekologiczne rośnie lawinowo:
+
+        - dzikie wysypiska: odpady są masowo i bez kontroli wyrzucane w
+          pasach leśnych, wzdłuż dróg i na otwartych terenach;
+        - zagrożenie dla środowiska: rozkładające się odpady zanieczyszczają
+          glebę i wody gruntowe, a pożary wysypisk uwalniają toksyny;
+        - jakość życia: to bezpośrednie zagrożenie dla zdrowia mieszkańców i
+          utrata potencjału turystycznego regionu.
+
+      Nasze rozwiązanie: wspólne przedsiębiorstwo komunalno-prywatne
+
+      Jedna mała gmina nie poradzi sobie z tym sama. Wyjściem strategicznym
+      widzimy utworzenie wspólnego przedsiębiorstwa komunalno-prywatnego,
+      które połączy zasoby naszej i sąsiednich gmin z możliwościami sektora
+      prywatnego w zakresie zbiórki, wywozu i sortowania odpadów. Taki model
+      obniży koszty zarządzania i zapewni wysoką jakość usługi mieszkańcom
+      kilku gmin jednocześnie.
+
+      Dlaczego prosimy o wsparcie
+
+      Realizacja wymaga znacznych nakładów początkowych: sprzęt specjalistyczny
+      (śmieciarki, kontenery) oraz infrastruktura tymczasowego składowania i
+      sortowania. Takie inwestycje znacznie przekraczają budżet naszej małej
+      gminy, dlatego zwracamy się o wsparcie finansowe, techniczne lub
+      eksperckie.
+
+      Jesteśmy otwarci na następujące formy partnerstwa:
+        1. współfinansowanie zakupu sprzętu do zbiórki i wywozu odpadów;
+        2. wsparcie grantowe projektów infrastrukturalnych w zakresie
+           ekologii i gospodarki odpadami;
+        3. doradztwo eksperckie i prawne przy tworzeniu oraz uruchomieniu
+           partnerstwa publiczno-prywatnego.
+
+  situation_edu:
+    uk: |
+      Поточна ситуація
+
+      У школах громади навчаються діти з 11 населених пунктів, серед них —
+      родини внутрішньо переміщених осіб. Бракує базового обладнання:
+      ноутбуків і багатофункціональних пристроїв, оснащення кабінетів
+      природничих наук та інформатики, шкільного автобуса для підвезення
+      дітей із віддалених сіл. Ми шукаємо партнерів для спільних освітніх
+      проєктів, обміну досвідом між школами та підтримки обладнанням.
+    en: |
+      Current situation
+
+      Our schools serve children from 11 settlements, including families of
+      internally displaced persons. Basic equipment is missing: laptops and
+      multifunctional printers, equipment for science and IT classrooms, and
+      a school bus for children from remote villages. We are looking for
+      partner schools for joint educational projects, exchange of experience
+      and support with equipment.
+    de: |
+      Aktuelle Lage
+
+      Unsere Schulen unterrichten Kinder aus 11 Ortschaften, darunter
+      Familien von Binnenvertriebenen. Es fehlt an Grundausstattung: Laptops
+      und Multifunktionsdrucker, Ausstattung für Natur- und Informatikräume
+      sowie ein Schulbus für Kinder aus abgelegenen Dörfern. Wir suchen
+      Partnerschulen für gemeinsame Projekte, Erfahrungsaustausch und
+      Unterstützung mit Ausstattung.
+    hu: |
+      Jelenlegi helyzet
+
+      Iskoláinkba 11 település gyermekei járnak, köztük belső menekült
+      családok gyermekei is. Hiányzik az alapvető felszerelés: laptopok és
+      multifunkciós nyomtatók, a természettudományi és informatikai
+      szaktantermek eszközei, valamint iskolabusz a távolabbi falvakból
+      érkező gyermekek számára. Testvériskolai kapcsolatot, közös projekteket
+      és eszköztámogatást keresünk.
+    pl: |
+      Obecna sytuacja
+
+      Do naszych szkół uczęszczają dzieci z 11 miejscowości, w tym z rodzin
+      osób wewnętrznie przesiedlonych. Brakuje podstawowego wyposażenia:
+      laptopów i urządzeń wielofunkcyjnych, wyposażenia pracowni
+      przyrodniczych i informatycznych oraz autobusu szkolnego dla dzieci z
+      oddalonych wsi. Szukamy szkół partnerskich do wspólnych projektów,
+      wymiany doświadczeń i wsparcia sprzętowego.
+
   contact:
     # УВАГА: значення пишеться ВСЕРЕДИНІ лапок, інакше YAML не прочитається:
     #   правильно → person_uk: "Прізвище Ім'я По батькові"

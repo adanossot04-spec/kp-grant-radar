@@ -337,31 +337,35 @@ def rebuild(db: Database, limit: int = 1000) -> dict[str, int]:
 
 # ─────────────────────────── листи ───────────────────────────
 LETTERS: dict[str, str] = {
-"hu": """Tárgy: Testvértelepülési kezdeményezés – {center_hu} ({center_uk}), {region_hu}
+"hu": """Tárgy: Együttműködési kezdeményezés – {center_hu} ({name_en}), {region_hu}
 
 Tisztelt Polgármester Úr / Asszony! Tisztelt Kollégák!
 
-A(z) {name_hu} ({center_hu}) nevében fordulok Önökhöz. Községünk Kárpátalján,
-a magyar határ mellett fekszik ({border}), {settlements} település tartozik
-hozzá, lakosságunk mintegy {population} fő, jelentős részük magyar anyanyelvű.
+A(z) {name_hu} nevében fordulok Önökhöz. Községünk Kárpátalján, a magyar határ
+mellett fekszik ({border}), {settlements} település tartozik hozzá, lakosságunk
+mintegy {population} fő, jelentős részük magyar anyanyelvű.
 
 {reference_hu}
 
+{situation}
 Legfontosabb szükségleteink:
 {needs_hu}
 
-Jelenlegi helyzet: {fleet_hu}.
-
 Vállaljuk a vámkezelést, az ukrán oldali szállítást, az üzemeltetést és a
-biztosítást, valamint fényképes beszámolót készítünk az eszközök használatáról,
-és készek vagyunk testvértelepülési megállapodást aláírni.
+biztosítást, fényképes beszámolót készítünk az eszközök használatáról, és
+készek vagyunk testvértelepülési megállapodást aláírni.
+
+Hálásak lennénk, ha egy online megbeszélés vagy levélváltás keretében
+megvitathatnánk az együttműködés lehetséges formáit. Hisszük, hogy közös
+erővel megállíthatjuk a környezeti válságot, és tiszta, biztonságos jövőt
+teremthetünk térségünk számára.
 
 Köszönettel és tisztelettel,
 {person_en}{position_part_en}
 {name_hu} · {name_en}
 {email} · {phone}{website_part}""",
 
-"de": """Betreff: Partnerschaftsanfrage – {name_de} ({center_en}), Transkarpatien, Ukraine
+"de": """Betreff: Kooperationsanfrage – {name_de} ({center_en}), Transkarpatien, Ukraine
 
 Sehr geehrte Damen und Herren,
 
@@ -371,22 +375,25 @@ Einwohner, direkt an der EU-Außengrenze ({border}).
 
 {reference_de}
 
-Wir bitten Sie, unsere Gemeinde bei der nächsten Abgabe ausgemusterter Technik
-zu berücksichtigen. Benötigt werden:
+{situation}
+Unser vorrangiger Bedarf:
 {needs_de}
-
-Aktueller Stand: {fleet_de}.
 
 Zollabfertigung, Transport ab der Grenze, Wartung und Versicherung übernehmen
 wir. Über den Einsatz berichten wir mit Fotos und einer Pressemitteilung; eine
 Partnerschaftsvereinbarung würden wir gerne unterzeichnen.
+
+Wir würden uns sehr freuen, mögliche Wege der Zusammenarbeit in einem
+Online-Gespräch oder im Schriftverkehr zu besprechen. Gemeinsam können wir die
+ökologische Krise stoppen und unserer Region eine saubere und sichere Zukunft
+sichern.
 
 Mit freundlichen Grüßen,
 {person_en}{position_part_en}
 {name_en}
 {email} · {phone}{website_part}""",
 
-"pl": """Temat: Propozycja współpracy partnerskiej – gmina {center_en}, Zakarpacie, Ukraina
+"pl": """Temat: Propozycja współpracy – gmina {center_en}, Zakarpacie, Ukraina
 
 Szanowni Państwo,
 
@@ -396,14 +403,17 @@ z Unią Europejską ({border}).
 
 {reference_en}
 
-Uprzejmie prosimy o rozważenie przekazania naszej gminie sprzętu komunalnego:
+{situation}
+Nasze priorytetowe potrzeby:
 {needs_en}
-
-Obecnie dysponujemy: {fleet_en}.
 
 Pokrywamy odprawę celną, transport po stronie ukraińskiej, eksploatację i
 ubezpieczenie. Zobowiązujemy się do sprawozdania ze zdjęciami oraz jesteśmy
 gotowi podpisać umowę o współpracy partnerskiej.
+
+Będziemy wdzięczni za możliwość omówienia form współpracy podczas spotkania
+online lub korespondencji roboczej. Wierzymy, że wspólnymi siłami zatrzymamy
+kryzys ekologiczny i zapewnimy regionowi czystą i bezpieczną przyszłość.
 
 Z wyrazami szacunku,
 {person_en}{position_part_en}
@@ -420,38 +430,45 @@ settlements, about {population} residents, located directly on the EU border
 
 {reference_en}
 
-We would be grateful if you could consider our hromada as a recipient of
-decommissioned municipal equipment — in particular:
+{situation}
+Our priority needs:
 {needs_en}
-
-Current situation: {fleet_en}.
 
 We cover customs clearance, transport on the Ukrainian side, maintenance and
 insurance. We will report on the use of the equipment with photos and a press
 release, and we are ready to sign a twinning memorandum.
+
+We would be sincerely grateful for the opportunity to discuss possible forms of
+cooperation in an online meeting or by correspondence. We believe that together
+we can stop this environmental crisis and secure a clean and safe future for
+our region.
 
 Kind regards,
 {person_en}{position_part_en}
 {name_en}
 {email} · {phone}{website_part}""",
 
-"uk": """Тема: Пропозиція партнерства — {name_uk}, Закарпаття
+"uk": """Тема: Пропозиція співпраці — {name_uk}, Закарпаття
 
 Шановні колеги!
 
-Звертаємося від імені {name_uk} ({region_uk}): {settlements} населених
+Звертаємося від імені {name_uk_gen} ({region_uk}): {settlements} населених
 пунктів, близько {population} мешканців, {border}.
 
 {reference_uk}
 
-Просимо розглянути можливість передати нашій громаді:
+{situation}
+Першочергові потреби:
 {needs_uk}
-
-Наявний стан: {fleet_uk}.
 
 Розмитнення, транспортування територією України, обслуговування та страхування
 беремо на себе. Гарантуємо фотозвіт, публікацію подяки та готові підписати
 меморандум про співпрацю.
+
+Будемо щиро вдячні за можливість обговорити потенційні шляхи співпраці під час
+онлайн-зустрічі чи робочого листування. Віримо, що спільними зусиллями ми
+зможемо зупинити екологічну кризу та забезпечити чисте і безпечне майбутнє для
+нашого регіону.
 
 З повагою,
 {person_uk}{position_part_uk}
@@ -487,7 +504,21 @@ def _needs_block(community: dict[str, Any], lang: str, goods: str) -> str:
     topic = "edu" if goods == "edu" else "waste"
     key = f"{topic}_{lang if lang in ('uk', 'en', 'de', 'hu') else 'en'}"
     items = needs.get(key) or needs.get(f"{topic}_en") or []
-    return "\n".join(f"  {i}. {x};" for i, x in enumerate(items, 1)).rstrip(";") + "."
+    lines = []
+    for i, raw in enumerate(items, 1):
+        item = str(raw).strip().rstrip(";")
+        if not item.endswith((".", "!", "?")):
+            item += "."
+        lines.append(f"  {i}. {item}")
+    return "\n".join(lines)
+
+
+def _situation_block(community: dict[str, Any], lang: str, goods: str) -> str:
+    """Опис ситуації громади з `config/profile.yaml` → `community.situation`."""
+    key = "situation_edu" if goods == "edu" else "situation"
+    block = (community.get(key) or {})
+    text = block.get(lang) or block.get("en") or block.get("uk") or ""
+    return text.rstrip() + "\n" if text else ""
 
 
 def build_letter(donor: dict[str, Any], lang: str | None = None) -> str:
@@ -525,6 +556,7 @@ def build_letter(donor: dict[str, Any], lang: str | None = None) -> str:
     pos_en = contact.get("position_en") or ""
     values = {
         "name_uk": c.get("name_uk", ""), "name_en": c.get("name_en", ""),
+        "name_uk_gen": c.get("name_uk_gen") or c.get("name_uk", ""),
         "name_hu": c.get("name_hu", ""), "name_de": c.get("name_de", ""),
         "center_uk": c.get("center_uk", ""), "center_hu": c.get("center_hu", ""),
         "center_en": c.get("center_en", ""),
@@ -543,6 +575,7 @@ def build_letter(donor: dict[str, Any], lang: str | None = None) -> str:
         "position_part_en": f", {pos_en}" if pos_en else "",
         "reference_hu": reference, "reference_de": reference,
         "reference_en": reference, "reference_uk": reference,
+        "situation": _situation_block(c, lang, donor.get("goods", "waste")),
         "needs_uk": _needs_block(c, "uk", donor.get("goods", "waste")),
         "needs_en": _needs_block(c, "en", donor.get("goods", "waste")),
         "needs_de": _needs_block(c, "de", donor.get("goods", "waste")),
