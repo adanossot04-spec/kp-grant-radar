@@ -56,6 +56,10 @@ jobs:
       - name: Перерахувати бали за актуальним профілем
         run: python -m grant_radar rescore
 
+      - name: Знайти першоджерела (де подавати заявку)
+        run: python -m grant_radar resolve --min-score 15 -n 600 --search-min 30
+        continue-on-error: true
+
       - name: Показати топ можливостей у логах
         continue-on-error: true
         run: python -m grant_radar top -n 10
