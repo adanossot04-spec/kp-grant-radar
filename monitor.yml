@@ -1,0 +1,128 @@
+name: Грант-радар — моніторинг
+
+on:
+  workflow_dispatch:          # кнопка «Run workflow»
+  schedule:
+    - cron: "0 5 * * *"       # щодня о 08:00 за Києвом
+  # УВАГА: тригера push тут бути НЕ повинно — бот сам комітить результати,
+  # і кожен його коміт запускав би новий цикл (нескінченний цикл запусків).
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: grant-radar
+  cancel-in-progress: false
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: src
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+      CEREBRAS_API_KEY: ${{ secrets.CEREBRAS_API_KEY }}
+      MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      MEMORY_YAML: ${{ secrets.MEMORY_YAML }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Встановити залежності
+        run: pip install -r requirements.txt
+
+      - name: Відновити досьє організації з секрету
+        run: |
+          if [ -n "$MEMORY_YAML" ]; then
+            printf '%s' "$MEMORY_YAML" > config/memory.yaml
+            echo "config/memory.yaml відновлено із Secret"
+          else
+            echo "Secret MEMORY_YAML не задано — використовується memory.example.yaml"
+          fi
+
+      - name: Сканувати джерела та оцінити релевантність
+        run: python -m grant_radar collect
+
+      - name: Перерахувати бали за актуальним профілем
+        run: python -m grant_radar rescore
+
+      - name: Знайти першоджерела (де подавати заявку)
+        run: python -m grant_radar resolve --min-score 15 -n 600 --search-min 30
+        continue-on-error: true
+
+      - name: Відсіяти новини, вакансії та протерміноване
+        run: python -m grant_radar screen --fetch 300
+        continue-on-error: true
+
+      - name: Самоперевірка стрічки (немає протермінованого)
+        run: python -m grant_radar check
+
+      - name: Оновити реєстр донорів (вкладка 🤝)
+        continue-on-error: true
+        run: python -m grant_radar donors -n 20
+
+      - name: Підготувати листи-запити до пріоритетних донорів
+        continue-on-error: true
+        run: python -m grant_radar letter --min-priority 4
+
+      # Придунайські громади AT/HU/RO: перелік у config/danube_partners.yaml
+      # оновлюється окремо (scripts/fetch_danube_partners.py), тут лише
+      # заводимо їх у реєстр, готуємо листи й сторінку розсилки.
+      - name: Оновити канал «Дунайський басейн»
+        continue-on-error: true
+        run: python -m grant_radar danube
+
+      - name: Показати топ можливостей у логах
+        continue-on-error: true
+        run: python -m grant_radar top -n 10
+
+      - name: Чернетки заявок для найкращих можливостей
+        continue-on-error: true
+        run: |
+          python -m grant_radar draft --benef communal
+          python -m grant_radar draft --benef private
+
+      - name: Зібрати статичний дашборд
+        run: python -m grant_radar export
+
+      - name: Надіслати дайджест у Telegram
+        if: env.TELEGRAM_BOT_TOKEN != ''
+        continue-on-error: true
+        run: python -m grant_radar digest --min-score 45
+
+      - name: Зберегти базу та сайт у репозиторій
+        run: |
+          git config user.name  "grant-radar-bot"
+          git config user.email "actions@github.com"
+          git add -A data docs
+          if git diff --staged --quiet; then
+            echo "змін немає"
+          else
+            git commit -m "Оновлення грант-радару $(date -u +'%Y-%m-%d %H:%M UTC')"
+            git pull --rebase --autostash origin main || true
+            git push origin HEAD:main
+          fi
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+  deploy-pages:
+    needs: monitor
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
