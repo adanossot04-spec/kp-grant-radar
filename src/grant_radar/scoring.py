@@ -1,42 +1,83 @@
 """Скоринг релевантності: правила + ключові слова (працює без жодних API-ключів).
 
 Логіка:
-  • збіг у ЗАГОЛОВКУ важить повний бал, збіг лише в тексті — 55 % бала;
-  • профільна тема (відходи / комунальне / благоустрій / транспорт) обов'язкова:
+  • збіг у ЗАГОЛОВКУ важить повний бал, збіг лише в тексті — 55 %;
+  • профільна тема (відходи / комунальне / благоустрій / транспорт / бізнес) обов'язкова:
     без неї запис не може потрапити у «високу» релевантність;
-  • мінус-слова (оборонка, поліція, наука заради науки, вакансії) б'ють сильно;
+  • для новин (не офіційних конкурсів) діють додаткові запобіжники від шуму;
+  • мінус-слова (оборонка, поліція, суто наукові гранти, вакансії) б'ють сильно;
   • терміновість дедлайну та статус конкурсу дають невеликі бонуси.
+
+Ключові слова можуть бути:
+  • звичайним підрядком:        "комунальн"
+  • регулярним виразом:         "re:громад(а|и|і|у|ою)\\b"
+    (регулярні вирази потрібні там, де підрядок дає хибні збіги:
+     «громад» інакше матчиться у «громадська організація», «громадянське суспільство»)
 """
 from __future__ import annotations
 
-from typing import Any
+import re
+from typing import Any, Pattern
 
 from .models import Opportunity
 
 CORE_GROUPS = ("waste", "municipal", "urban", "transport", "business")
 BAND_LABEL = {"high": "🔥 Висока", "medium": "🟡 Середня", "low": "⚪ Низька"}
 
+# Пороги для новинних записів (RSS), які не є офіційними конкурсами
+NEWS_CAP_NO_CORE_TITLE = 22   # у заголовку немає профільного слова
+NEWS_CAP_NO_SIGNAL = 28       # немає ознак конкурсу/фінансування
+
+
+class Term:
+    """Ключове слово: підрядок або регулярний вираз."""
+
+    __slots__ = ("raw", "rx")
+
+    def __init__(self, raw: str) -> None:
+        self.raw = raw
+        self.rx: Pattern[str] | None = (
+            re.compile(raw[3:], re.IGNORECASE | re.UNICODE) if raw.startswith("re:") else None
+        )
+
+    def found(self, text: str) -> bool:
+        return bool(self.rx.search(text)) if self.rx else (self.raw in text)
+
+    @property
+    def label(self) -> str:
+        return self.raw[3:] if self.rx else self.raw
+
 
 class Scorer:
     def __init__(self, profile: dict[str, Any]) -> None:
         self.profile = profile
-        self.groups: dict[str, dict] = profile.get("keyword_groups", {})
-        self.geo = profile.get("geo", {})
-        self.signal = profile.get("funding_signal", {})
-        self.negative = profile.get("negative", {})
         self.cfg = profile.get("scoring", {})
-        self.scale = float(self.cfg.get("scale", 0.75))
+        self.scale = float(self.cfg.get("scale", 0.92))
+        self.groups = {
+            name: {"points": float(g.get("points", 0)),
+                   "terms": [Term(t) for t in g.get("terms", [])]}
+            for name, g in (profile.get("keyword_groups") or {}).items()
+        }
+        self.geo = self._block(profile.get("geo", {}))
+        self.signal = self._block(profile.get("funding_signal", {}))
+        self.negative = self._block(profile.get("negative", {}))
 
-    # ─────────────────────────────────────────────────────────────
     @staticmethod
-    def _hits(terms: list[str], title: str, body: str) -> tuple[list[str], list[str]]:
-        th = [t for t in terms if t in title]
-        bh = [t for t in terms if t not in th and t in body]
+    def _block(block: dict[str, Any]) -> dict[str, Any]:
+        return {"points": float(block.get("points", 0)),
+                "terms": [Term(t) for t in block.get("terms", [])]}
+
+    @staticmethod
+    def _hits(terms: list[Term], title: str, body: str) -> tuple[list[str], list[str]]:
+        th = [t.label for t in terms if t.found(title)]
+        bh = [t.label for t in terms if t.label not in th and t.found(body)]
         return th, bh
 
+    # ─────────────────────────────────────────────────────────────
     def score(self, opp: Opportunity, source_weight: float = 1.0) -> tuple[int, str, list[str]]:
         title = opp.title.lower()
         body = f"{opp.summary} {opp.programme} {opp.identifier}".lower()
+        is_news = opp.status == "news"
 
         base = 0.0
         reasons: list[str] = []
@@ -44,35 +85,34 @@ class Scorer:
         core_any = False
 
         for name, group in self.groups.items():
-            pts = float(group.get("points", 0))
-            th, bh = self._hits(group.get("terms", []), title, body)
+            th, bh = self._hits(group["terms"], title, body)
             if not th and not bh:
                 continue
-            factor = 1.0 if th else 0.55
-            base += pts * factor
-            shown = (th + bh)[:4]
-            reasons.append(f"{name}{'★' if th else ''}: {', '.join(shown)}")
+            base += group["points"] * (1.0 if th else 0.55)
+            reasons.append(f"{name}{'★' if th else ''}: {', '.join((th + bh)[:4])}")
             if name in CORE_GROUPS:
                 core_any = True
                 core_title = core_title or bool(th)
 
-        for block, label in ((self.geo, "гео"), (self.signal, "фінансування")):
-            th, bh = self._hits(block.get("terms", []), title, body)
-            if th or bh:
-                base += float(block.get("points", 0)) * (1.0 if th else 0.6)
-                reasons.append(f"{label}: {', '.join((th + bh)[:3])}")
-            elif block is self.signal and opp.status == "news":
-                # новина без жодної згадки про конкурс/дедлайн/фінансування — це не можливість
-                base -= 18
-                reasons.append("немає ознак конкурсу/фінансування")
+        th, bh = self._hits(self.geo["terms"], title, body)
+        if th or bh:
+            base += self.geo["points"] * (1.0 if th else 0.6)
+            reasons.append(f"гео: {', '.join((th + bh)[:3])}")
 
-        neg_th, neg_bh = self._hits(self.negative.get("terms", []), title, body)
+        sig_th, sig_bh = self._hits(self.signal["terms"], title, body)
+        has_signal = bool(sig_th or sig_bh)
+        if has_signal:
+            base += self.signal["points"] * (1.0 if sig_th else 0.6)
+            reasons.append(f"фінансування: {', '.join((sig_th + sig_bh)[:3])}")
+        elif is_news:
+            base -= 18
+            reasons.append("немає ознак конкурсу/фінансування")
+
+        neg_th, neg_bh = self._hits(self.negative["terms"], title, body)
         if neg_th or neg_bh:
-            penalty = float(self.negative.get("points", -25))
-            base += penalty * (1.0 if neg_th else 0.6) * min(len(neg_th + neg_bh), 3)
+            base += self.negative["points"] * (1.0 if neg_th else 0.6) * min(len(neg_th + neg_bh), 3)
             reasons.append(f"мінус: {', '.join((neg_th + neg_bh)[:3])}")
 
-        # Терміновість дедлайну
         days = opp.days_left()
         if days is not None:
             if days < 0:
@@ -82,7 +122,6 @@ class Scorer:
                 base += float(self.cfg.get("deadline_bonus", 8))
                 reasons.append(f"дедлайн через {days} дн.")
 
-        # Статус офіційного конкурсу важливіший за новину
         if opp.status == "open":
             base += 8
             reasons.append("конкурс відкрито")
@@ -94,12 +133,21 @@ class Scorer:
             base -= 30
             reasons.append("немає профільної тематики")
 
-        points = int(round(base * float(source_weight) * self.scale))
-        points = max(0, min(100, points))
+        points = max(0, min(100, int(round(base * float(source_weight) * self.scale))))
 
-        # Без профільного слова в заголовку — максимум «середня» релевантність
+        # ── Запобіжники від шуму ────────────────────────────────────────────
+        high = int(self.cfg.get("high_threshold", 60))
         if not core_title:
-            points = min(points, int(self.cfg.get("high_threshold", 60)) - 1)
+            # профільного слова немає в заголовку → максимум «середня»
+            points = min(points, high - 1)
+        if is_news:
+            # новина без профільного слова в заголовку — майже завжди шум
+            if not core_title and points > NEWS_CAP_NO_CORE_TITLE:
+                points = NEWS_CAP_NO_CORE_TITLE
+                reasons.append("новина без профільної теми в заголовку")
+            # новина без жодної згадки конкурсу/дедлайну/фінансування
+            if not has_signal and points > NEWS_CAP_NO_SIGNAL:
+                points = NEWS_CAP_NO_SIGNAL
 
         return points, self.band(points), reasons
 
