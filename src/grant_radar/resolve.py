@@ -291,6 +291,18 @@ def _ddg_lite(query: str, timeout: int = 25) -> list[tuple[str, str]]:
     return out
 
 
+def _page_published(html: str) -> str:
+    """Дата публікації сторінки — потрібна, щоб правильно трактувати
+    дати без року («заявки приймаються з 20 червня по 20 липня»)."""
+    for pat in (r'"datePublished"\s*:\s*"([^"]+)"',
+                r'property=["\']article:published_time["\']\s+content=["\']([^"\']+)',
+                r'<time[^>]+datetime=["\']([^"\']+)'):
+        m = re.search(pat, html, re.I)
+        if m:
+            return m.group(1)
+    return ""
+
+
 def _body_text(html: str) -> str:
     """Текст статті без меню й футера — щоб донора не «вгадати» по шапці сайту."""
     soup = BeautifulSoup(html, "html.parser")
@@ -427,7 +439,9 @@ def resolve_one(item: dict[str, Any], timeout: int = 25) -> dict[str, str]:
                                        body[:3000])
     out: dict[str, str] = {}
     from .screening import extract_deadline          # дедлайн зі сторінки оголошення
-    deadline = extract_deadline(item.get("title") or "", body)
+    deadline = extract_deadline(
+        item.get("title") or "", body,
+        published=_page_published(html) or item.get("published_at"))
     if deadline:
         out["deadline_at"] = deadline
     if page_url != url:
@@ -442,7 +456,8 @@ def resolve_one(item: dict[str, Any], timeout: int = 25) -> dict[str, str]:
 def resolve(db, min_score: int = 35, limit: int = 120, workers: int = 8,
             only_unresolved: bool = True, search_min: int = 35) -> int:
     """Масово визначає першоджерела для записів із каталогів і новин."""
-    sql = ("SELECT uid, title, url, summary, source_id, score FROM opportunities "
+    sql = ("SELECT uid, title, url, summary, source_id, published_at, score "
+           "FROM opportunities "
            "WHERE score >= ? AND (deadline_at IS NULL OR deadline_at = '' "
            "      OR deadline_at >= ?) ")
     args: list[Any] = [min_score, datetime.now(timezone.utc).isoformat(timespec="seconds")]

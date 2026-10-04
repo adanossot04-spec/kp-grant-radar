@@ -58,57 +58,77 @@ def _mk(y: int, m: int, d: int, today: date) -> date | None:
         out = date(y, m, d)
     except ValueError:
         return None
-    if not (today.year - 6 <= out.year <= today.year + 6):
+    if not (today.year - 8 <= out.year <= today.year + 8):
         return None
     return out
 
 
-def _dates_in(chunk: str, today: date) -> list[date]:
-    found: list[date] = []
+def _dates_in(chunk: str, today: date, base_year: int) -> list[tuple[date, bool]]:
+    """Дати у фрагменті тексту: (дата, чи був рік вказаний явно).
+
+    Дати без року прив'язуємо до `base_year` — це рік публікації оголошення,
+    а не поточний. Інакше архівний пост «Заявки приймаються з 20 червня по
+    20 липня 2025» перетворюється на «20 червня 2027» і протермінований
+    конкурс виглядає як відкритий.
+    """
+    found: list[tuple[date, bool]] = []
     for m in DATE_ISO.finditer(chunk):
         d = _mk(int(m.group(1)), int(m.group(2)), int(m.group(3)), today)
         if d:
-            found.append(d)
+            found.append((d, True))
     for m in DATE_DMY.finditer(chunk):
         d = _mk(int(m.group(3)), int(m.group(2)), int(m.group(1)), today)
         if d:
-            found.append(d)
+            found.append((d, True))
     for m in DATE_WORD_UA.finditer(chunk):
         day, word, year = m.group(1), (m.group(2) or "").lower(), m.group(3)
         mon = next((v for k, v in MONTHS.items() if word.startswith(k)), None)
         if not mon:
             continue
-        y = int(year) if year else today.year
-        d = _mk(y, mon, int(day), today)
-        if d and not year and d < today:          # «до 15 березня» без року → наступний рік
-            d = _mk(y + 1, mon, int(day), today)
+        d = _mk(int(year) if year else base_year, mon, int(day), today)
         if d:
-            found.append(d)
+            found.append((d, bool(year)))
     return found
 
 
-def extract_deadline(*texts: str, today: date | None = None) -> str | None:
-    """Шукає дату закінчення прийому заявок. Повертає ISO-дату або None."""
+def extract_deadline(*texts: str, today: date | None = None,
+                     published: str | None = None) -> str | None:
+    """Шукає дату закінчення прийому заявок. Повертає ISO-дату або None.
+
+    `published` — дата публікації оголошення (ISO). Саме до неї прив'язуються
+    дати без року; якщо її немає, беремо поточний рік.
+    """
     today = today or datetime.now(timezone.utc).date()
+    base_year = today.year
+    if published:
+        try:
+            base_year = datetime.fromisoformat(
+                str(published).replace("Z", "+00:00")).year
+        except ValueError:
+            pass
+
     blob = " ".join(t for t in texts if t)
     if not blob:
         return None
     blob = re.sub(r"\s+", " ", blob)[:6000]
 
-    # дати поряд із «дедлайн / заявки приймаються до / deadline»;
-    # контекст перевіряємо з обох боків, щоб не сплутати з громадським
-    # обговоренням, звітністю чи «цілей до 2050 року»
-    near: list[date] = []
+    # дати поряд зі словами про подачу; контекст перевіряємо з обох боків,
+    # щоб не сплутати з громадським обговоренням, звітністю чи «цілей до 2050»
+    near: list[tuple[date, bool]] = []
     low = blob.lower()
     for m in DEADLINE_CUES.finditer(low):
         window = blob[max(0, m.start() - 60): m.start() + 90]
         if NOT_A_DEADLINE.search(window):
             continue
-        near += _dates_in(blob[m.start(): m.start() + 90], today)
+        near += _dates_in(blob[m.start(): m.start() + 110], today, base_year)
     if not near:
         return None
-    future = sorted(d for d in near if d >= today)
-    return (future[0] if future else max(near)).isoformat()
+
+    # якщо хоч десь рік написано явно — довіряємо лише таким датам
+    explicit = [d for d, has_year in near if has_year]
+    pool = explicit or [d for d, _ in near]
+    # у діапазоні «з 20 червня по 20 липня» дедлайн — пізніша дата
+    return max(pool).isoformat()
 
 
 # ───────────────────── новина чи справжній конкурс ─────────────────────
@@ -179,7 +199,12 @@ REASON_TEXT = {
     "expired": "термін подачі заявок минув",
     "not_a_call": "стаття без ознак конкурсу чи фінансування",
     "event": "подія (вебінар, тренінг, форум), а не конкурс",
+    "stale": "оголошення старше за рік, а дедлайн не підтверджено",
 }
+
+# джерела, де запис без дедлайну — нормально (проєктний пайплайн, не конкурс із датою)
+NO_DEADLINE_OK = {"worldbank", "eu_ft_portal"}
+STALE_AFTER_DAYS = 365
 
 
 def screen(item: dict[str, Any], today: date | None = None) -> tuple[bool, str, str | None]:
@@ -196,7 +221,8 @@ def screen(item: dict[str, Any], today: date | None = None) -> tuple[bool, str, 
 
     # 1) дедлайн: беремо збережений або виймаємо з тексту
     deadline = (item.get("deadline_at") or "").strip() or None
-    found = extract_deadline(title, summary, body, today=today)
+    found = extract_deadline(title, summary, body, today=today,
+                             published=item.get("published_at"))
     if not deadline and found:
         deadline = found
     if deadline:
@@ -206,6 +232,17 @@ def screen(item: dict[str, Any], today: date | None = None) -> tuple[bool, str, 
                 return False, "expired", deadline
         except ValueError:
             pass
+
+    # старе оголошення без підтвердженого дедлайну — майже напевно вже закрите
+    if not deadline and source_id not in NO_DEADLINE_OK:
+        published = (item.get("published_at") or "").strip()
+        if published:
+            try:
+                pub = datetime.fromisoformat(published.replace("Z", "+00:00")).date()
+                if (today - pub).days > STALE_AFTER_DAYS:
+                    return False, "stale", None
+            except ValueError:
+                pass
 
     blob = f"{title} {summary} {body}"
     if VACANCY.search(blob[:900]):
@@ -242,8 +279,8 @@ def screen_all(db, fetch: int = 0, workers: int = 8, redate: bool = False) -> di
                там дата приходить структуровано.
     """
     rows = [dict(r) for r in db.conn.execute(
-        "SELECT uid, title, summary, source_id, url, apply_url, deadline_at, score "
-        "FROM opportunities ORDER BY score DESC")]
+        "SELECT uid, title, summary, source_id, url, apply_url, deadline_at, "
+        "published_at, resolved_at, score FROM opportunities ORDER BY score DESC")]
 
     bodies: dict[str, str] = {}
     if fetch:
@@ -251,17 +288,23 @@ def screen_all(db, fetch: int = 0, workers: int = 8, redate: bool = False) -> di
             [r for r in rows if not (r.get("deadline_at") or "").strip()][:fetch], workers)
 
     counts = {"shown": 0, "news": 0, "vacancy": 0, "no_source": 0, "expired": 0,
-              "not_a_call": 0, "event": 0, "deadlines": 0, "cleared": 0}
+              "not_a_call": 0, "event": 0, "stale": 0, "deadlines": 0, "cleared": 0}
     for r in rows:
         r["body"] = bodies.get(r["uid"], "")
         if redate and r.get("source_id") not in CALL_PORTALS:
             fresh = extract_deadline(r.get("title") or "", r.get("summary") or "",
-                                     r["body"])
-            if (r.get("deadline_at") or "") and not fresh:
+                                     r["body"], published=r.get("published_at"))
+            # дати, знайдені на самій сторінці оголошення (крок resolve),
+            # не чіпаємо — у короткому описі їх просто немає
+            if fresh:
+                r["deadline_at"] = fresh
+                db.conn.execute("UPDATE opportunities SET deadline_at=? WHERE uid=?",
+                                (fresh, r["uid"]))
+            elif r.get("deadline_at") and not r.get("resolved_at"):
                 counts["cleared"] += 1
-            r["deadline_at"] = fresh or ""
-            db.conn.execute("UPDATE opportunities SET deadline_at=? WHERE uid=?",
-                            (fresh or None, r["uid"]))
+                r["deadline_at"] = ""
+                db.conn.execute("UPDATE opportunities SET deadline_at=NULL WHERE uid=?",
+                                (r["uid"],))
         ok, reason, deadline = screen(r)
         if deadline and deadline != (r.get("deadline_at") or ""):
             counts["deadlines"] += 1
