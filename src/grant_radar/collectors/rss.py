@@ -31,6 +31,16 @@ RE_DOT = re.compile(r"(?:дедлайн|deadline|до)\D{0,15}(\d{1,2})[./](\d{1
 
 
 def guess_deadline(text: str) -> str | None:
+    """Дедлайн із тексту новини. Логіка спільна з `screening.extract_deadline`,
+    щоб у базі не з'являлися «дедлайни» з абзаців про обговорення чи звітність."""
+    from ..screening import extract_deadline
+    found = extract_deadline(text)
+    if found:
+        return f"{found}T00:00:00+00:00"
+    return None
+
+
+def _legacy_guess_deadline(text: str) -> str | None:
     t = text.lower()
     try:
         m = RE_UA.search(t)

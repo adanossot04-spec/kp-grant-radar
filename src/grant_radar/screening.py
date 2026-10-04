@@ -33,10 +33,17 @@ MONTHS = {
 
 # контекст, біля якого шукаємо дату подачі
 DEADLINE_CUES = re.compile(
-    r"(дедлайн|кінцевий[ _]термін|останній день|термін(и)? подач|заявки приймаються|"
-    r"прийом заявок|подання заявок|подати заявку до|реєстрація до|коли:|до\s+\d|"
-    r"deadline|closing date|applications? (?:are )?(?:accepted|open) (?:until|till|by)|"
-    r"submit(?:ted)? by|apply by)", re.I)
+    r"(дедлайн|кінцевий[ _]термін|останній день|термін(и)? подач|термін подання|"
+    r"заявки приймаються|приймаються заявки|прийом заявок|подання заявок|подача заявок|"
+    r"подати заявку до|подати документи до|реєстрація (?:триває )?до|коли:|"
+    r"triває до|конкурс триває до|аплікації до|"
+    r"deadline|closing date|applications? (?:are )?(?:accepted|open|received) "
+    r"(?:until|till|by)|submission (?:deadline|date)|submit(?:ted)? by|apply by)", re.I)
+
+# дати поряд із цими словами — НЕ дедлайн подачі заявки
+NOT_A_DEADLINE = re.compile(
+    r"(обговоренн|консультац|коментар|опитуванн|звітн|сплат|до сплати|"
+    r"цілей до|до \d{4} року|public consultation|comments? by)", re.I)
 
 DATE_DMY = re.compile(r"\b(\d{1,2})[.\-/](\d{1,2})[.\-/](\d{4})\b")
 DATE_ISO = re.compile(r"\b(\d{4})-(\d{2})-(\d{2})\b")
@@ -88,23 +95,20 @@ def extract_deadline(*texts: str, today: date | None = None) -> str | None:
         return None
     blob = re.sub(r"\s+", " ", blob)[:6000]
 
-    # 1) дати поряд із «дедлайн / заявки приймаються до / deadline»
+    # дати поряд із «дедлайн / заявки приймаються до / deadline»;
+    # контекст перевіряємо з обох боків, щоб не сплутати з громадським
+    # обговоренням, звітністю чи «цілей до 2050 року»
     near: list[date] = []
-    for m in DEADLINE_CUES.finditer(blob.lower()):
-        chunk = blob[m.start(): m.start() + 90]
-        near += _dates_in(chunk, today)
-    if near:
-        # якщо є майбутні — беремо найближчу майбутню, інакше найпізнішу минулу
-        future = sorted(d for d in near if d >= today)
-        return (future[0] if future else max(near)).isoformat()
-
-    # 2) будь-яка дата у форматі «до 02.05.2023»
-    any_dates = _dates_in(blob[:1500], today)
-    if any_dates:
-        future = sorted(d for d in any_dates if d >= today)
-        if future:
-            return future[0].isoformat()
-    return None
+    low = blob.lower()
+    for m in DEADLINE_CUES.finditer(low):
+        window = blob[max(0, m.start() - 60): m.start() + 90]
+        if NOT_A_DEADLINE.search(window):
+            continue
+        near += _dates_in(blob[m.start(): m.start() + 90], today)
+    if not near:
+        return None
+    future = sorted(d for d in near if d >= today)
+    return (future[0] if future else max(near)).isoformat()
 
 
 # ───────────────────── новина чи справжній конкурс ─────────────────────
@@ -124,6 +128,20 @@ STORY = re.compile(
     r"(історія успіху|істори[ія] про|: як |як \w+ (?:розвива|відкри|створ|побудува|змінив|заснува)|"
     r"шлях від|розповідь про|репортаж|інтерв'ю|success story|how \w+ (?:built|turned|started))", re.I)
 
+# «донор щось зробив» — теж новина, а не відкритий конкурс
+DONOR_NEWS = re.compile(
+    r"(нада(є|ють|в|ла) (?:гарант|кредит|позик|підтримк)|виділ(ив|ила|яє|яють|ено)|"
+    r"інвесту(є|ють)|профінансу(є|ють|вав)|спряму(є|ють)|переда(в|ли|но)|"
+    r"підписа(в|ли|но) (?:угоду|меморандум|договір)|проголосуйте|голосуванн[яі]|"
+    r"receives?|will receive|provides? (?:a )?guarantee|allocat(es|ed)|signs? (?:a )?(?:deal|agreement))",
+    re.I)
+
+# події: вебінари, тренінги, форуми — корисно, але заявку на грант там не подаси
+EVENT = re.compile(
+    r"(вебінар|воркшоп|тренінг|семінар|конференці|форум|саміт|хакатон|"
+    r"інформаційн(а|ий) (?:сесі|день|захід)|відбудеться|запрошуємо на (?:зустріч|подію)|"
+    r"webinar|workshop|training session|conference|info ?session|summit)", re.I)
+
 # вакансії, тендери на працівників, навчання без фінансування
 VACANCY = re.compile(
     r"(вакансі|запрошуємо на роботу|шукаємо (?:фахів|координат|менеджер|спеціаліс)|"
@@ -139,6 +157,14 @@ OPEN_CALL = re.compile(
     r"call for (?:proposals|applications|projects)|applications? (?:are )?open|"
     r"submit your application|how to apply|eligibility criteria|apply now)", re.I)
 
+# ознаки того, що це взагалі можливість отримати гроші, а не стаття
+FUNDING_SIGNS = re.compile(
+    r"(грант|конкурс|заявк|аплікац|фінансуванн|співфінансуванн|субсид|субвенц|дотац|"
+    r"стипенді|тендер|закупівл|програма підтримки|підтримк[аи] проєкт|фонд оголо|"
+    r"конкурсн|відбір проєкт|прийом пропозиц|пільгов(ий|е) кредит|"
+    r"call for (?:proposals|applications|tenders|projects)|funding|grant|tender|"
+    r"subsid|scholarship|fellowship|procurement|financing|award)", re.I)
+
 # джерела, де трапляються саме новини, а не оголошення конкурсів
 NEWS_SOURCES = {"gnews_ua", "gnews_en", "decentralization", "hromady",
                 "prostir_all", "websearch_ua", "websearch_eu"}
@@ -151,6 +177,8 @@ REASON_TEXT = {
     "vacancy": "вакансія або пошук експерта, а не грант",
     "no_source": "новина без знайденого першоджерела — немає куди подавати заявку",
     "expired": "термін подачі заявок минув",
+    "not_a_call": "стаття без ознак конкурсу чи фінансування",
+    "event": "подія (вебінар, тренінг, форум), а не конкурс",
 }
 
 
@@ -185,7 +213,14 @@ def screen(item: dict[str, Any], today: date | None = None) -> tuple[bool, str, 
 
     if source_id not in CALL_PORTALS:
         open_call = bool(OPEN_CALL.search(blob))
+        if not FUNDING_SIGNS.search(f"{title} {summary}"[:700]):
+            return False, "not_a_call", deadline
         if (RETRO.search(title) or STORY.search(title)) and not open_call:
+            return False, "news", deadline
+        if EVENT.search(title) and not apply_url and not re.search(
+                r"(грант|конкурс|заявк|call for|grant)", title, re.I):
+            return False, "event", deadline
+        if DONOR_NEWS.search(title) and not open_call and not apply_url:
             return False, "news", deadline
         if source_id in NEWS_SOURCES:
             # новина корисна лише тоді, коли знайдено сторінку донора
@@ -197,8 +232,15 @@ def screen(item: dict[str, Any], today: date | None = None) -> tuple[bool, str, 
     return True, "", deadline
 
 
-def screen_all(db, fetch: int = 0, workers: int = 8) -> dict[str, int]:
-    """Перевіряє всю базу. `fetch` — скільки сторінок довантажити заради дедлайну."""
+def screen_all(db, fetch: int = 0, workers: int = 8, redate: bool = False) -> dict[str, int]:
+    """Перевіряє всю базу.
+
+    `fetch`  — скільки сторінок довантажити, щоб знайти дедлайн у тексті.
+    `redate` — перерахувати дедлайни з тексту для всіх нествруктурованих джерел
+               (разова чистка хибних дат на кшталт «до 8 жовтня 2026» з абзацу
+               про громадське обговорення). Портали конкурсів не чіпаємо —
+               там дата приходить структуровано.
+    """
     rows = [dict(r) for r in db.conn.execute(
         "SELECT uid, title, summary, source_id, url, apply_url, deadline_at, score "
         "FROM opportunities ORDER BY score DESC")]
@@ -208,9 +250,18 @@ def screen_all(db, fetch: int = 0, workers: int = 8) -> dict[str, int]:
         bodies = _fetch_bodies(
             [r for r in rows if not (r.get("deadline_at") or "").strip()][:fetch], workers)
 
-    counts = {"shown": 0, "news": 0, "vacancy": 0, "no_source": 0, "expired": 0, "deadlines": 0}
+    counts = {"shown": 0, "news": 0, "vacancy": 0, "no_source": 0, "expired": 0,
+              "not_a_call": 0, "event": 0, "deadlines": 0, "cleared": 0}
     for r in rows:
         r["body"] = bodies.get(r["uid"], "")
+        if redate and r.get("source_id") not in CALL_PORTALS:
+            fresh = extract_deadline(r.get("title") or "", r.get("summary") or "",
+                                     r["body"])
+            if (r.get("deadline_at") or "") and not fresh:
+                counts["cleared"] += 1
+            r["deadline_at"] = fresh or ""
+            db.conn.execute("UPDATE opportunities SET deadline_at=? WHERE uid=?",
+                            (fresh or None, r["uid"]))
         ok, reason, deadline = screen(r)
         if deadline and deadline != (r.get("deadline_at") or ""):
             counts["deadlines"] += 1

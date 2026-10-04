@@ -38,6 +38,8 @@ def main(argv: list[str] | None = None) -> int:
                     help="для resolve: перевіряти й ті записи, що вже опрацьовані")
     ap.add_argument("--fetch", type=int, default=0,
                     help="для screen: скільки сторінок довантажити заради пошуку дедлайну")
+    ap.add_argument("--redate", action="store_true",
+                    help="для screen: перерахувати дедлайни з тексту (чистка хибних дат)")
     ap.add_argument("--search-min", type=int, default=35,
                     help="для resolve: з якого бала вмикати пошук донора в інтернеті")
     ap.add_argument("--out", default=None, help="куди писати дайджест/експорт")
@@ -81,12 +83,13 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "screen":
         from .screening import REASON_TEXT, screen_all
-        res = screen_all(db, fetch=args.fetch)
+        res = screen_all(db, fetch=args.fetch, redate=args.redate)
         log.info("✅ У стрічці залишається: %d", res["shown"])
         for key, text in REASON_TEXT.items():
             if res.get(key):
                 log.info("   — приховано %4d: %s", res[key], text)
-        log.info("🗓 Дедлайнів знайдено в тексті: %d", res["deadlines"])
+        log.info("🗓 Дедлайнів знайдено в тексті: %d; знято хибних: %d",
+                 res["deadlines"], res.get("cleared", 0))
         return 0
 
     if args.command == "serve":
