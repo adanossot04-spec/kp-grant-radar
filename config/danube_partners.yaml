@@ -1,0 +1,3695 @@
+# Придунайські громади Австрії, Угорщини та Румунії — база для листування.
+#
+# Згенеровано автоматично: scripts/fetch_danube_partners.py
+# Джерела: OpenStreetMap (Overpass API) + Wikidata. Обидва безкоштовні.
+#
+# Логіка добору: адміністративна одиниця 8-го рівня, межа якої проходить
+# не далі ніж 800 м від русла Дунаю. Контакти — офіційний сайт (P856) та
+# е-mail (P968) з Wikidata; порожній email добирається командою
+# `contacts` (пошук на сайті громади).
+#
+# Файл можна правити руками: додати громаду, вписати точний e-mail
+# профільного відділу (Umweltamt / környezetvédelmi osztály / serviciul
+# de mediu) — агент бере дані звідси.
+
+partners:
+  - name: "Wien"
+    country: AT
+    lang: de
+    admin: "Österreich"
+    site: "https://www.wien.gv.at/"
+    email: "stadtservice@post.wien.gv.at"
+    email_alt: "dr@ma53.wien.gv.at"
+    population: 2028289
+    osm: 0
+    wikidata: Q1741
+    coords: [48.20833, 16.3725]
+  - name: "Linz"
+    country: AT
+    lang: de
+    admin: "Oberösterreich"
+    site: "https://www.linz.at/"
+    email: "info@mag.linz.at"
+    population: 211944
+    osm: 0
+    wikidata: Q41329
+    coords: [48.30583, 14.28639]
+  - name: "Leonding"
+    country: AT
+    lang: de
+    admin: "Bezirk Linz-Land"
+    site: "https://www.leonding.at/"
+    email: "rathaus@leonding.at"
+    population: 28698
+    osm: 86316
+    wikidata: Q487958
+    coords: [48.27674, 14.24299]
+  - name: "Klosterneuburg"
+    country: AT
+    lang: de
+    admin: "Bezirk Tulln"
+    site: "https://www.klosterneuburg.at/"
+    email: "stadtamt@klosterneuburg.at"
+    population: 27058
+    osm: 114956
+    wikidata: Q487522
+    coords: [48.29893, 16.28233]
+  - name: "Krems an der Donau"
+    country: AT
+    lang: de
+    admin: "Niederösterreich"
+    site: "https://www.krems.gv.at/"
+    email: "buergerservice@krems.gv.at"
+    population: 25272
+    osm: 0
+    wikidata: Q131266
+    coords: [48.41667, 15.61667]
+  - name: "Schwechat"
+    country: AT
+    lang: de
+    admin: "Bezirk Bruck an der Leitha"
+    site: "https://www.schwechat.gv.at/"
+    email: "stadtgemeinde@schwechat.gv.at"
+    population: 18026
+    osm: 111817
+    wikidata: Q489972
+    coords: [48.12396, 16.50469]
+  - name: "Stockerau"
+    country: AT
+    lang: de
+    admin: "Bezirk Korneuburg"
+    site: "https://www.stockerau.at"
+    email: "stadtgemeinde@stockerau.gv.at"
+    population: 17210
+    osm: 114897
+    wikidata: Q494283
+    coords: [48.38703, 16.19548]
+  - name: "Tulln an der Donau"
+    country: AT
+    lang: de
+    admin: "Bezirk Tulln"
+    site: "https://www.tulln.at/"
+    email: "stadtamt@tulln.gv.at"
+    population: 16197
+    osm: 106746
+    wikidata: Q489810
+    coords: [48.3284, 16.05704]
+  - name: "Korneuburg"
+    country: AT
+    lang: de
+    admin: "Bezirk Korneuburg"
+    site: "https://www.korneuburg.gv.at"
+    email: "stadtamt@korneuburg.gv.at"
+    population: 12986
+    osm: 114756
+    wikidata: Q659841
+    coords: [48.34534, 16.31884]
+  - name: "Enns"
+    country: AT
+    lang: de
+    admin: "Bezirk Linz-Land"
+    site: "https://www.enns.at/"
+    email: "office@enns.ooe.gv.at"
+    population: 11937
+    osm: 89436
+    wikidata: Q260089
+    coords: [48.20683, 14.47073]
+  - name: "Groß-Enzersdorf"
+    country: AT
+    lang: de
+    admin: "Bezirk Gänserndorf"
+    site: "https://www.grossenzersdorf.at"
+    email: "buergerservice@gross-enzersdorf.gv.at"
+    population: 11817
+    osm: 104864
+    wikidata: Q871555
+    coords: [48.18504, 16.60669]
+  - name: "Langenzersdorf"
+    country: AT
+    lang: de
+    admin: "Bezirk Korneuburg"
+    site: "https://www.langenzersdorf.gv.at"
+    email: "gemeinde@langenzersdorf.gv.at"
+    population: 8194
+    osm: 114764
+    wikidata: Q675616
+    coords: [48.30846, 16.36477]
+  - name: "Sankt Andrä-Wördern"
+    country: AT
+    lang: de
+    admin: "Bezirk Tulln"
+    site: "https://www.staw.at/"
+    email: "post@staw.at"
+    population: 7870
+    osm: 112477
+    wikidata: Q672587
+    coords: [48.31738, 16.21799]
+  - name: "Asten"
+    country: AT
+    lang: de
+    admin: "Bezirk Linz-Land"
+    site: "https://www.asten.ooe.gv.at/"
+    email: "gemeinde@asten.ooe.gv.at"
+    population: 6613
+    osm: 89432
+    wikidata: Q679166
+    coords: [48.22996, 14.41149]
+  - name: "Hainburg an der Donau"
+    country: AT
+    lang: de
+    admin: "Bezirk Bruck an der Leitha"
+    site: "https://www.hainburg.at"
+    email: "gemeinde@hainburg-donau.gv.at"
+    population: 6570
+    osm: 958936
+    wikidata: Q752107
+    coords: [48.14891, 16.95007]
+  - name: "Traismauer"
+    country: AT
+    lang: de
+    admin: "Bezirk St. Pölten"
+    site: "https://www.traismauer.at/"
+    email: "stadtgemeinde@traismauer.at"
+    population: 6224
+    osm: 63620
+    wikidata: Q305159
+    coords: [48.35102, 15.76147]
+  - name: "Alkoven"
+    country: AT
+    lang: de
+    admin: "Bezirk Eferding"
+    site: "https://www.alkoven.at/"
+    email: "gemeinde@alkoven.ooe.gv.at"
+    population: 5961
+    osm: 86254
+    wikidata: Q647082
+    coords: [48.28378, 14.10446]
+  - name: "Wilhering"
+    country: AT
+    lang: de
+    admin: "Bezirk Linz-Land"
+    site: "https://www.wilhering.at/"
+    email: "gemeinde@wilhering.at"
+    population: 5911
+    osm: 86255
+    wikidata: Q871451
+    coords: [48.30061, 14.1865]
+  - name: "Melk"
+    country: AT
+    lang: de
+    admin: "Bezirk Melk"
+    site: "https://www.melk.gv.at/"
+    email: "melk@donau.com"
+    population: 5725
+    osm: 127127
+    wikidata: Q489806
+    coords: [48.21174, 15.33513]
+  - name: "Fischamend"
+    country: AT
+    lang: de
+    admin: "Bezirk Bruck an der Leitha"
+    site: "https://www.fischamend.gv.at/"
+    email: "amt@fischamend.gv.at"
+    population: 5714
+    osm: 111818
+    wikidata: Q594276
+    coords: [48.11733, 16.61727]
+  - name: "Ybbs an der Donau"
+    country: AT
+    lang: de
+    admin: "Bezirk Melk"
+    site: "https://www.ybbs.at/"
+    email: "stadtgemeinde@ybbs.at"
+    population: 5653
+    osm: 128163
+    wikidata: Q278447
+    coords: [48.17475, 15.07815]
+  - name: "Feldkirchen an der Donau"
+    country: AT
+    lang: de
+    admin: "Bezirk Urfahr-Umgebung"
+    site: "https://www.feldkirchen-donau.at/"
+    email: "office@feldkirchen-donau.at"
+    population: 5361
+    osm: 86205
+    wikidata: Q250189
+    coords: [48.35648, 14.07216]
+  - name: "Leobendorf"
+    country: AT
+    lang: de
+    admin: "Bezirk Korneuburg"
+    site: "https://www.leobendorf.at/"
+    email: "marktgemeinde@leobendorf.at"
+    population: 5265
+    osm: 114757
+    wikidata: Q162982
+    coords: [48.38551, 16.32027]
+  - name: "Mauthausen"
+    country: AT
+    lang: de
+    admin: "Bezirk Perg"
+    site: "https://www.mauthausen.at/"
+    email: "gu@mauthausen.at"
+    population: 4936
+    osm: 910868
+    wikidata: Q658855
+    coords: [48.24651, 14.53633]
+  - name: "Steyregg"
+    country: AT
+    lang: de
+    admin: "Bezirk Urfahr-Umgebung"
+    site: "https://www.steyregg.at/"
+    email: "office@steyregg.at"
+    population: 4889
+    osm: 87700
+    wikidata: Q662757
+    coords: [48.29178, 14.36964]
+  - name: "Ottensheim"
+    country: AT
+    lang: de
+    admin: "Bezirk Urfahr-Umgebung"
+    site: "https://www.ottensheim.ooe.gv.at/"
+    email: "webmaster@ottensheim.at"
+    population: 4721
+    osm: 86237
+    wikidata: Q683160
+    coords: [48.33269, 14.18375]
+  - name: "Puchenau"
+    country: AT
+    lang: de
+    admin: "Bezirk Urfahr-Umgebung"
+    site: "https://www.puchenau.at/"
+    email: "gemeinde@puchenau.at"
+    population: 4445
+    osm: 86308
+    wikidata: Q695254
+    coords: [48.32644, 14.23168]
+  - name: "Hartkirchen"
+    country: AT
+    lang: de
+    admin: "Bezirk Eferding"
+    site: "https://www.hartkirchen.ooe.gv.at/"
+    email: "gemeinde@hartkirchen.ooe.gv.at"
+    population: 4099
+    osm: 86264
+    wikidata: Q664682
+    coords: [48.37636, 13.97718]
+  - name: "Luftenberg an der Donau"
+    country: AT
+    lang: de
+    admin: "Bezirk Perg"
+    site: "https://www.luftenberg.at/"
+    email: "gemeindeamt@luftenberg.ooe.gv.at"
+    population: 4057
+    osm: 910874
+    wikidata: Q677951
+    coords: [48.27197, 14.42483]
+  - name: "Zwentendorf an der Donau"
+    country: AT
+    lang: de
+    admin: "Bezirk Tulln"
+    site: "https://www.zwentendorf.at/"
+    email: "marktgemeinde@zwentendorf-donau.gv.at"
+    population: 3982
+    osm: 108217
+    wikidata: Q243860
+    coords: [48.35084, 15.86641]
+  - name: "Pöchlarn"
+    country: AT
+    lang: de
+    admin: "Bezirk Melk"
+    site: "https://www.poechlarn.at/"
+    email: "info@poechlarn.at"
+    population: 3912
+    osm: 129473
+    wikidata: Q255350
+    coords: [48.19641, 15.22636]
+  - name: "Hausleiten"
+    country: AT
+    lang: de
+    admin: "Bezirk Korneuburg"
+    site: "https://www.hausleiten.gv.at"
+    email: "gemeinde@hausleiten.gv.at"
+    population: 3843
+    osm: 113651
+    wikidata: Q691586
+    coords: [48.39085, 16.10385]
+  - name: "St. Martin im Mühlkreis"
+    country: AT
+    lang: de
+    admin: "Bezirk Rohrbach"
+    site: "https://www.sankt-martin.at/"
+    email: "gemeindeamt@sankt-martin.at"
+    population: 3757
+    osm: 977353
+    wikidata: Q693639
+    coords: [48.41507, 14.03009]
+  - name: "Naarn im Machlande"
+    country: AT
+    lang: de
+    admin: "Bezirk Perg"
+    site: "https://www.naarn.at/"
+    email: "gemeinde@naarn.ooe.gv.at"
+    population: 3690
+    osm: 422625
+    wikidata: Q668650
+    coords: [48.21449, 14.62251]
+  - name: "Kirchberg am Wagram"
+    country: AT
+    lang: de
+    admin: "Bezirk Tulln"
+    site: "https://www.kirchberg-wagram.at/"
+    email: "marktgemeinde@kirchberg-wagram.gv.at"
+    population: 3670
+    osm: 108218
+    wikidata: Q674246
+    coords: [48.40986, 15.89201]
+  - name: "Ardagger"
+    country: AT
+    lang: de
+    admin: "Bezirk Amstetten"
+    site: "https://www.ardagger.gv.at/"
+    email: "gemeinde@ardagger.gv.at"
+    population: 3604
+    osm: 132152
+    wikidata: Q638449
+    coords: [48.1745, 14.8334]
+  - name: "Mautern an der Donau"
+    country: AT
+    lang: de
+    admin: "Bezirk Krems"
+    site: "https://www.mautern.at"
+    email: "stadtgemeinde@mautern-donau.gv.at"
+    population: 3418
+    osm: 419291
+    wikidata: Q669995
+    coords: [48.38254, 15.56871]
+  - name: "Ennsdorf"
+    country: AT
+    lang: de
+    admin: "Bezirk Amstetten"
+    site: "https://www.ennsdorf.gv.at/"
+    email: "gemeinde@ennsdorf.gv.at"
+    population: 3303
+    osm: 907902
+    wikidata: Q697066
+    coords: [48.21626, 14.50418]
+  - name: "Grafenwörth"
+    country: AT
+    lang: de
+    admin: "Bezirk Tulln"
+    site: "https://www.grafenwoerth.at/"
+    email: "gemeinde@grafenwoerth.gv.at"
+    population: 3132
+    osm: 107128
+    wikidata: Q674455
+    coords: [48.42948, 15.77842]
+  - name: "Furth bei Göttweig"
+    country: AT
+    lang: de
+    admin: "Bezirk Krems"
+    site: "https://www.furth.at/"
+    email: "gemeinde@furth.at"
+    population: 2956
+    osm: 419282
+    wikidata: Q581628
+    coords: [48.38082, 15.60842]
+  - name: "Grein"
+    country: AT
+    lang: de
+    admin: "Bezirk Perg"
+    site: "https://www.grein.ooe.gv.at/"
+    email: "info@baumfried.at"
+    population: 2926
+    osm: 909439
+    wikidata: Q389363
+    coords: [48.22483, 14.85105]
+  - name: "Esternberg"
+    country: AT
+    lang: de
+    admin: "Bezirk Schärding"
+    site: "https://www.esternberg.at/"
+    email: "gemeinde@esternberg.ooe.gv.at"
+    population: 2855
+    osm: 975837
+    wikidata: Q685087
+    coords: [48.5374, 13.59693]
+  - name: "Waldhausen im Strudengau"
+    country: AT
+    lang: de
+    admin: "Bezirk Perg"
+    site: "https://www.waldhausen.at/"
+    email: "gemeinde@waldhausen.ooe.gv.at"
+    population: 2853
+    osm: 128116
+    wikidata: Q678170
+    coords: [48.27228, 14.9367]
+  - name: "Sankt Pantaleon-Erla"
+    country: AT
+    lang: de
+    admin: "Bezirk Amstetten"
+    site: "https://www.st-pantaleon-erla.gv.at/"
+    email: "gemeinde@st-pantaleon-erla.gv.at"
+    population: 2707
+    osm: 907917
+    wikidata: Q661826
+    coords: [48.20382, 14.56906]
+  - name: "Spillern"
+    country: AT
+    lang: de
+    admin: "Bezirk Korneuburg"
+    site: "https://www.spillern.at"
+    email: "marktgemeinde@spillern.at"
+    population: 2644
+    osm: 114894
+    wikidata: Q876188
+    coords: [48.37599, 16.26315]
+  - name: "Langenstein"
+    country: AT
+    lang: de
+    admin: "Bezirk Perg"
+    site: "https://www.langenstein.at/"
+    email: "gemeinde@langenstein.ooe.gv.at"
+    population: 2534
+    osm: 910866
+    wikidata: Q678349
+    coords: [48.25943, 14.4678]
+  - name: "Langenrohr"
+    country: AT
+    lang: de
+    admin: "Bezirk Tulln"
+    site: "https://www.langenrohr.gv.at/"
+    email: "gemeinde@langenrohr.gv.at"
+    population: 2369
+    osm: 108380
+    wikidata: Q674396
+    coords: [48.31765, 15.99252]
+  - name: "Zeiselmauer-Wolfpassing"
+    country: AT
+    lang: de
+    admin: "Bezirk Tulln"
+    site: "https://www.zeiselmauer-wolfpassing.at/"
+    email: "gemeinde@zeiselmauer.gv.at"
+    population: 2302
+    osm: 112509
+    wikidata: Q184968
+    coords: [48.32548, 16.17767]
+  - name: "Aschach an der Donau"
+    country: AT
+    lang: de
+    admin: "Bezirk Eferding"
+    site: "https://www.aschach.at/"
+    email: "gemeinde@aschach-donau.ooe.gv.at"
+    population: 2201
+    osm: 86284
+    wikidata: Q682766
+    coords: [48.3877, 14.00296]
+  - name: "Persenbeug-Gottsdorf"
+    country: AT
+    lang: de
+    admin: "Bezirk Melk"
+    site: "https://www.persenbeug-gottsdorf.gv.at/"
+    email: "gemeinde@persenbeug-gottsdorf.at"
+    population: 2201
+    osm: 545418
+    wikidata: Q661843
+    coords: [48.19995, 15.09611]
+  - name: "Gedersdorf"
+    country: AT
+    lang: de
+    admin: "Bezirk Krems"
+    site: "https://www.gedersdorf.at/"
+    email: "gemeindeamt@gedersdorf.at"
+    population: 2184
+    osm: 447328
+    wikidata: Q579202
+    coords: [48.41321, 15.70128]
+  - name: "Wallsee-Sindelburg"
+    country: AT
+    lang: de
+    admin: "Bezirk Amstetten"
+    site: "https://www.wallsee-sindelburg.gv.at/"
+    email: "gemeinde@wallsee-sindelburg.gv.at"
+    population: 2178
+    osm: 915353
+    wikidata: Q688679
+    coords: [48.14611, 14.72692]
+  - name: "Neustadtl an der Donau"
+    country: AT
+    lang: de
+    admin: "Bezirk Amstetten"
+    site: "https://www.neustadtl.at/"
+    email: "gemeinde@neustadtl.at"
+    population: 2167
+    osm: 131852
+    wikidata: Q601968
+    coords: [48.19568, 14.92461]
+  - name: "St. Agatha"
+    country: AT
+    lang: de
+    admin: "Bezirk Grieskirchen"
+    site: "https://www.st-agatha.at/"
+    email: "gemeinde@st-agatha.ooe.gv.at"
+    population: 2116
+    osm: 611076
+    wikidata: Q678895
+    coords: [48.38766, 13.87627]
+  - name: "Orth an der Donau"
+    country: AT
+    lang: de
+    admin: "Bezirk Gänserndorf"
+    site: "https://www.orth.at"
+    email: "info@orth.at"
+    population: 2086
+    osm: 106438
+    wikidata: Q871563
+    coords: [48.15071, 16.70541]
+  - name: "Strengberg"
+    country: AT
+    lang: de
+    admin: "Bezirk Amstetten"
+    site: "https://www.strengberg.gv.at/"
+    email: "gemeinde@strengberg.gv.at"
+    population: 2055
+    osm: 915354
+    wikidata: Q673937
+    coords: [48.15317, 14.6494]
+  - name: "Haslau - Maria Ellend"
+    country: AT
+    lang: de
+    admin: "Bezirk Bruck an der Leitha"
+    site: "https://www.haslau-mariaellend.gv.at"
+    email: "gemeinde@haslau-mariaellend.gv.at"
+    population: 2004
+    osm: 960705
+    wikidata: Q678006
+    coords: [48.10536, 16.6976]
+  - name: "Engelhartstetten"
+    country: AT
+    lang: de
+    admin: "Bezirk Gänserndorf"
+    site: "https://www.engelhartstetten.at"
+    email: "gemeinde@engelhartstetten.at"
+    population: 1979
+    osm: 106616
+    wikidata: Q547840
+    coords: [48.18738, 16.89958]
+  - name: "Bergland"
+    country: AT
+    lang: de
+    admin: "Bezirk Melk"
+    site: "https://www.bergland.gv.at/"
+    email: "gemeinde@bergland.gv.at"
+    population: 1901
+    osm: 128182
+    wikidata: Q665148
+    coords: [48.15178, 15.15437]
+  - name: "Pupping"
+    country: AT
+    lang: de
+    admin: "Bezirk Eferding"
+    site: "https://www.pupping.at/"
+    email: "gemeinde@pupping.ooe.gv.at"
+    population: 1824
+    osm: 105793
+    wikidata: Q684562
+    coords: [48.31786, 14.02029]
+  - name: "Saxen"
+    country: AT
+    lang: de
+    admin: "Bezirk Perg"
+    site: "https://www.saxen.at/"
+    email: "gemeinde@saxen.at"
+    population: 1820
+    osm: 909429
+    wikidata: Q682882
+    coords: [48.20748, 14.79641]
+  - name: "Emmersdorf an der Donau"
+    country: AT
+    lang: de
+    admin: "Bezirk Melk"
+    site: "https://www.emmersdorf.gv.at/"
+    email: "office@emmersdorf.at"
+    population: 1776
+    osm: 127128
+    wikidata: Q675509
+    coords: [48.25322, 15.32787]
+  - name: "Bad Deutsch-Altenburg"
+    country: AT
+    lang: de
+    admin: "Bezirk Bruck an der Leitha"
+    site: "https://www.bad-deutsch-altenburg.gv.at"
+    email: "office@roemerland-carnuntum.at"
+    population: 1765
+    osm: 929724
+    wikidata: Q661194
+    coords: [48.11668, 16.90512]
+  - name: "Baumgartenberg"
+    country: AT
+    lang: de
+    admin: "Bezirk Perg"
+    site: "https://www.baumgartenberg.at/"
+    email: "gemeinde@baumgartenberg.ooe.gv.at"
+    population: 1734
+    osm: 909403
+    wikidata: Q678100
+    coords: [48.20833, 14.7533]
+  - name: "Krummnußbaum"
+    country: AT
+    lang: de
+    admin: "Bezirk Melk"
+    site: "https://www.krummnussbaum.at"
+    email: "gemeinde@krummnussbaum.at"
+    population: 1724
+    osm: 127141
+    wikidata: Q671938
+    coords: [48.20128, 15.14946]
+  - name: "Hofamt Priel"
+    country: AT
+    lang: de
+    admin: "Bezirk Melk"
+    site: "https://www.hofamtpriel.at"
+    email: "gemeinde@hofamtpriel.at"
+    population: 1714
+    osm: 545444
+    wikidata: Q676547
+    coords: [48.22369, 15.0449]
+  - name: "Marbach an der Donau"
+    country: AT
+    lang: de
+    admin: "Bezirk Melk"
+    site: "https://www.marbach-donau.at"
+    email: "info@marbach-donau.gv.at"
+    population: 1690
+    osm: 547403
+    wikidata: Q876222
+    coords: [48.22683, 15.14132]
+  - name: "Sankt Martin-Karlsbach"
+    country: AT
+    lang: de
+    admin: "Bezirk Melk"
+    site: "https://www.st-martin-karlsbach.gv.at"
+    email: "marktgemeinde@st-martin-karlsbach.gv.at"
+    population: 1659
+    osm: 127139
+    wikidata: Q675334
+    coords: [48.16533, 15.01021]
+  - name: "Muckendorf-Wipfing"
+    country: AT
+    lang: de
+    admin: "Bezirk Tulln"
+    site: "https://www.muckendorf-wipfing.at/"
+    email: "gemeinde@muckendorf-wipfing.at"
+    population: 1573
+    osm: 967116
+    wikidata: Q674147
+    coords: [48.33294, 16.15228]
+  - name: "St. Aegidi"
+    country: AT
+    lang: de
+    admin: "Bezirk Schärding"
+    site: "https://www.st-aegidi.at/"
+    email: "gemeinde@st-aegidi.ooe.gv.at"
+    population: 1556
+    osm: 554558
+    wikidata: Q684547
+    coords: [48.4706, 13.73176]
+  - name: "Spitz"
+    country: AT
+    lang: de
+    admin: "Bezirk Krems"
+    site: "https://www.spitz-wachau.at/"
+    email: "gemeindeamt@spitz.gv.at"
+    population: 1534
+    osm: 452796
+    wikidata: Q676596
+    coords: [48.35848, 15.38276]
+  - name: "Hofkirchen im Mühlkreis"
+    country: AT
+    lang: de
+    admin: "Bezirk Rohrbach"
+    site: "https://www.hofkirchen.at/"
+    email: "gemeindeamt@hofkirchen.at"
+    population: 1520
+    osm: 907559
+    wikidata: Q693743
+    coords: [48.46591, 13.82462]
+  - name: "Pfarrkirchen im Mühlkreis"
+    country: AT
+    lang: de
+    admin: "Bezirk Rohrbach"
+    site: "https://www.pfarrkirchen.at/"
+    email: "gemeindeamt@pfarrkirchen.at"
+    population: 1474
+    osm: 905523
+    wikidata: Q642621
+    coords: [48.51965, 13.80926]
+  - name: "Neustift im Mühlkreis"
+    country: AT
+    lang: de
+    admin: "Bezirk Rohrbach"
+    site: "https://www.neustift-muehlviertel.at/"
+    email: "gemeinde@neustift-muehlviertel.at"
+    population: 1461
+    osm: 905524
+    wikidata: Q693573
+    coords: [48.51959, 13.75423]
+  - name: "Freinberg"
+    country: AT
+    lang: de
+    admin: "Bezirk Schärding"
+    site: "https://www.freinberg.at/"
+    email: "gemeinde@freinberg.ooe.gv.at"
+    population: 1458
+    osm: 660037
+    wikidata: Q684493
+    coords: [48.56452, 13.51299]
+  - name: "Weißenkirchen in der Wachau"
+    country: AT
+    lang: de
+    admin: "Bezirk Krems"
+    site: "https://www.weissenkirchen-wachau.at/"
+    email: "info@weissenkirchen-wachau.at"
+    population: 1429
+    osm: 416890
+    wikidata: Q676503
+    coords: [48.39399, 15.45142]
+  - name: "Leiben"
+    country: AT
+    lang: de
+    admin: "Bezirk Melk"
+    site: "https://www.leiben.at"
+    email: "info@leiben.gv.at"
+    population: 1321
+    osm: 127130
+    wikidata: Q871577
+    coords: [48.2416, 15.26435]
+  - name: "Königsbrunn am Wagram"
+    country: AT
+    lang: de
+    admin: "Bezirk Tulln"
+    site: "https://www.koenigsbrunn.at/"
+    email: "marktgemeinde@koenigsbrunn.at"
+    population: 1319
+    osm: 106758
+    wikidata: Q674372
+    coords: [48.38808, 15.94623]
+  - name: "Haibach ob der Donau"
+    country: AT
+    lang: de
+    admin: "Bezirk Eferding"
+    site: "https://www.haibach-donau.at/"
+    email: "gemeinde@haibach-donau.ooe.gv.at"
+    population: 1308
+    osm: 105806
+    wikidata: Q665209
+    coords: [48.41435, 13.90129]
+  - name: "Eckartsau"
+    country: AT
+    lang: de
+    admin: "Bezirk Gänserndorf"
+    site: "https://www.eckartsau.gv.at"
+    email: "info@eckartsau.gv.at"
+    population: 1283
+    osm: 106609
+    wikidata: Q667807
+    coords: [48.1562, 16.802]
+  - name: "Bergern im Dunkelsteinerwald"
+    country: AT
+    lang: de
+    admin: "Bezirk Krems"
+    site: "https://www.bergern-dunkelsteinerwald.at/"
+    email: "gde@bergern-dunkelsteinerwald.gv.at"
+    population: 1253
+    osm: 545987
+    wikidata: Q676362
+    coords: [48.34586, 15.5001]
+  - name: "Petronell-Carnuntum"
+    country: AT
+    lang: de
+    admin: "Bezirk Bruck an der Leitha"
+    site: "https://www.petronell.at"
+    email: "marktgemeinde@petronell-carnuntum.gv.at"
+    population: 1245
+    osm: 960779
+    wikidata: Q585533
+    coords: [48.11087, 16.8621]
+  - name: "Zelking-Matzleinsdorf"
+    country: AT
+    lang: de
+    admin: "Bezirk Melk"
+    site: "https://www.zelking-matzleinsdorf.gv.at"
+    email: "gemeinde@zelking-matzleinsdorf.gv.at"
+    population: 1214
+    osm: 127140
+    wikidata: Q187442
+    coords: [48.18835, 15.25623]
+  - name: "Waldkirchen am Wesen"
+    country: AT
+    lang: de
+    admin: "Bezirk Schärding"
+    site: "https://www.waldkirchen.at/"
+    email: "gemeinde@waldkirchen.ooe.gv.at"
+    population: 1171
+    osm: 397117
+    wikidata: Q682974
+    coords: [48.43947, 13.81806]
+  - name: "Scharndorf"
+    country: AT
+    lang: de
+    admin: "Bezirk Bruck an der Leitha"
+    site: "https://www.scharndorf.gv.at"
+    email: "Gemeinde@scharndorf.gv.at"
+    population: 1159
+    osm: 960768
+    wikidata: Q678395
+    coords: [48.09939, 16.78752]
+  - name: "Rossatz-Arnsdorf"
+    country: AT
+    lang: de
+    admin: "Bezirk Krems"
+    site: "https://www.rossatz-arnsdorf.at/"
+    email: "gemeinde@rossatz-arnsdorf.gv.at"
+    population: 1065
+    osm: 546260
+    wikidata: Q676832
+    coords: [48.36518, 15.46959]
+  - name: "Kirchberg ob der Donau"
+    country: AT
+    lang: de
+    admin: "Bezirk Rohrbach"
+    site: "https://www.kirchberg-donau.at/"
+    email: "gemeindeamt@kirchberg-donau.at"
+    population: 1055
+    osm: 905603
+    wikidata: Q473501
+    coords: [48.43375, 13.9531]
+  - name: "Klein-Pöchlarn"
+    country: AT
+    lang: de
+    admin: "Bezirk Melk"
+    site: "https://www.kleinpoechlarn.at"
+    email: "gemeindeamt@klein-poechlarn.gv.at"
+    population: 1053
+    osm: 555398
+    wikidata: Q675036
+    coords: [48.22263, 15.22248]
+  - name: "Wolfsthal"
+    country: AT
+    lang: de
+    admin: "Bezirk Bruck an der Leitha"
+    site: "https://www.wolfsthal.gv.at/"
+    email: "gemeinde@wolfsthal.gv.at"
+    population: 1032
+    osm: 933011
+    wikidata: Q661180
+    coords: [48.13376, 17.01534]
+  - name: "Nöchling"
+    country: AT
+    lang: de
+    admin: "Bezirk Melk"
+    site: "https://www.noechling.at/"
+    email: "marktgemeinde@noechling.gv.at"
+    population: 1017
+    osm: 128115
+    wikidata: Q876348
+    coords: [48.22657, 14.98898]
+  - name: "Niederkappel"
+    country: AT
+    lang: de
+    admin: "Bezirk Rohrbach"
+    site: "https://www.niederkappel.at/"
+    email: "gemeinde@niederkappel.at"
+    population: 985
+    osm: 905568
+    wikidata: Q386162
+    coords: [48.47224, 13.88212]
+  - name: "Schönbühel-Aggsbach"
+    country: AT
+    lang: de
+    admin: "Bezirk Melk"
+    site: "https://www.schoenbuehel.at"
+    email: "schoenbuehel-aggsbach@aggsbach-dorf.at"
+    population: 981
+    osm: 127129
+    wikidata: Q666204
+    coords: [48.28033, 15.40686]
+  - name: "Engelhartszell an der Donau"
+    country: AT
+    lang: de
+    admin: "Bezirk Schärding"
+    site: "https://www.engelhartszell.at/"
+    email: "gemeinde@engelhartszell.ooe.gv.at"
+    population: 942
+    osm: 905552
+    wikidata: Q660958
+    coords: [48.49682, 13.72789]
+  - name: "Maria Laach am Jauerling"
+    country: AT
+    lang: de
+    admin: "Bezirk Krems"
+    site: "https://www.marialaach.at/"
+    email: "gemeinde@maria-laach.gv.at"
+    population: 916
+    osm: 453691
+    wikidata: Q675315
+    coords: [48.30703, 15.33811]
+  - name: "Dürnstein"
+    country: AT
+    lang: de
+    admin: "Bezirk Krems"
+    site: "https://www.duernstein.at"
+    email: "office@duernstein.gv.at"
+    population: 864
+    osm: 416887
+    wikidata: Q668600
+    coords: [48.40742, 15.51298]
+  - name: "Goldwörth"
+    country: AT
+    lang: de
+    admin: "Bezirk Urfahr-Umgebung"
+    site: "https://www.goldwoerth.at/"
+    email: "gemeinde@goldwoerth.ooe.gv.at"
+    population: 840
+    osm: 86204
+    wikidata: Q693445
+    coords: [48.32488, 14.10895]
+  - name: "St. Nikola an der Donau"
+    country: AT
+    lang: de
+    admin: "Bezirk Perg"
+    site: "https://www.st-ikola.at/"
+    email: "gemeinde@st-nikola-donau.ooe.gv.at"
+    population: 798
+    osm: 129513
+    wikidata: Q670046
+    coords: [48.23059, 14.92743]
+  - name: "Aggsbach"
+    country: AT
+    lang: de
+    admin: "Bezirk Krems"
+    site: "https://www.aggsbach.gv.at"
+    email: "gemeindeamt@aggsbach.gv.at"
+    population: 615
+    osm: 453187
+    wikidata: Q393419
+    coords: [48.30215, 15.38847]
+  - name: "Vichtenstein"
+    country: AT
+    lang: de
+    admin: "Bezirk Schärding"
+    site: "https://www.vichtenstein.ooe.gv.at/"
+    email: "gemeinde@vichtenstein.ooe.gv.at"
+    population: 611
+    osm: 905553
+    wikidata: Q667013
+    coords: [48.5255, 13.66096]
+  - name: "Mannsdorf an der Donau"
+    country: AT
+    lang: de
+    admin: "Bezirk Gänserndorf"
+    site: "https://www.mannsdorf.at/"
+    email: "gemeinde@mannsdorf.gv.at"
+    population: 342
+    osm: 106434
+    wikidata: Q691717
+    coords: [48.14755, 16.66058]
+  - name: "Budapest"
+    country: HU
+    lang: hu
+    admin: "Magyarország"
+    site: "https://budapest.hu/"
+    email: "megbizhato.szobaberlet@budapest.hu"
+    email_alt: "u003emegbizhato.szobaberlet@budapest.hu"
+    population: 1685209
+    osm: 1244004
+    wikidata: Q1781
+    coords: [47.48142, 19.13002]
+  - name: "Győr"
+    country: HU
+    lang: hu
+    admin: "Győri járás"
+    site: "https://www.gyor.hu"
+    email: "hivatal.gyor@gyor.gov.hu"
+    population: 129373
+    osm: 1440627
+    wikidata: Q134494
+    coords: [47.66969, 17.65902]
+  - name: "Érd"
+    country: HU
+    lang: hu
+    admin: "Érdi járás"
+    site: "https://www.erd.hu/"
+    email: "onkormanyzat@erd.hu"
+    population: 71495
+    osm: 112435
+    wikidata: Q193050
+    coords: [47.37237, 18.89812]
+  - name: "Dunakeszi"
+    country: HU
+    lang: hu
+    admin: "Dunakeszi járás"
+    site: "https://dunakeszi.hu/"
+    email: "jegyzo@dunakeszi.hu"
+    email_alt: "ugyfelszolgalat@dunakeszi.hu"
+    population: 42630
+    osm: 214932
+    wikidata: Q547479
+    coords: [47.63597, 19.1375]
+  - name: "Dunaújváros"
+    country: HU
+    lang: hu
+    admin: "Dunaújvárosi járás"
+    site: "https://dunaujvaros.hu/"
+    email: "sajto@dunaujvaros.hu"
+    population: 41193
+    osm: 1420733
+    wikidata: Q187812
+    coords: [46.94591, 18.91309]
+  - name: "Szigetszentmiklós"
+    country: HU
+    lang: hu
+    admin: "Szigetszentmiklósi járás"
+    site: "http://szigetszentmiklos.hu"
+    email: "sajto@szigetszentmiklos.hu"
+    email_alt: "varoshaza@szigetszentmiklos.hu, 20varoshaza@szigetszentmiklos.hu"
+    population: 40132
+    osm: 222329
+    wikidata: Q740853
+    coords: [47.35852, 19.04842]
+  - name: "Vác"
+    country: HU
+    lang: hu
+    admin: "Váci járás"
+    site: "http://www.vac.hu"
+    population: 33871
+    osm: 1440602
+    wikidata: Q207408
+    coords: [47.79153, 19.14669]
+  - name: "Mosonmagyaróvár"
+    country: HU
+    lang: hu
+    admin: "Mosonmagyaróvári járás"
+    site: "http://mosonmagyarovar.hu/"
+    population: 33743
+    osm: 1491446
+    wikidata: Q207406
+    coords: [47.86954, 17.28986]
+  - name: "Baja"
+    country: HU
+    lang: hu
+    admin: "Bajai járás"
+    site: "https://www.bajaionkormanyzat.hu/"
+    population: 32401
+    osm: 1130381
+    wikidata: Q203344
+    coords: [46.18309, 18.98108]
+  - name: "Esztergom"
+    country: HU
+    lang: hu
+    admin: "Esztergomi járás"
+    site: "https://www.esztergom.hu/"
+    email: "varoshaza@esztergom.hu"
+    population: 28521
+    osm: 1027785
+    wikidata: Q171353
+    coords: [47.75769, 18.76925]
+  - name: "Szentendre"
+    country: HU
+    lang: hu
+    admin: "Szentendrei járás"
+    site: "https://szentendre.hu/"
+    email: "ugyfelszolgalat@szentendre.hu"
+    population: 28483
+    osm: 216160
+    wikidata: Q390798
+    coords: [47.67715, 19.03296]
+  - name: "Dunaharaszti"
+    country: HU
+    lang: hu
+    admin: "Szigetszentmiklósi járás"
+    site: "https://dunaharaszti.hu/"
+    population: 23700
+    osm: 222340
+    wikidata: Q854933
+    coords: [47.34342, 19.10524]
+  - name: "Göd"
+    country: HU
+    lang: hu
+    admin: "Dunakeszi járás"
+    site: "http://god.hu/"
+    email: "varoshaza@god.hu"
+    population: 21838
+    osm: 214933
+    wikidata: Q604258
+    coords: [47.68694, 19.15627]
+  - name: "Komárom"
+    country: HU
+    lang: hu
+    admin: "Komáromi járás"
+    site: "http://www.komarom.hu"
+    email: "komarom@komarom.hu"
+    population: 19862
+    osm: 1027781
+    wikidata: Q625154
+    coords: [47.72126, 18.12388]
+  - name: "Szigethalom"
+    country: HU
+    lang: hu
+    admin: "Szigetszentmiklósi járás"
+    site: "http://www.szigethalom.hu"
+    population: 18382
+    osm: 222332
+    wikidata: Q784229
+    coords: [47.31506, 19.00735]
+  - name: "Százhalombatta"
+    country: HU
+    lang: hu
+    admin: "Érdi járás"
+    site: "http://www.szazhalombatta.hu"
+    population: 18115
+    osm: 112432
+    wikidata: Q773203
+    coords: [47.31179, 18.90478]
+  - name: "Paks"
+    country: HU
+    lang: hu
+    admin: "Paksi járás"
+    site: "http://www.paks.hu"
+    email: "pakshonlap@gmail.com"
+    population: 17873
+    osm: 1493086
+    wikidata: Q740800
+    coords: [46.61979, 18.82185]
+  - name: "Mohács"
+    country: HU
+    lang: hu
+    admin: "Mohácsi járás"
+    site: "http://www.mohacs.hu"
+    email: "mohacs@mohacs.hu"
+    population: 17054
+    osm: 575366
+    wikidata: Q320798
+    coords: [46.00822, 18.74447]
+  - name: "Kalocsa"
+    country: HU
+    lang: hu
+    admin: "Kalocsai járás"
+    site: "https://www.kalocsa.hu"
+    email: "ugyfelszolgalat@kalocsaviz.hu"
+    population: 14257
+    osm: 1130407
+    wikidata: Q679249
+    coords: [46.51465, 18.98488]
+  - name: "Budakalász"
+    country: HU
+    lang: hu
+    admin: "Szentendrei járás"
+    site: "https://www.budakalasz.hu/"
+    email: "info@budakalasz.hu"
+    email_alt: "polgarmester@budakalasz.hu"
+    population: 12088
+    osm: 216158
+    wikidata: Q850935
+    coords: [47.62284, 19.03369]
+  - name: "Halásztelek"
+    country: HU
+    lang: hu
+    admin: "Szigetszentmiklósi járás"
+    site: "http://www.halasztelek.hu"
+    email: "hivatal@halasztelek.hu"
+    email_alt: "pmtitkarsag@halasztelek.hu"
+    population: 12084
+    osm: 222330
+    wikidata: Q378591
+    coords: [47.36505, 18.97992]
+  - name: "Tököl"
+    country: HU
+    lang: hu
+    admin: "Szigetszentmiklósi járás"
+    site: "https://www.tokol.hu/"
+    email: "hivatal@tokol.hu"
+    population: 11253
+    osm: 222331
+    wikidata: Q916987
+    coords: [47.32017, 18.9672]
+  - name: "Ráckeve"
+    country: HU
+    lang: hu
+    admin: "Ráckevei járás"
+    site: "http://www.rackeve.hu"
+    population: 11086
+    osm: 222336
+    wikidata: Q755701
+    coords: [47.16591, 18.94846]
+  - name: "Kiskunlacháza"
+    country: HU
+    lang: hu
+    admin: "Ráckevei járás"
+    site: "https://www.kiskunlachaza.hu/"
+    email: "pmhivatal@kiskunlachaza.hu"
+    population: 9441
+    osm: 222346
+    wikidata: Q1095159
+    coords: [47.18969, 19.04043]
+  - name: "Dunavarsány"
+    country: HU
+    lang: hu
+    admin: "Szigetszentmiklósi járás"
+    site: "http://www.dunavarsany.hu"
+    email: "titkarsag@dunavarsany.hu"
+    population: 8987
+    osm: 222342
+    wikidata: Q738159
+    coords: [47.29164, 19.05229]
+  - name: "Dunaföldvár"
+    country: HU
+    lang: hu
+    admin: "Paksi járás"
+    site: "http://www.dunafoldvar.hu/"
+    population: 8249
+    osm: 1407270
+    wikidata: Q911301
+    coords: [46.78917, 18.88171]
+  - name: "Ercsi"
+    country: HU
+    lang: hu
+    admin: "Martonvásári járás"
+    site: "http://ercsi.hu"
+    population: 7986
+    osm: 1418513
+    wikidata: Q855040
+    coords: [47.23413, 18.8592]
+  - name: "Nyergesújfalu"
+    country: HU
+    lang: hu
+    admin: "Esztergomi járás"
+    site: "http://www.nyergesujfalu.hu"
+    population: 7206
+    osm: 1027805
+    wikidata: Q854949
+    coords: [47.71081, 18.55499]
+  - name: "Ács"
+    country: HU
+    lang: hu
+    admin: "Komáromi járás"
+    site: "http://www.acs-varos.hu"
+    email: "titkarsag@acsvaros.hu"
+    population: 6920
+    osm: 1027798
+    wikidata: Q649647
+    coords: [47.70623, 17.98692]
+  - name: "Taksony"
+    country: HU
+    lang: hu
+    admin: "Szigetszentmiklósi járás"
+    site: "http://www.taksony.hu"
+    population: 6815
+    osm: 222341
+    wikidata: Q921821
+    coords: [47.31477, 19.08735]
+  - name: "Tahitótfalu"
+    country: HU
+    lang: hu
+    admin: "Szentendrei járás"
+    site: "http://www.tahitotfalu.hu"
+    email: "tahitotfalu@tahitotfalu.hu"
+    population: 6358
+    osm: 216161
+    wikidata: Q967910
+    coords: [47.77177, 19.0712]
+  - name: "Dömsöd"
+    country: HU
+    lang: hu
+    admin: "Ráckevei járás"
+    site: "http://www.domsod.hu/"
+    email: "2344fi@gmail.com"
+    population: 5948
+    osm: 222347
+    wikidata: Q241396
+    coords: [47.08885, 19.02518]
+  - name: "Solt"
+    country: HU
+    lang: hu
+    admin: "Kalocsai járás"
+    site: "http://www.solt.hu"
+    population: 5817
+    osm: 1130376
+    wikidata: Q855073
+    coords: [46.80538, 19.04274]
+  - name: "Rajka"
+    country: HU
+    lang: hu
+    admin: "Mosonmagyaróvári járás"
+    site: "http://rajka.hu"
+    population: 5459
+    osm: 1492741
+    wikidata: Q1009081
+    coords: [47.98493, 17.18784]
+  - name: "Tát"
+    country: HU
+    lang: hu
+    admin: "Esztergomi járás"
+    site: "http://www.tat.hu"
+    email: "visz@nvi.hu"
+    population: 5116
+    osm: 1027833
+    wikidata: Q1072168
+    coords: [47.74362, 18.64193]
+  - name: "Nagymaros"
+    country: HU
+    lang: hu
+    admin: "Szobi járás"
+    site: "https://nagymaros.hu/"
+    email: "hivatal@nagymaros.hu"
+    email_alt: "bejelentés@nagymaros.hu"
+    population: 5011
+    osm: 1440603
+    wikidata: Q282460
+    coords: [47.81044, 18.95055]
+  - name: "Rácalmás"
+    country: HU
+    lang: hu
+    admin: "Dunaújvárosi járás"
+    site: "http://www.racalmas.hu"
+    email: "titkarsag@racalmas.hu"
+    population: 4928
+    osm: 1420734
+    wikidata: Q1075327
+    coords: [47.0198, 18.90099]
+  - name: "Sződliget"
+    country: HU
+    lang: hu
+    admin: "Váci járás"
+    site: "http://www.szodliget.hu"
+    email: "hivatal@szodliget.hu"
+    population: 4915
+    osm: 1375512
+    wikidata: Q659772
+    coords: [47.72722, 19.1555]
+  - name: "Lábatlan"
+    country: HU
+    lang: hu
+    admin: "Esztergomi járás"
+    site: "http://www.labatlan.hu"
+    email: "polghiv@labatlan.hu"
+    population: 4851
+    osm: 1027780
+    wikidata: Q934949
+    coords: [47.72934, 18.49842]
+  - name: "Tokod"
+    country: HU
+    lang: hu
+    admin: "Esztergomi járás"
+    site: "http://www.tokod.hu"
+    email: "jegyzo@tokod.hu"
+    population: 4255
+    osm: 1027760
+    wikidata: Q1072301
+    coords: [47.72147, 18.64943]
+  - name: "Verőce"
+    country: HU
+    lang: hu
+    admin: "Szobi járás"
+    site: "https://www.veroce.hu/"
+    population: 4146
+    osm: 1440600
+    wikidata: Q1047624
+    coords: [47.83781, 19.0455]
+  - name: "Adony"
+    country: HU
+    lang: hu
+    admin: "Dunaújvárosi járás"
+    site: "http://www.adony.hu"
+    email: "jegyzo@adony.hu"
+    population: 4103
+    osm: 1420598
+    wikidata: Q366220
+    coords: [47.09035, 18.83909]
+  - name: "Leányfalu"
+    country: HU
+    lang: hu
+    admin: "Szentendrei járás"
+    site: "http://www.leanyfalu.hu/"
+    email: "jegyzo@leanyfalu.hu"
+    email_alt: "aljegyzo@leanyfalu.hu, polgarmester@leanyfalu.hu"
+    population: 4053
+    osm: 216164
+    wikidata: Q373512
+    coords: [47.71752, 19.05102]
+  - name: "Fadd"
+    country: HU
+    lang: hu
+    admin: "Tolnai járás"
+    site: "https://fadd.hu/"
+    email: "titkarsagfaddph@tolna.net"
+    population: 4035
+    osm: 1493764
+    wikidata: Q747724
+    coords: [46.45881, 18.83244]
+  - name: "Győrzámoly"
+    country: HU
+    lang: hu
+    admin: "Győri járás"
+    site: "http://www.gyorzamoly.hu/"
+    population: 3994
+    osm: 1492794
+    wikidata: Q507661
+    coords: [47.76179, 17.60349]
+  - name: "Dunavecse"
+    country: HU
+    lang: hu
+    admin: "Kunszentmiklósi járás"
+    site: "http://www.dunavecse.hu/"
+    population: 3894
+    osm: 1130430
+    wikidata: Q613187
+    coords: [46.90173, 19.04678]
+  - name: "Decs"
+    country: HU
+    lang: hu
+    admin: "Szekszárdi járás"
+    site: "http://www.decs.hu/"
+    email: "phdecs@decs.hu"
+    population: 3737
+    osm: 1501285
+    wikidata: Q591329
+    coords: [46.26559, 18.79047]
+  - name: "Kulcs"
+    country: HU
+    lang: hu
+    admin: "Dunaújvárosi járás"
+    site: "https://www.kulcs.eu/"
+    email: "titkarsag@kulcs.eu"
+    population: 3613
+    osm: 1420750
+    wikidata: Q1121754
+    coords: [47.0504, 18.89972]
+  - name: "Baracs"
+    country: HU
+    lang: hu
+    admin: "Dunaújvárosi járás"
+    site: "http://baracs.hu/"
+    population: 3446
+    osm: 1420732
+    wikidata: Q790169
+    coords: [46.90306, 18.87394]
+  - name: "Sükösd"
+    country: HU
+    lang: hu
+    admin: "Bajai járás"
+    site: "https://www.sukosd.hu/"
+    population: 3334
+    osm: 1130330
+    wikidata: Q221288
+    coords: [46.31263, 19.00102]
+  - name: "Harta"
+    country: HU
+    lang: hu
+    admin: "Kalocsai járás"
+    site: "http://www.harta.hu"
+    email: "harta@harta.hu"
+    population: 3310
+    osm: 1130342
+    wikidata: Q646203
+    coords: [46.68844, 19.09025]
+  - name: "Lébény"
+    country: HU
+    lang: hu
+    admin: "Mosonmagyaróvári járás"
+    site: "http://www.lebeny.hu/"
+    population: 3283
+    osm: 1492747
+    wikidata: Q1160417
+    coords: [47.75324, 17.34101]
+  - name: "Halászi"
+    country: HU
+    lang: hu
+    admin: "Mosonmagyaróvári járás"
+    site: "http://www.halaszi.hu"
+    population: 3279
+    osm: 1491444
+    wikidata: Q580088
+    coords: [47.89858, 17.34803]
+  - name: "Gönyű"
+    country: HU
+    lang: hu
+    admin: "Győri járás"
+    site: "http://www.gonyu.hu"
+    population: 3262
+    osm: 1440652
+    wikidata: Q1006147
+    coords: [47.72036, 17.8147]
+  - name: "Dunabogdány"
+    country: HU
+    lang: hu
+    admin: "Szentendrei járás"
+    site: "http://www.dunabogdany.hu"
+    email: "etkeztetes@dunabogdany.hu"
+    email_alt: "gyermekorvos@dunabogdany.hu"
+    population: 3256
+    osm: 216165
+    wikidata: Q734021
+    coords: [47.76679, 19.0413]
+  - name: "Abda"
+    country: HU
+    lang: hu
+    admin: "Győri járás"
+    site: "http://www.abda.hu/"
+    email: "titkarsag@abda.hu"
+    population: 3155
+    osm: 1440629
+    wikidata: Q479596
+    coords: [47.6994, 17.55123]
+  - name: "Dunapataj"
+    country: HU
+    lang: hu
+    admin: "Kalocsai járás"
+    site: "http://www.dunapataj.hu"
+    population: 3015
+    osm: 1130421
+    wikidata: Q911434
+    coords: [46.63631, 19.06834]
+  - name: "Szigetmonostor"
+    country: HU
+    lang: hu
+    admin: "Szentendrei járás"
+    site: "http://www.szigetmonostor.hu"
+    email: "faluhaz@szigetmonostor.hu"
+    population: 2991
+    osm: 216157
+    wikidata: Q640548
+    coords: [47.64362, 19.09774]
+  - name: "Öttevény"
+    country: HU
+    lang: hu
+    admin: "Győri járás"
+    site: "http://www.otteveny.hu/"
+    email: "onkormanyzat@otteveny.hu"
+    email_alt: "polgarmester@otteveny.hu"
+    population: 2908
+    osm: 1492790
+    wikidata: Q1089740
+    coords: [47.73974, 17.48645]
+  - name: "Pócsmegyer"
+    country: HU
+    lang: hu
+    admin: "Szentendrei járás"
+    site: "http://www.pocsmegyer.hu"
+    population: 2849
+    osm: 216163
+    wikidata: Q1187384
+    coords: [47.71514, 19.11096]
+  - name: "Tass"
+    country: HU
+    lang: hu
+    admin: "Kunszentmiklósi járás"
+    site: "https://tass.hu/"
+    email: "onkormanyzat@tass.hu"
+    population: 2836
+    osm: 1130388
+    wikidata: Q651978
+    coords: [47.01346, 19.04894]
+  - name: "Szalkszentmárton"
+    country: HU
+    lang: hu
+    admin: "Kalocsai járás"
+    site: "https://szalkszentmarton.hu/"
+    email: "info@szalkszentmarton.hu"
+    population: 2825
+    osm: 1130324
+    wikidata: Q1063925
+    coords: [46.96423, 19.04678]
+  - name: "Szigetcsép"
+    country: HU
+    lang: hu
+    admin: "Ráckevei járás"
+    site: "https://szigetcsep.hu/"
+    population: 2821
+    osm: 222333
+    wikidata: Q1076191
+    coords: [47.26121, 18.95501]
+  - name: "Iváncsa"
+    country: HU
+    lang: hu
+    admin: "Dunaújvárosi járás"
+    site: "http://www.ivancsa.hu"
+    email: "jegyzo@ivancsa.hu"
+    email_alt: "hivatal@ivancsa.hu, polgarmester@ivancsa.hu"
+    population: 2790
+    osm: 1418518
+    wikidata: Q1089641
+    coords: [47.14707, 18.82535]
+  - name: "Érsekcsanád"
+    country: HU
+    lang: hu
+    admin: "Bajai járás"
+    site: "https://ersekcsanad.hu/"
+    population: 2756
+    osm: 1130367
+    wikidata: Q645142
+    coords: [46.25053, 18.9706]
+  - name: "Szigetszentmárton"
+    country: HU
+    lang: hu
+    admin: "Ráckevei járás"
+    site: "http://www.szigetszentmarton.hu"
+    population: 2659
+    osm: 222335
+    wikidata: Q736233
+    coords: [47.2187, 18.9482]
+  - name: "Kismaros"
+    country: HU
+    lang: hu
+    admin: "Szobi járás"
+    site: "http://www.kismaros.hu"
+    email: "titkarsag@kismaros.hu"
+    population: 2617
+    osm: 1440601
+    wikidata: Q1089453
+    coords: [47.83569, 18.98076]
+  - name: "Dusnok"
+    country: HU
+    lang: hu
+    admin: "Kalocsai járás"
+    site: "https://dusnok.hu/"
+    email: "jegyzo@dusnok.hu"
+    email_alt: "polgarmester@dusnok.hu, iskola@dusnok.hu"
+    population: 2591
+    osm: 1130401
+    wikidata: Q911773
+    coords: [46.38535, 18.98836]
+  - name: "Bölcske"
+    country: HU
+    lang: hu
+    admin: "Paksi járás"
+    site: "https://bolcske.hu/"
+    email: "polghiv@bolcske.hu"
+    population: 2568
+    osm: 1407268
+    wikidata: Q855117
+    coords: [46.7246, 18.93095]
+  - name: "Győrújfalu"
+    country: HU
+    lang: hu
+    admin: "Győri járás"
+    site: "http://www.gyorujfalu.hu/"
+    email: "igazgatas@gyorujfalu.hu"
+    population: 2519
+    osm: 1440630
+    wikidata: Q582881
+    coords: [47.72457, 17.60181]
+  - name: "Szob"
+    country: HU
+    lang: hu
+    admin: "Szobi járás"
+    site: "https://szob.hu/"
+    population: 2488
+    osm: 1370263
+    wikidata: Q429409
+    coords: [47.83143, 18.8787]
+  - name: "Dunaszeg"
+    country: HU
+    lang: hu
+    admin: "Győri járás"
+    site: "http://www.dunaszeg.hu/"
+    email: "dunaszeg@dunaszeg.hu"
+    population: 2324
+    osm: 1492787
+    wikidata: Q911441
+    coords: [47.77914, 17.56113]
+  - name: "Kimle"
+    country: HU
+    lang: hu
+    admin: "Mosonmagyaróvári járás"
+    site: "http://www.kimle.hu/"
+    population: 2291
+    osm: 1491440
+    wikidata: Q1089628
+    coords: [47.82553, 17.39023]
+  - name: "Ásványráró"
+    country: HU
+    lang: hu
+    admin: "Mosonmagyaróvári járás"
+    site: "http://www.asvanyraro.hu/"
+    email: "polgarmesterihivatal@asvanyraro.hu"
+    population: 2170
+    osm: 1492796
+    wikidata: Q1075646
+    coords: [47.82425, 17.54541]
+  - name: "Pilismarót"
+    country: HU
+    lang: hu
+    admin: "Esztergomi járás"
+    site: "http://www.pilismarot.hu"
+    email: "igazgatas@pilismarot.hu"
+    population: 2166
+    osm: 1027768
+    wikidata: Q1089163
+    coords: [47.76734, 18.85888]
+  - name: "Őcsény"
+    country: HU
+    lang: hu
+    admin: "Szekszárdi járás"
+    site: "http://www.ocseny.hu/"
+    population: 2149
+    osm: 1501295
+    wikidata: Q1070473
+    coords: [46.31573, 18.80412]
+  - name: "Szigetújfalu"
+    country: HU
+    lang: hu
+    admin: "Ráckevei járás"
+    site: "http://www.szigetujfalu.hu"
+    population: 2139
+    osm: 222334
+    wikidata: Q531717
+    coords: [47.24005, 18.93325]
+  - name: "Dunakiliti"
+    country: HU
+    lang: hu
+    admin: "Mosonmagyaróvári járás"
+    site: "http://www.dunakiliti.hu/"
+    population: 2079
+    osm: 1492740
+    wikidata: Q911405
+    coords: [47.96564, 17.29404]
+  - name: "Máriakálnok"
+    country: HU
+    lang: hu
+    admin: "Mosonmagyaróvári járás"
+    site: "http://www.mariakalnok.hu"
+    population: 2074
+    osm: 1491442
+    wikidata: Q1089630
+    coords: [47.85673, 17.32132]
+  - name: "Nagyszentjános"
+    country: HU
+    lang: hu
+    admin: "Győri járás"
+    site: "https://nagyszentjanos.asp.lgov.hu/"
+    email: "info@nagyszentjanos.hu"
+    population: 2042
+    osm: 1440648
+    wikidata: Q612379
+    coords: [47.71353, 17.85191]
+  - name: "Apostag"
+    country: HU
+    lang: hu
+    admin: "Kunszentmiklósi járás"
+    site: "https://apostag.hu/"
+    population: 2031
+    osm: 1130412
+    wikidata: Q516344
+    coords: [46.87442, 18.97567]
+  - name: "Almásfüzitő"
+    country: HU
+    lang: hu
+    admin: "Komáromi járás"
+    site: "http://www.almasfuzito.hu"
+    email: "polghiv@almasfuzito.hu"
+    email_alt: "bejelentes@almasfuzito.hu"
+    population: 2016
+    osm: 1608474
+    wikidata: Q658286
+    coords: [47.73197, 18.25236]
+  - name: "Süttő"
+    country: HU
+    lang: hu
+    admin: "Esztergomi járás"
+    site: "http://www.sutto.hu"
+    email: "jegyzo@sutto.hu"
+    email_alt: "titkarsag@sutto.hu, polgarmester@sutto.hu"
+    population: 2005
+    osm: 1607359
+    wikidata: Q953690
+    coords: [47.7171, 18.45708]
+  - name: "Bogyiszló"
+    country: HU
+    lang: hu
+    admin: "Tolnai járás"
+    site: "https://bogyiszlo.hu/"
+    email: "hivatal@bogyiszlo.hu"
+    population: 1970
+    osm: 1493765
+    wikidata: Q833491
+    coords: [46.3888, 18.82915]
+  - name: "Győrladamér"
+    country: HU
+    lang: hu
+    admin: "Győri járás"
+    site: "http://www.gyorladamer.hu/"
+    email: "igazgatas@gyorladamer.hu"
+    population: 1937
+    osm: 1492789
+    wikidata: Q1030744
+    coords: [47.7681, 17.5726]
+  - name: "Dunaalmás"
+    country: HU
+    lang: hu
+    admin: "Tatai járás"
+    site: "https://dunaalmas.hu/"
+    population: 1836
+    osm: 1027793
+    wikidata: Q911249
+    coords: [47.72246, 18.30661]
+  - name: "Dunasziget"
+    country: HU
+    lang: hu
+    admin: "Mosonmagyaróvári járás"
+    site: "http://www.dunasziget.hu/"
+    population: 1836
+    osm: 1492744
+    wikidata: Q253198
+    coords: [47.94317, 17.37774]
+  - name: "Bátya"
+    country: HU
+    lang: hu
+    admin: "Kalocsai járás"
+    site: "https://batya.hu/"
+    email: "ugyfelszolgalat@dtkh.hu"
+    population: 1787
+    osm: 1130422
+    wikidata: Q603829
+    coords: [46.4636, 18.95354]
+  - name: "Visegrád"
+    country: HU
+    lang: hu
+    admin: "Szentendrei járás"
+    site: "https://www.visegrad.hu/"
+    email: "jegyzo@visegrad.hu"
+    email_alt: "titkarsag@visegrad.hu, onkormanyzat@visegrad.hu"
+    population: 1775
+    osm: 216166
+    wikidata: Q548097
+    coords: [47.76553, 18.96507]
+  - name: "Madocsa"
+    country: HU
+    lang: hu
+    admin: "Paksi járás"
+    site: "https://www.madocsa.hu/"
+    email: "polgarmester@madocsa.hu"
+    population: 1762
+    osm: 1407267
+    wikidata: Q1161473
+    coords: [46.67873, 18.95178]
+  - name: "Dunaszekcső"
+    country: HU
+    lang: hu
+    admin: "Mohácsi járás"
+    site: "https://www.dunaszekcso.hu/"
+    population: 1723
+    osm: 575368
+    wikidata: Q659869
+    coords: [46.09014, 18.74251]
+  - name: "Majosháza"
+    country: HU
+    lang: hu
+    admin: "Szigetszentmiklósi járás"
+    site: "https://www.majoshaza.hu/"
+    email: "titkarsag@majoshaza.hu"
+    population: 1697
+    osm: 222344
+    wikidata: Q950601
+    coords: [47.26408, 19.01655]
+  - name: "Hercegszántó"
+    country: HU
+    lang: hu
+    admin: "Bajai járás"
+    site: "http://hercegszanto.hu"
+    population: 1628
+    osm: 1130310
+    wikidata: Q205462
+    coords: [45.94066, 18.90641]
+  - name: "Darnózseli"
+    country: HU
+    lang: hu
+    admin: "Mosonmagyaróvári járás"
+    site: "http://www.darnozseli.hu"
+    email: "polgarmester@darnozseli.hu"
+    population: 1615
+    osm: 1492793
+    wikidata: Q902184
+    coords: [47.85149, 17.42183]
+  - name: "Fajsz"
+    country: HU
+    lang: hu
+    admin: "Kalocsai járás"
+    site: "http://www.fajsz.hu"
+    email: "fajszph@fajsz.hu"
+    population: 1549
+    osm: 1130435
+    wikidata: Q995689
+    coords: [46.38111, 18.9239]
+  - name: "Kunsziget"
+    country: HU
+    lang: hu
+    admin: "Győri járás"
+    site: "http://www.kunsziget.hu/"
+    email: "onkormanyzat@kunsziget.hu"
+    email_alt: "polgarmester@kunsziget.hu, ikszt@kunsziget.hu"
+    population: 1482
+    osm: 1492792
+    wikidata: Q937538
+    coords: [47.74696, 17.52142]
+  - name: "Dunaegyháza"
+    country: HU
+    lang: hu
+    admin: "Kunszentmiklósi járás"
+    site: "https://www.dunaegyhaza.hu/"
+    email: "hivatal@dunaegyhaza.hu"
+    population: 1433
+    osm: 1130369
+    wikidata: Q608227
+    coords: [46.84459, 18.94925]
+  - name: "Szigetbecse"
+    country: HU
+    lang: hu
+    admin: "Ráckevei járás"
+    site: "http://www.szigetbecse.hu"
+    email: "szigetbecse@szigetbecse.hu"
+    population: 1429
+    osm: 222337
+    wikidata: Q571326
+    coords: [47.11046, 18.95711]
+  - name: "Kisapostag"
+    country: HU
+    lang: hu
+    admin: "Dunaújvárosi járás"
+    site: "https://kisapostag.hu/"
+    population: 1407
+    osm: 1420735
+    wikidata: Q958654
+    coords: [46.90223, 18.92971]
+  - name: "Neszmély"
+    country: HU
+    lang: hu
+    admin: "Tatai járás"
+    site: "http://www.neszmely.hu"
+    population: 1386
+    osm: 1027778
+    wikidata: Q630060
+    coords: [47.71866, 18.39279]
+  - name: "Báta"
+    country: HU
+    lang: hu
+    admin: "Szekszárdi járás"
+    site: "http://www.bata.hu/"
+    population: 1366
+    osm: 1501294
+    wikidata: Q853601
+    coords: [46.1567, 18.78804]
+  - name: "Hédervár"
+    country: HU
+    lang: hu
+    admin: "Mosonmagyaróvári járás"
+    site: "http://www.hedervar.hu/"
+    email: "polgarmester@hedervar.hu"
+    population: 1356
+    osm: 1492786
+    wikidata: Q1057359
+    coords: [47.8221, 17.46702]
+  - name: "Foktő"
+    country: HU
+    lang: hu
+    admin: "Kalocsai járás"
+    site: "https://fokto.hu/"
+    email: "hivatal@fokto.hu"
+    population: 1354
+    osm: 1130414
+    wikidata: Q1002618
+    coords: [46.54297, 18.94318]
+  - name: "Bezenye"
+    country: HU
+    lang: hu
+    admin: "Mosonmagyaróvári járás"
+    site: "http://www.bezenye.hu"
+    email: "igazgatas@bezenye.hu"
+    email_alt: "tanyagondnok@bezenye.hu"
+    population: 1324
+    osm: 1492743
+    wikidata: Q794397
+    coords: [47.94929, 17.2254]
+  - name: "Zebegény"
+    country: HU
+    lang: hu
+    admin: "Szob"
+    site: "https://www.zebegeny.hu/"
+    email: "titkarsag@zebegeny.hu"
+    population: 1307
+    osm: 1370260
+    wikidata: Q686161
+    coords: [47.80559, 18.91994]
+  - name: "Áporka"
+    country: HU
+    lang: hu
+    admin: "Ráckevei járás"
+    site: "http://www.aporka.hu"
+    population: 1262
+    osm: 222345
+    wikidata: Q669264
+    coords: [47.22867, 19.00731]
+  - name: "Nagybajcs"
+    country: HU
+    lang: hu
+    admin: "Győri járás"
+    population: 1232
+    osm: 1492795
+    wikidata: Q1089963
+    coords: [47.76788, 17.6778]
+  - name: "Szeremle"
+    country: HU
+    lang: hu
+    admin: "Bajai járás"
+    site: "http://www.szeremle.hu"
+    population: 1225
+    osm: 1130429
+    wikidata: Q597190
+    coords: [46.1326, 18.87461]
+  - name: "Makád"
+    country: HU
+    lang: hu
+    admin: "Ráckevei járás"
+    site: "http://www.makad.hu"
+    email: "jegyzo@makad.hu"
+    email_alt: "hivatal@makad.hu, penzugy1@makad.hu"
+    population: 1206
+    osm: 222339
+    wikidata: Q1014831
+    coords: [47.07132, 18.93543]
+  - name: "Gerjen"
+    country: HU
+    lang: hu
+    admin: "Paksi járás"
+    site: "https://gerjen.hu/"
+    email: "fejlesztes@gerjen.hu"
+    population: 1159
+    osm: 1493088
+    wikidata: Q661599
+    coords: [46.48753, 18.88458]
+  - name: "Dömös"
+    country: HU
+    lang: hu
+    admin: "Esztergomi járás"
+    site: "http://www.domos.hu"
+    email: "onkormanyzat@domos.hu"
+    population: 1148
+    osm: 1027819
+    wikidata: Q946405
+    coords: [47.75, 18.90668]
+  - name: "Kölked"
+    country: HU
+    lang: hu
+    admin: "Mohácsi járás"
+    site: "http://www.kolked.hu/"
+    email: "hivatal@kolked.hu"
+    email_alt: "polgarmester@kolked.hu"
+    population: 946
+    osm: 575251
+    wikidata: Q630702
+    coords: [45.92365, 18.73348]
+  - name: "Kisbajcs"
+    country: HU
+    lang: hu
+    admin: "Győri járás"
+    site: "http://www.kisbajcs.hu/"
+    population: 921
+    osm: 1440628
+    wikidata: Q741158
+    coords: [47.74662, 17.69215]
+  - name: "Kisoroszi"
+    country: HU
+    lang: hu
+    admin: "Szentendrei járás"
+    site: "http://www.kisoroszi.hu"
+    email: "hivatal@kisoroszi.hu"
+    email_alt: "polgarmester@kisoroszi.hu, ujsag@kisoroszi.hu"
+    population: 913
+    osm: 216162
+    wikidata: Q944109
+    coords: [47.80583, 19.0218]
+  - name: "Géderlak"
+    country: HU
+    lang: hu
+    admin: "Kalocsai járás"
+    site: "https://gederlak.hu/"
+    population: 864
+    osm: 1130343
+    wikidata: Q1031306
+    coords: [46.60503, 18.94362]
+  - name: "Lipót"
+    country: HU
+    lang: hu
+    admin: "Mosonmagyaróvári járás"
+    site: "http://www.lipot.hu/"
+    email: "lipotonkormanyzat@lipot.hu"
+    population: 840
+    osm: 1492791
+    wikidata: Q635710
+    coords: [47.85873, 17.48603]
+  - name: "Uszód"
+    country: HU
+    lang: hu
+    admin: "Kalocsai járás"
+    site: "https://uszod.hu/"
+    email: "jegyzo@uszod.hu"
+    email_alt: "igazgatas@uszod.hu"
+    population: 816
+    osm: 1130393
+    wikidata: Q1063912
+    coords: [46.56448, 18.9583]
+  - name: "Dunafalva"
+    country: HU
+    lang: hu
+    admin: "Bajai járás"
+    site: "http://www.dunafalva.hu"
+    email: "ugykezelo@dunafalva.hu"
+    population: 800
+    osm: 1130368
+    wikidata: Q911280
+    coords: [46.06656, 18.80306]
+  - name: "Dunaszentpál"
+    country: HU
+    lang: hu
+    admin: "Győri járás"
+    site: "http://www.dunaszentpal.hu/"
+    population: 739
+    osm: 1492788
+    wikidata: Q911465
+    coords: [47.77461, 17.49607]
+  - name: "Dunaszentbenedek"
+    country: HU
+    lang: hu
+    admin: "Kalocsai járás"
+    site: "http://dunaszentbenedek.hu"
+    email: "igazgatas@dunaszentbenedek.hu"
+    population: 734
+    osm: 1130339
+    wikidata: Q262552
+    coords: [46.5974, 18.91518]
+  - name: "Feketeerdő"
+    country: HU
+    lang: hu
+    admin: "Mosonmagyaróvári járás"
+    site: "http://www.feketeerdo.hu/"
+    email: "polgarmester@feketeerdo.hu"
+    population: 676
+    osm: 1492742
+    wikidata: Q998497
+    coords: [47.9324, 17.2812]
+  - name: "Mecsér"
+    country: HU
+    lang: hu
+    admin: "Mosonmagyaróvári járás"
+    site: "http://www.mecser.hu/"
+    population: 672
+    osm: 1492749
+    wikidata: Q1089402
+    coords: [47.79447, 17.45915]
+  - name: "Püski"
+    country: HU
+    lang: hu
+    admin: "Mosonmagyaróvári járás"
+    population: 648
+    osm: 1491445
+    wikidata: Q1089422
+    coords: [47.8928, 17.39201]
+  - name: "Bár"
+    country: HU
+    lang: hu
+    admin: "Mohácsi járás"
+    site: "http://www.bar.hu"
+    population: 549
+    osm: 575119
+    wikidata: Q853333
+    coords: [46.05527, 18.71302]
+  - name: "Homorúd"
+    country: HU
+    lang: hu
+    admin: "Mohácsi járás"
+    population: 522
+    osm: 575135
+    wikidata: Q1054831
+    coords: [45.96322, 18.79815]
+  - name: "Pörböly"
+    country: HU
+    lang: hu
+    admin: "Szekszárdi járás"
+    site: "http://www.porboly.hu/"
+    population: 497
+    osm: 1501298
+    wikidata: Q675679
+    coords: [46.20352, 18.8314]
+  - name: "Ordas"
+    country: HU
+    lang: hu
+    admin: "Kalocsai járás"
+    site: "http://www.ordas.hu"
+    email: "ordas@ordas.hu"
+    population: 437
+    osm: 1130378
+    wikidata: Q1063984
+    coords: [46.63311, 18.92422]
+  - name: "Károlyháza"
+    country: HU
+    lang: hu
+    admin: "Mosonmagyaróvári járás"
+    site: "http://www.karolyhaza.hu/"
+    population: 420
+    osm: 1491441
+    wikidata: Q1089634
+    coords: [47.80039, 17.32106]
+  - name: "Kisbodak"
+    country: HU
+    lang: hu
+    admin: "Mosonmagyaróvári járás"
+    site: "http://www.kisbodak.hu/"
+    email: "polgarmester@kisbodak.hu"
+    email_alt: "u00a0polgarmester@kisbodak.hu"
+    population: 368
+    osm: 1491443
+    wikidata: Q583981
+    coords: [47.90247, 17.42208]
+  - name: "Lórév"
+    country: HU
+    lang: hu
+    admin: "Ráckevei járás"
+    site: "http://www.lorev.hu"
+    population: 294
+    osm: 222338
+    wikidata: Q932778
+    coords: [47.11491, 18.90373]
+  - name: "Dunaremete"
+    country: HU
+    lang: hu
+    admin: "Mosonmagyaróvári járás"
+    site: "http://www.dunaremete.hu/"
+    email: "info@dunaremete.hu"
+    population: 255
+    osm: 1491439
+    wikidata: Q911436
+    coords: [47.87964, 17.44842]
+  - name: "Vének"
+    country: HU
+    lang: hu
+    admin: "Győri járás"
+    site: "https://www.venek.hu/"
+    email: "polgarmester@venek.hu"
+    population: 192
+    osm: 1440626
+    wikidata: Q950321
+    coords: [47.74382, 17.74697]
+  - name: "Galați"
+    country: RO
+    lang: ro
+    admin: "Galați"
+    site: "https://www.primariagalati.ro"
+    email: "info544@primariagalati.ro"
+    phone: "+40-236307700"
+    population: 217851
+    osm: 10487103
+    wikidata: Q170996
+    coords: [45.50045, 28.07602]
+  - name: "Brăila"
+    country: RO
+    lang: ro
+    admin: "Brăila"
+    site: "http://www.primariabraila.ro/"
+    email: "pmb@pmbr.ro"
+    phone: "+40-239694947"
+    population: 154686
+    osm: 7509955
+    wikidata: Q188478
+    coords: [45.27225, 27.9657]
+  - name: "Drobeta-Turnu Severin"
+    country: RO
+    lang: ro
+    admin: "Mehedinți"
+    site: "https://primariadrobeta.ro/"
+    email: "primaria@primariadrobeta.ro"
+    phone: "+40-252314379"
+    population: 79865
+    osm: 9711987
+    wikidata: Q193890
+    coords: [44.67325, 22.58563]
+  - name: "Tulcea"
+    country: RO
+    lang: ro
+    admin: "Tulcea"
+    site: "http://www.primaria-tulcea.ro/"
+    email: "contact@primariatulcea.ro"
+    population: 65624
+    osm: 9883781
+    wikidata: Q11585
+    coords: [45.15141, 28.80004]
+  - name: "Călărași"
+    country: RO
+    lang: ro
+    admin: "Călărași"
+    site: "http://www.primariacalarasi.ro"
+    email: "office@primariacalarasi.ro"
+    phone: "+40-242311005"
+    population: 58211
+    osm: 10697530
+    wikidata: Q212561
+    coords: [44.22265, 27.33605]
+  - name: "Giurgiu"
+    country: RO
+    lang: ro
+    admin: "Giurgiu"
+    site: "http://www.primariagiurgiu.ro"
+    email: "primarie@primariagiurgiu.ro"
+    phone: "+40-246215631"
+    population: 54551
+    osm: 10697456
+    wikidata: Q202351
+    coords: [43.89761, 25.95752]
+  - name: "Fetești"
+    country: RO
+    lang: ro
+    admin: "Ialomița"
+    site: "http://www.primariafetesti.ro/"
+    email: "contact@primariafetesti.ro"
+    phone: "+40-243364410"
+    population: 27465
+    osm: 10697874
+    wikidata: Q598577
+    coords: [44.40247, 27.8021]
+  - name: "Oltenița"
+    country: RO
+    lang: ro
+    admin: "Călărași"
+    site: "http://www.primariaoltenita.ro/"
+    email: "contact@primariaoltenita.ro"
+    phone: "+40-242515182"
+    population: 22624
+    osm: 10697515
+    wikidata: Q737188
+    coords: [44.11327, 26.69466]
+  - name: "Turnu Măgurele"
+    country: RO
+    lang: ro
+    admin: "Teleorman"
+    site: "http://www.municipiulturnumagurele.ro/"
+    email: "primaria@municipiulturnumagurele.ro"
+    phone: "+40-247416452"
+    population: 19597
+    osm: 10664112
+    wikidata: Q570213
+    coords: [43.78032, 24.86976]
+  - name: "Cernavodă"
+    country: RO
+    lang: ro
+    admin: "Constanța"
+    site: "http://www.primaria-cernavoda.ro/"
+    email: "primaria@cernavoda.ro"
+    phone: "+40-241487108"
+    population: 15088
+    osm: 10697851
+    wikidata: Q736276
+    coords: [44.31483, 28.0807]
+  - name: "Calafat"
+    country: RO
+    lang: ro
+    admin: "Dolj"
+    site: "http://www.municipiulcalafat.ro/"
+    email: "primariacalafat@yahoo.com"
+    phone: "+40-251231424"
+    population: 13807
+    osm: 2021225
+    wikidata: Q652856
+    coords: [43.94948, 22.97166]
+  - name: "Corabia"
+    country: RO
+    lang: ro
+    admin: "Olt"
+    site: "http://www.primariacorabia.ro"
+    email: "primariacorabia@yahoo.com"
+    phone: "+40-249560703"
+    population: 13527
+    osm: 9742521
+    wikidata: Q754721
+    coords: [43.79484, 24.48191]
+  - name: "Zimnicea"
+    country: RO
+    lang: ro
+    admin: "Teleorman"
+    site: "https://orasulzimnicea.ro/"
+    email: "primaria@orasulzimnicea.ro"
+    phone: "+40-247366431"
+    population: 12589
+    osm: 10664124
+    wikidata: Q203929
+    coords: [43.68935, 25.37398]
+  - name: "Dăbuleni"
+    country: RO
+    lang: ro
+    admin: "Dolj"
+    site: "http://www.primariadabuleni.ro/"
+    email: "primariadabuleni@gmail.com"
+    phone: "+40-251334555"
+    population: 10333
+    osm: 9664751
+    wikidata: Q276135
+    coords: [43.80189, 24.12704]
+  - name: "Modelu"
+    country: RO
+    lang: ro
+    admin: "Călărași"
+    site: "http://www.primariamodelu.ro/"
+    email: "primarie@primariamodelu.ro"
+    phone: "+40-242312553"
+    population: 10052
+    osm: 13833305
+    wikidata: Q2052617
+    coords: [44.23196, 27.39466]
+  - name: "Șimian"
+    country: RO
+    lang: ro
+    admin: "Mehedinți"
+    site: "https://www.primaria-simian.ro/"
+    email: "clsimianmh@gmail.com"
+    phone: "+40-252338693"
+    population: 10021
+    osm: 9711981
+    wikidata: Q16439834
+    coords: [44.62878, 22.73801]
+  - name: "Moldova Nouă"
+    country: RO
+    lang: ro
+    admin: "Caraș-Severin"
+    site: "http://www.moldova-noua.ro/"
+    email: "contact@primariamoldovanoua.ro"
+    phone: "+40-255540997"
+    population: 9278
+    osm: 10643248
+    wikidata: Q829051
+    coords: [44.74618, 21.66203]
+  - name: "Poiana Mare"
+    country: RO
+    lang: ro
+    admin: "Dolj"
+    site: "http://www.poianamare.ro"
+    email: "poiana_mare@cjdolj.ro"
+    phone: "+40-251235048"
+    population: 9047
+    osm: 9695252
+    wikidata: Q16426501
+    coords: [43.89554, 23.08818]
+  - name: "Hârșova"
+    country: RO
+    lang: ro
+    admin: "Constanța"
+    site: "http://www.primaria-harsova.ro/"
+    email: "secretariat@primaria-harsova.ro"
+    phone: "+40-241870300"
+    population: 8737
+    osm: 10697996
+    wikidata: Q748068
+    coords: [44.70627, 27.97948]
+  - name: "Orșova"
+    country: RO
+    lang: ro
+    admin: "Mehedinți"
+    site: "http://www.primariaorsova.ro/"
+    email: "primariaorsova@primariaorsova.ro"
+    phone: "+40-372764195"
+    population: 8506
+    osm: 9711982
+    wikidata: Q750243
+    coords: [44.73063, 22.41179]
+  - name: "Borcea"
+    country: RO
+    lang: ro
+    admin: "Călărași"
+    site: "http://www.primariaborcea.ro/"
+    email: "primariaborcea@yahoo.co.uk"
+    phone: "+40-242340063"
+    population: 7219
+    osm: 10697873
+    wikidata: Q1866812
+    coords: [44.30851, 27.81538]
+  - name: "Chirnogi"
+    country: RO
+    lang: ro
+    admin: "Călărași"
+    site: "http://primariachirnogi.ro"
+    email: "prim_chirnogi@yahoo.com"
+    phone: "+40-242524239"
+    population: 6629
+    osm: 11522502
+    wikidata: Q16426076
+    coords: [44.09953, 26.4974]
+  - name: "Chiscani"
+    country: RO
+    lang: ro
+    admin: "Brăila"
+    site: "http://www.portal-braila.ro/Primarii/Chiscani/index.php"
+    email: "primariachiscani@yahoo.com"
+    phone: "+40-239664011"
+    population: 6151
+    osm: 10487263
+    wikidata: Q2716329
+    coords: [45.20408, 27.89392]
+  - name: "Roseți"
+    country: RO
+    lang: ro
+    admin: "Călărași"
+    site: "http://comunaroseti.ro/"
+    email: "primariaroseti@yahoo.com"
+    phone: "+40-242344017"
+    population: 6017
+    osm: 13833306
+    wikidata: Q12725094
+    coords: [44.22384, 27.46564]
+  - name: "Călărași"
+    country: RO
+    lang: ro
+    admin: "Dolj"
+    email: "primaria_calarasi@yahoo.com"
+    phone: "+40-251379052"
+    population: 5195
+    osm: 9664752
+    wikidata: Q2913586
+    coords: [43.78849, 24.02639]
+  - name: "Mânăstirea"
+    country: RO
+    lang: ro
+    admin: "Călărași"
+    site: "https://www.comunamanastirea.ro"
+    email: "manastirea_primaria@yahoo.com"
+    phone: "+40-242520018"
+    population: 5137
+    osm: 11522481
+    wikidata: Q2537556
+    coords: [44.21012, 26.84466]
+  - name: "Ciupercenii Noi"
+    country: RO
+    lang: ro
+    admin: "Dolj"
+    email: "ciuperceniinoi_comuna@yahoo.ro"
+    phone: "+40-251321002"
+    population: 5003
+    osm: 9695254
+    wikidata: Q5066856
+    coords: [43.88925, 22.92718]
+  - name: "Făcăeni"
+    country: RO
+    lang: ro
+    admin: "Ialomița"
+    site: "http://www.primariafacaeni.ro/"
+    email: "clfacaeni@yahoo.com"
+    phone: "+40-243313330"
+    population: 4899
+    osm: 13833799
+    wikidata: Q16426773
+    coords: [44.58353, 27.89576]
+  - name: "Somova"
+    country: RO
+    lang: ro
+    admin: "Tulcea"
+    site: "http://somova.romclub.ro/"
+    email: "primaria.somova@yahoo.com"
+    phone: "+40-240541059"
+    population: 4878
+    osm: 10363614
+    wikidata: Q5071003
+    coords: [45.18796, 28.66539]
+  - name: "Jijila"
+    country: RO
+    lang: ro
+    admin: "Tulcea"
+    site: "http://www.comunajijila.ro"
+    email: "prmrjijila@yahoo.com"
+    phone: "+40-240550024"
+    population: 4834
+    osm: 10363625
+    wikidata: Q12104506
+    coords: [45.33993, 28.15299]
+  - name: "Desa"
+    country: RO
+    lang: ro
+    admin: "Dolj"
+    email: "secretariat@primariadesa.ro"
+    phone: "+40-251322496"
+    population: 4609
+    osm: 9695253
+    wikidata: Q12724720
+    coords: [43.85163, 23.02144]
+  - name: "Spanțov"
+    country: RO
+    lang: ro
+    admin: "Călărași"
+    site: "http://www.comunaspantov.ro/"
+    email: "primariaspantov@gmail.com"
+    phone: "+40-242522148"
+    population: 4595
+    osm: 11522480
+    wikidata: Q2717108
+    coords: [44.15287, 26.80231]
+  - name: "Ostrov"
+    country: RO
+    lang: ro
+    admin: "Constanța"
+    site: "https://www.ostrov.judetul-constanta.ro/"
+    email: "primariaostrov@yahoo.com"
+    phone: "+40-241857010"
+    population: 4586
+    osm: 11520341
+    wikidata: Q5062507
+    coords: [44.07642, 27.40082]
+  - name: "Cetate"
+    country: RO
+    lang: ro
+    admin: "Dolj"
+    site: "http://www.primariacetate.ro/"
+    email: "primaria@primaria-cetate.ro"
+    phone: "+40-263271419"
+    population: 4572
+    osm: 9695256
+    wikidata: Q12724630
+    coords: [44.11106, 23.04968]
+  - name: "Grădiștea"
+    country: RO
+    lang: ro
+    admin: "Călărași"
+    site: "http://www.primariagradistea.ro/"
+    email: "primaria@primariagradistea.ro"
+    phone: "+40-242336017"
+    population: 4499
+    osm: 11522483
+    wikidata: Q2537520
+    coords: [44.24257, 27.16119]
+  - name: "Ostroveni"
+    country: RO
+    lang: ro
+    admin: "Dolj"
+    email: "comunaostroveni@yahoo.com"
+    phone: "+40-251337366"
+    population: 4451
+    osm: 9664754
+    wikidata: Q12725015
+    coords: [43.80385, 23.88682]
+  - name: "Bordușani"
+    country: RO
+    lang: ro
+    admin: "Ialomița"
+    email: "primaria.bordusani@yahoo.com"
+    phone: "+40-243311508"
+    population: 4414
+    osm: 13833800
+    wikidata: Q2718378
+    coords: [44.46774, 27.93443]
+  - name: "Isaccea"
+    country: RO
+    lang: ro
+    admin: "Tulcea"
+    site: "https://isaccea.ro"
+    email: "secretariatisaccea@gmail.com"
+    phone: "+40-240506600"
+    population: 4408
+    osm: 10363616
+    wikidata: Q248018
+    coords: [45.25578, 28.46228]
+  - name: "Bechet"
+    country: RO
+    lang: ro
+    admin: "Dolj"
+    site: "http://primariabechet.ro/"
+    email: "bechet@cjdolj.ro"
+    phone: "+40-251336826"
+    population: 4355
+    osm: 9664753
+    wikidata: Q253872
+    coords: [43.7772, 23.9474]
+  - name: "Islaz"
+    country: RO
+    lang: ro
+    admin: "Teleorman"
+    site: "http://islaztr.ro/"
+    email: "primariaislaz@yahoo.com"
+    phone: "+40-247420206"
+    population: 4256
+    osm: 11544697
+    wikidata: Q12724880
+    coords: [43.73824, 24.73539]
+  - name: "Bistreț"
+    country: RO
+    lang: ro
+    admin: "Dolj"
+    site: "http://www.primariabistret.ro/"
+    email: "primariabistret@gmail.com"
+    phone: "+40-251355011"
+    population: 4211
+    osm: 9695107
+    wikidata: Q3304905
+    coords: [43.8818, 23.50346]
+  - name: "Cuza Vodă"
+    country: RO
+    lang: ro
+    admin: "Călărași"
+    site: "http://www.primariacuzavoda.ro/"
+    email: "primariacuzavodacalarasi@gmail.com"
+    phone: "+40-242339426"
+    population: 4116
+    osm: 11522484
+    wikidata: Q1913575
+    coords: [44.26768, 27.26996]
+  - name: "Maglavit"
+    country: RO
+    lang: ro
+    admin: "Dolj"
+    site: "http://maglavit.info.ro/?page_id=8"
+    email: "maglavit@ymail.com"
+    phone: "+40-251328546"
+    population: 3938
+    osm: 9695255
+    wikidata: Q16426474
+    coords: [44.03414, 23.11016]
+  - name: "Oinacu"
+    country: RO
+    lang: ro
+    admin: "Giurgiu"
+    site: "https://www.primariaoinacu.ro/"
+    email: "primariaoinacugr@gmail.com"
+    phone: "+40-246239143"
+    population: 3937
+    osm: 11544685
+    wikidata: Q5116912
+    coords: [43.94453, 26.03639]
+  - name: "Gogoșu"
+    country: RO
+    lang: ro
+    admin: "Mehedinți"
+    site: "https://primaria-gogosu.ro/"
+    email: "contact@primaria-gogosu.ro"
+    phone: "+40-252357228"
+    population: 3910
+    osm: 9714859
+    wikidata: Q16426942
+    coords: [44.36499, 22.59801]
+  - name: "Jegălia"
+    country: RO
+    lang: ro
+    admin: "Călărași"
+    site: "http://www.primariajegalia.ro/"
+    email: "primariajegalia@yahoo.com"
+    phone: "+40-242342021"
+    population: 3858
+    osm: 13833309
+    wikidata: Q2717043
+    coords: [44.29193, 27.64083]
+  - name: "Ciocănești"
+    country: RO
+    lang: ro
+    admin: "Călărași"
+    email: "primaria@primaria-ciocanesti.ro"
+    phone: "+40-242337305"
+    population: 3804
+    osm: 10697523
+    wikidata: Q16426085
+    coords: [44.23849, 27.06757]
+  - name: "Prundu"
+    country: RO
+    lang: ro
+    admin: "Giurgiu"
+    site: "http://prundu.infoprimarie.ro/"
+    email: "primaria_prundu@yahoo.com"
+    phone: "+40-246245117"
+    population: 3707
+    osm: 11544683
+    wikidata: Q12145285
+    coords: [44.0711, 26.26105]
+  - name: "Vădeni"
+    country: RO
+    lang: ro
+    admin: "Brăila"
+    site: "http://www.vadeni.ro"
+    email: "office@vadeni.ro"
+    phone: "+40-239697664"
+    population: 3700
+    osm: 10487104
+    wikidata: Q8272907
+    coords: [45.3526, 27.93229]
+  - name: "Luncavița"
+    country: RO
+    lang: ro
+    admin: "Tulcea"
+    site: "http://www.luncavita.ro/"
+    email: "primaria@comunaluncavita.ro"
+    phone: "+40-743026807"
+    population: 3536
+    osm: 10363618
+    wikidata: Q10787203
+    coords: [45.2808, 28.30921]
+  - name: "Tichilești"
+    country: RO
+    lang: ro
+    admin: "Brăila"
+    site: "http://www.primariatichilesti.ro"
+    email: "primariatichilesti@yahoo.com"
+    phone: "+40-239664590"
+    population: 3419
+    osm: 10487262
+    wikidata: Q4682631
+    coords: [45.14062, 27.88843]
+  - name: "Rasova"
+    country: RO
+    lang: ro
+    admin: "Constanța"
+    site: "https://www.primaria-rasova.ro/"
+    email: "contact@primaria-rasova.ro"
+    phone: "+40-769052946"
+    population: 3347
+    osm: 11793343
+    wikidata: Q5062358
+    coords: [44.24782, 27.96535]
+  - name: "Bragadiru"
+    country: RO
+    lang: ro
+    admin: "Teleorman"
+    phone: "+40-24733520"
+    population: 3327
+    osm: 11544654
+    wikidata: Q12724574
+    coords: [43.72975, 25.53828]
+  - name: "Gârla Mare"
+    country: RO
+    lang: ro
+    admin: "Mehedinți"
+    site: "https://primariagarlamare.ro/"
+    phone: "+40-252393012"
+    population: 3300
+    osm: 9714872
+    wikidata: Q12724833
+    coords: [44.21998, 22.77349]
+  - name: "Ianca"
+    country: RO
+    lang: ro
+    admin: "Olt"
+    site: "http://www.comunaianca.ro/"
+    email: "c_ianca@yahoo.com"
+    phone: "+40-249537005"
+    population: 3232
+    osm: 9742518
+    wikidata: Q12724870
+    coords: [43.74918, 24.19493]
+  - name: "Rast"
+    country: RO
+    lang: ro
+    admin: "Dolj"
+    site: "https://primaria-rast.ro/"
+    email: "rast@cjdolj.ro"
+    phone: "+40-251324001"
+    population: 3198
+    osm: 9695099
+    wikidata: Q16426506
+    coords: [43.89759, 23.29303]
+  - name: "Sulina"
+    country: RO
+    lang: ro
+    admin: "Tulcea"
+    site: "https://primaria-sulina.ro"
+    email: "sulina_prim@yahoo.com"
+    phone: "+40-240543001"
+    population: 3118
+    osm: 9883788
+    wikidata: Q328647
+    coords: [45.13905, 29.58126]
+  - name: "Chiselet"
+    country: RO
+    lang: ro
+    admin: "Călărași"
+    site: "https://primariachiselet.ro/"
+    email: "primariachiselet@yahoo.com"
+    phone: "+40-242521023"
+    population: 3104
+    osm: 11552235
+    wikidata: Q16426081
+    coords: [44.19324, 26.81921]
+  - name: "Devesel"
+    country: RO
+    lang: ro
+    admin: "Mehedinți"
+    email: "comunadevesel@gmail.com"
+    phone: "+40-252353257"
+    population: 3029
+    osm: 9714853
+    wikidata: Q16426923
+    coords: [44.47425, 22.68546]
+  - name: "Gropeni"
+    country: RO
+    lang: ro
+    admin: "Brăila"
+    site: "http://www.portal-braila.ro/Primarii/Gropeni/index.php"
+    email: "primariagropeni@gmail.com"
+    phone: "+40-239639944"
+    population: 3022
+    osm: 10487261
+    wikidata: Q12724818
+    coords: [45.04195, 27.91648]
+  - name: "Crucea"
+    country: RO
+    lang: ro
+    admin: "Constanța"
+    site: "http://www.primaria-crucea.ro/"
+    email: "primaria@crucea.judetul-constanta.ro"
+    phone: "+40-241874703"
+    population: 3010
+    osm: 12498960
+    wikidata: Q5115409
+    coords: [44.53697, 28.20236]
+  - name: "Murighiol"
+    country: RO
+    lang: ro
+    admin: "Tulcea"
+    site: "http://www.primariamurighiol.paginadestart.com"
+    email: "contact@primaria-murighiol.ro"
+    phone: "+40-240545969"
+    population: 2959
+    osm: 9883790
+    wikidata: Q5113748
+    coords: [44.9277, 29.16083]
+  - name: "Stăncuța"
+    country: RO
+    lang: ro
+    admin: "Brăila"
+    site: "http://www.portal-braila.ro/Primarii/Stancuta/index.php"
+    email: "stancutaprimaria@yahoo.com"
+    phone: "+40-239665682"
+    population: 2950
+    osm: 10487257
+    wikidata: Q3696105
+    coords: [44.90792, 27.81822]
+  - name: "Berteștii de Jos"
+    country: RO
+    lang: ro
+    admin: "Brăila"
+    site: "http://www.portal-braila.ro/Primarii/Bertestii_de_Jos/index.php"
+    email: "bertestiidejos@br.e-adm.ro"
+    phone: "+40-239699909"
+    population: 2929
+    osm: 10487258
+    wikidata: Q2621183
+    coords: [44.83031, 27.78591]
+  - name: "Gighera"
+    country: RO
+    lang: ro
+    admin: "Dolj"
+    site: "http://www.comunagighera.ro/"
+    email: "gighera@cjdolj.ro"
+    phone: "+40-251353011"
+    population: 2899
+    osm: 9664755
+    wikidata: Q16439594
+    coords: [43.84106, 23.77616]
+  - name: "Lipnița"
+    country: RO
+    lang: ro
+    admin: "Constanța"
+    site: "http://www.primaria-lipnita.ro/"
+    email: "secretariat@primaria-lipnita.ro"
+    phone: "+40-241856545"
+    population: 2876
+    osm: 11520342
+    wikidata: Q5053057
+    coords: [44.09845, 27.56175]
+  - name: "Gruia"
+    country: RO
+    lang: ro
+    admin: "Mehedinți"
+    site: "https://comunagruia.ro/"
+    email: "clgruiamehedinti@yahoo.com"
+    phone: "+40-252394001"
+    population: 2824
+    osm: 6689807
+    wikidata: Q12724820
+    coords: [44.29719, 22.71286]
+  - name: "Dorobanțu"
+    country: RO
+    lang: ro
+    admin: "Călărași"
+    site: "https://primariadorobantu.ro/"
+    email: "primăriadorobantu@yahoo.com"
+    phone: "+40-242335103"
+    population: 2749
+    osm: 11522482
+    wikidata: Q2686219
+    coords: [44.2309, 26.97266]
+  - name: "Nufăru"
+    country: RO
+    lang: ro
+    admin: "Tulcea"
+    site: "http://www.primarianufaru.ro"
+    email: "office@primarianufaru.ro"
+    phone: "+40-240549054"
+    population: 2644
+    osm: 9883780
+    wikidata: Q12134510
+    coords: [45.1354, 28.93993]
+  - name: "Eșelnița"
+    country: RO
+    lang: ro
+    admin: "Mehedinți"
+    email: "consiliullocaleselnita@yahoo.com"
+    phone: "+40-252365070"
+    population: 2639
+    osm: 9711983
+    wikidata: Q16426938
+    coords: [44.72779, 22.27255]
+  - name: "Ghindărești"
+    country: RO
+    lang: ro
+    admin: "Constanța"
+    site: "http://comunaghindaresti.ro"
+    email: "ghindaresti_pri@yahoo.com"
+    phone: "+40-241873099"
+    population: 2557
+    osm: 10697997
+    wikidata: Q5065390
+    coords: [44.6343, 28.04119]
+  - name: "Vedea"
+    country: RO
+    lang: ro
+    admin: "Giurgiu"
+    site: "http://www.primariavedea.ro/"
+    email: "clvedeagr@yahoo.com"
+    phone: "+40-246240120"
+    population: 2540
+    osm: 11544652
+    wikidata: Q5116838
+    coords: [43.77246, 25.75793]
+  - name: "Unirea"
+    country: RO
+    lang: ro
+    admin: "Călărași"
+    site: "http://www.primaria-unirea.ro/"
+    email: "primariaunireacalarasi@yahoo.com"
+    phone: "+40-242343028"
+    population: 2531
+    osm: 13833308
+    wikidata: Q2716812
+    coords: [44.2747, 27.59073]
+  - name: "Hinova"
+    country: RO
+    lang: ro
+    admin: "Mehedinți"
+    site: "https://comunahinova.ro/"
+    email: "clhinova@yahoo.ro"
+    phone: "+40-252354288"
+    population: 2526
+    osm: 9714851
+    wikidata: Q12724844
+    coords: [44.54591, 22.76506]
+  - name: "Pojejena"
+    country: RO
+    lang: ro
+    admin: "Caraș-Severin"
+    site: "http://www.primariapojejena.ro"
+    email: "primariapojejena@yahoo.com"
+    phone: "+40-255544355"
+    population: 2488
+    osm: 11484909
+    wikidata: Q12725050
+    coords: [44.80667, 21.52323]
+  - name: "Ghidici"
+    country: RO
+    lang: ro
+    admin: "Dolj"
+    site: "http://www.primariaghidici.ro/"
+    email: "primaria.ghidici@yahoo.ro"
+    phone: "+40-251323352"
+    population: 2437
+    osm: 9695250
+    wikidata: Q16426451
+    coords: [43.8734, 23.21112]
+  - name: "Aliman"
+    country: RO
+    lang: ro
+    admin: "Constanța"
+    site: "http://www.primaria-aliman.ro/"
+    email: "secretariat@primaria-aliman.ro"
+    phone: "+40-241856207"
+    population: 2434
+    osm: 11793344
+    wikidata: Q12077924
+    coords: [44.17208, 27.84913]
+  - name: "Salcia"
+    country: RO
+    lang: ro
+    admin: "Mehedinți"
+    site: "https://salciamh.ro/"
+    email: "comunasalcia_mh@yahoo.ro"
+    phone: "+40-252391603"
+    population: 2416
+    osm: 9714876
+    wikidata: Q2246077
+    coords: [44.13759, 22.93425]
+  - name: "Pietroșani"
+    country: RO
+    lang: ro
+    admin: "Teleorman"
+    site: "http://primariapietrosani.ro/"
+    email: "prinpietrosani@yahoo.com"
+    phone: "+40-247334402"
+    population: 2407
+    osm: 11544656
+    wikidata: Q16427649
+    coords: [43.73087, 25.60206]
+  - name: "Grojdibodu"
+    country: RO
+    lang: ro
+    admin: "Olt"
+    email: "primaria_grojdibodu@yahoo.com"
+    phone: "+40-249536001"
+    population: 2373
+    osm: 9742516
+    wikidata: Q12724817
+    coords: [43.75503, 24.26017]
+  - name: "Piscu Vechi"
+    country: RO
+    lang: ro
+    admin: "Dolj"
+    site: "http://primariapiscuvechi.ro/"
+    email: "primariapiscuvechi@yahoo.com"
+    phone: "+40-251323002"
+    population: 2370
+    osm: 9695251
+    wikidata: Q16426496
+    coords: [43.88922, 23.15579]
+  - name: "Negoi"
+    country: RO
+    lang: ro
+    admin: "Dolj"
+    email: "comuna.negoi@yahoo.ro"
+    phone: "+40-251325088"
+    population: 2298
+    osm: 9695100
+    wikidata: Q16426493
+    coords: [43.90007, 23.35849]
+  - name: "Slobozia"
+    country: RO
+    lang: ro
+    admin: "Giurgiu"
+    site: "http://primariaslobozia.ro/"
+    email: "primariaslobozia@yahoo.com"
+    phone: "+40-246242089"
+    population: 2251
+    osm: 11544650
+    wikidata: Q5091784
+    coords: [43.85112, 25.88681]
+  - name: "Năsturelu"
+    country: RO
+    lang: ro
+    admin: "Teleorman"
+    email: "primarianasturelu@yahoo.com"
+    phone: "+40-247368807"
+    population: 2248
+    osm: 11544657
+    wikidata: Q12724994
+    coords: [43.67081, 25.46119]
+  - name: "Oltina"
+    country: RO
+    lang: ro
+    admin: "Constanța"
+    site: "https://comunaoltina.ro/"
+    email: "primaria@comunaoltina.ro"
+    phone: "+40-241851852"
+    population: 2241
+    osm: 11793346
+    wikidata: Q5062217
+    coords: [44.14608, 27.65117]
+  - name: "Mărașu"
+    country: RO
+    lang: ro
+    admin: "Brăila"
+    site: "http://www.portal-braila.ro/Primarii/Marasu/index.php"
+    email: "primariamarasu@yahoo.com"
+    phone: "+40-239696706"
+    population: 2236
+    osm: 10487259
+    wikidata: Q2716399
+    coords: [45.01399, 27.96908]
+  - name: "Găujani"
+    country: RO
+    lang: ro
+    admin: "Giurgiu"
+    site: "http://www.primariagaujani.ro/"
+    email: "primaria.gaujani@yahoo.com"
+    phone: "+40-246250822"
+    population: 2223
+    osm: 11544653
+    wikidata: Q5118388
+    coords: [43.74987, 25.70565]
+  - name: "Seaca"
+    country: RO
+    lang: ro
+    admin: "Teleorman"
+    email: "primaria_seaca@yahoo.com"
+    phone: "+40-247420850"
+    population: 2212
+    osm: 11552219
+    wikidata: Q12725129
+    coords: [43.75928, 25.05305]
+  - name: "Mahmudia"
+    country: RO
+    lang: ro
+    admin: "Tulcea"
+    site: "http://www.mahmudia.ro/"
+    email: "primaria@mahmudia.ro"
+    phone: "+40-240545543"
+    population: 2163
+    osm: 9883778
+    wikidata: Q5066090
+    coords: [45.09142, 29.11869]
+  - name: "Berzasca"
+    country: RO
+    lang: ro
+    admin: "Caraș-Severin"
+    site: "http://www.ghidulprimariilor.ro/business.php/PRIMARIA-BERZASCA/44032/"
+    email: "berzeasca_cs@yahoo.com"
+    phone: "+40-255545601"
+    population: 2132
+    osm: 11319222
+    wikidata: Q5056350
+    coords: [44.67973, 22.02262]
+  - name: "Malu"
+    country: RO
+    lang: ro
+    admin: "Giurgiu"
+    site: "http://primaria-malu.ro/"
+    email: "clmalugr@yahoo.com"
+    phone: "+40-246241106"
+    population: 2056
+    osm: 11544651
+    wikidata: Q5092240
+    coords: [43.81155, 25.81435]
+  - name: "Gârcov"
+    country: RO
+    lang: ro
+    admin: "Olt"
+    site: "http://www.primariagarcov.ro/"
+    email: "primariagarcov@yahoo.com"
+    phone: "+40-249519501"
+    population: 2047
+    osm: 9742513
+    wikidata: Q5118396
+    coords: [43.7612, 24.61801]
+  - name: "Vrata"
+    country: RO
+    lang: ro
+    admin: "Mehedinți"
+    site: "https://www.primariavrata.ro/"
+    email: "contact@primariavrata.ro"
+    phone: "+40-252393435"
+    population: 1977
+    osm: 9714873
+    wikidata: Q16426985
+    coords: [44.188, 22.83727]
+  - name: "Lisa"
+    country: RO
+    lang: ro
+    admin: "Teleorman"
+    email: "lissa_tr@yahoo.com"
+    phone: "+40-247360703"
+    population: 1964
+    osm: 11552218
+    wikidata: Q12724902
+    coords: [43.75975, 25.13221]
+  - name: "Catane"
+    country: RO
+    lang: ro
+    admin: "Dolj"
+    site: "https://primaria-catane.ro/"
+    email: "achizitii.catane@yahoo.com"
+    phone: "+40-251319698"
+    population: 1959
+    osm: 9695106
+    wikidata: Q16426422
+    coords: [43.90535, 23.4178]
+  - name: "Orlea"
+    country: RO
+    lang: ro
+    admin: "Olt"
+    site: "http://www.ghidulprimariilor.ro/business.php/PRIMARIA-ORLEA/107198/"
+    email: "primariaorlea@yahoo.com"
+    phone: "+40-249536569"
+    population: 1917
+    osm: 9742514
+    wikidata: Q12725010
+    coords: [43.75399, 24.36256]
+  - name: "Burila Mare"
+    country: RO
+    lang: ro
+    admin: "Mehedinți"
+    site: "https://primariaburilamare.ro/"
+    email: "consiliullocalburilamare@yahoo.com"
+    phone: "+40-252357401"
+    population: 1894
+    osm: 9714850
+    wikidata: Q12724599
+    coords: [44.47445, 22.55413]
+  - name: "Sichevița"
+    country: RO
+    lang: ro
+    admin: "Caraș-Severin"
+    email: "sichevitap@yahoo.com"
+    phone: "+40-255545005"
+    population: 1891
+    osm: 11319221
+    wikidata: Q16426045
+    coords: [44.71102, 21.83388]
+  - name: "Suhaia"
+    country: RO
+    lang: ro
+    admin: "Teleorman"
+    email: "contact@primariasuhaia.ro"
+    phone: "+40-247451100"
+    population: 1879
+    osm: 11552216
+    wikidata: Q16427692
+    coords: [43.75731, 25.25819]
+  - name: "Seimeni"
+    country: RO
+    lang: ro
+    admin: "Constanța"
+    site: "http://www.primaria-seimeni.ro/"
+    email: "primariaseimeni@yahoo.co.uk"
+    phone: "+40-241239174"
+    population: 1872
+    osm: 11793468
+    wikidata: Q5052979
+    coords: [44.41337, 28.10272]
+  - name: "Vlădeni"
+    country: RO
+    lang: ro
+    admin: "Ialomița"
+    site: "http://www.vladeni.go.ro/"
+    email: "primariavladeniil@gmail.com"
+    phone: "+40-243313631"
+    population: 1870
+    osm: 13833798
+    wikidata: Q16426816
+    coords: [44.61739, 27.81657]
+  - name: "Ion Corvin"
+    country: RO
+    lang: ro
+    admin: "Constanța"
+    site: "http://www.primaria-ioncorvin.ro/"
+    email: "comuna@primariaioncorvin.ro"
+    phone: "+40-241856200"
+    population: 1715
+    osm: 11793345
+    wikidata: Q5052950
+    coords: [44.13113, 27.80733]
+  - name: "Stelnica"
+    country: RO
+    lang: ro
+    admin: "Ialomița"
+    site: "http://www.primaria-stelnica.ro"
+    email: "primaria.stelnica@yahoo.com"
+    phone: "+40-243361785"
+    population: 1649
+    osm: 10697872
+    wikidata: Q2718388
+    coords: [44.40273, 27.93565]
+  - name: "Dichiseni"
+    country: RO
+    lang: ro
+    admin: "Călărași"
+    site: "http://www.primariadichiseni.ro/"
+    email: "primaria.dichiseni@yahoo.ro"
+    phone: "+40-242313637"
+    population: 1641
+    osm: 13833307
+    wikidata: Q1123476
+    coords: [44.23721, 27.5313]
+  - name: "Socol"
+    country: RO
+    lang: ro
+    admin: "Caraș-Severin"
+    email: "primariasocol@yahoo.com"
+    phone: "+40-25554484"
+    population: 1602
+    osm: 11319252
+    wikidata: Q12756677
+    coords: [44.83129, 21.44186]
+  - name: "Gostinu"
+    country: RO
+    lang: ro
+    admin: "Giurgiu"
+    site: "http://primariagostinu.ro/"
+    email: "PRIMARIAGOSTINU@YAHOO.COM"
+    phone: "+40-246229141"
+    population: 1578
+    osm: 11544684
+    wikidata: Q5092161
+    coords: [43.98348, 26.12403]
+  - name: "Gura Padinii"
+    country: RO
+    lang: ro
+    admin: "Olt"
+    email: "gprimarie@yahoo.com"
+    phone: "+40-249536920"
+    population: 1539
+    osm: 9742515
+    wikidata: Q12724827
+    coords: [43.75446, 24.3038]
+  - name: "Topalu"
+    country: RO
+    lang: ro
+    admin: "Constanța"
+    site: "https://comunatopalu.ro/"
+    email: "secretariat@comunatopalu.ro"
+    phone: "+40-241256002"
+    population: 1517
+    osm: 12498959
+    wikidata: Q12161957
+    coords: [44.53688, 28.10075]
+  - name: "Coronini"
+    country: RO
+    lang: ro
+    admin: "Caraș-Severin"
+    site: "http://primariacoronini.ro/"
+    email: "primariacoronini@yahoo.com"
+    phone: "+40-255544115"
+    population: 1514
+    osm: 11319220
+    wikidata: Q16426006
+    coords: [44.68072, 21.69083]
+  - name: "Beștepe"
+    country: RO
+    lang: ro
+    admin: "Tulcea"
+    site: "http://www.primariaonline.ro/primarii/Tulcea/index.php?primarie=943"
+    email: "primaria.bestepe@yahoo.com"
+    phone: "+40-240545334"
+    population: 1510
+    osm: 9883777
+    wikidata: Q12724543
+    coords: [45.09646, 29.02172]
+  - name: "Traian"
+    country: RO
+    lang: ro
+    admin: "Teleorman"
+    email: "primariatraiantr@yahoo.com"
+    phone: "+40-247420613"
+    population: 1421
+    osm: 11544695
+    wikidata: Q12725212
+    coords: [43.78498, 24.98693]
+  - name: "Ciuperceni"
+    country: RO
+    lang: ro
+    admin: "Teleorman"
+    email: "primariaciuperceni@yahoo.com"
+    phone: "+40-247419590"
+    population: 1350
+    osm: 11544696
+    wikidata: Q16427610
+    coords: [43.77617, 24.94716]
+  - name: "Fântânele"
+    country: RO
+    lang: ro
+    admin: "Teleorman"
+    email: "office@primariafantanele.ro"
+    phone: "+40-247451082"
+    population: 1305
+    osm: 11552215
+    wikidata: Q12724786
+    coords: [43.72404, 25.29513]
+  - name: "Grindu"
+    country: RO
+    lang: ro
+    admin: "Tulcea"
+    site: "http://grindu.romclub.ro"
+    email: "primaria.grindu@yahoo.com"
+    phone: "+40-340501001"
+    population: 1271
+    osm: 10363626
+    wikidata: Q5087019
+    coords: [45.41204, 28.22872]
+  - name: "Pristol"
+    country: RO
+    lang: ro
+    admin: "Mehedinți"
+    site: "https://www.primariapristol.ro/"
+    email: "primariapristol@pejmh.ro"
+    phone: "+40-252394502"
+    population: 1254
+    osm: 9714871
+    wikidata: Q12725063
+    coords: [44.2505, 22.72528]
+  - name: "Rogova"
+    country: RO
+    lang: ro
+    admin: "Mehedinți"
+    site: "https://www.comunarogova.ro/"
+    email: "CLROGOVA@SEJMH.RO"
+    phone: "+40-252353001"
+    population: 1248
+    osm: 9714854
+    wikidata: Q16426966
+    coords: [44.4745, 22.82258]
+  - name: "Ilovița"
+    country: RO
+    lang: ro
+    admin: "Mehedinți"
+    site: "http://www.primariailovita.ro/home"
+    email: "primaria@primariailovita.ro"
+    phone: "+40-252216451"
+    population: 1238
+    osm: 9711986
+    wikidata: Q12724874
+    coords: [44.76775, 22.48235]
+  - name: "Giurgeni"
+    country: RO
+    lang: ro
+    admin: "Ialomița"
+    site: "http://www.giurgeni.go.ro/"
+    email: "comunagiurgeni@gmail.com"
+    phone: "+40-243277010"
+    population: 1223
+    osm: 13834092
+    wikidata: Q16426782
+    coords: [44.74059, 27.84515]
+  - name: "Măceșu de Jos"
+    country: RO
+    lang: ro
+    admin: "Dolj"
+    site: "https://primariamacesudejos.ro/"
+    email: "primariamacesudejos@yahoo.com"
+    phone: "+40-251354507"
+    population: 1172
+    osm: 9695116
+    wikidata: Q12724967
+    coords: [43.85261, 23.70349]
+  - name: "I.C. Brătianu"
+    country: RO
+    lang: ro
+    admin: "Tulcea"
+    site: "http://www.icbratianu.ro"
+    email: "primaria_icbratianu@yahoo.com"
+    phone: "+40-240573134"
+    population: 1143
+    osm: 10363624
+    wikidata: Q12724869
+    coords: [45.40018, 28.07742]
+  - name: "Cârna"
+    country: RO
+    lang: ro
+    admin: "Dolj"
+    email: "carna_dunareni@cjdolj.ro"
+    phone: "+40-251256824"
+    population: 1110
+    osm: 9695108
+    wikidata: Q12724701
+    coords: [43.84831, 23.60738]
+  - name: "Crișan"
+    country: RO
+    lang: ro
+    admin: "Tulcea"
+    site: "http://www.primariacrisan.paginadestart.com/"
+    email: "primariacrisan@gmail.com"
+    phone: "+40-240547057"
+    population: 1092
+    osm: 9883787
+    wikidata: Q16427771
+    coords: [45.09964, 29.36596]
+  - name: "Smârdan"
+    country: RO
+    lang: ro
+    admin: "Tulcea"
+    site: "http://www.primariasmirdan.ro/"
+    email: "secretar@primariasmirdan.ro"
+    phone: "+40-240571848"
+    population: 960
+    osm: 10363623
+    wikidata: Q5070654
+    coords: [45.30963, 28.07234]
+  - name: "Horia"
+    country: RO
+    lang: ro
+    admin: "Constanța"
+    site: "https://comunahoria.ro/"
+    email: "primariahoriact@yahoo.com"
+    phone: "+40-241257750"
+    population: 942
+    osm: 12498958
+    wikidata: Q5053092
+    coords: [44.6341, 28.10968]
+  - name: "Maliuc"
+    country: RO
+    lang: ro
+    admin: "Tulcea"
+    site: "http://www.maliuc.ro/"
+    email: "primaria.maliuc@yahoo.com"
+    phone: "+40-240546543"
+    population: 813
+    osm: 9883779
+    wikidata: Q5113257
+    coords: [45.18514, 29.0716]
+  - name: "Svinița"
+    country: RO
+    lang: ro
+    admin: "Mehedinți"
+    site: "http://www.primariasvinita.ro/"
+    email: "primariasvinita@yahoo.com"
+    phone: "+40-374018097"
+    population: 741
+    osm: 9711985
+    wikidata: Q16426969
+    coords: [44.54616, 22.1037]
+  - name: "Dubova"
+    country: RO
+    lang: ro
+    admin: "Mehedinți"
+    site: "https://primariadubova.ro/"
+    email: "contact@primariadubova.ro"
+    phone: "+40-252368002"
+    population: 716
+    osm: 9711984
+    wikidata: Q12724751
+    coords: [44.61195, 22.20241]
+  - name: "Sfântu Gheorghe"
+    country: RO
+    lang: ro
+    admin: "Tulcea"
+    site: "https://www.primariasfantugheorghetulcea.ro/"
+    email: "primaria_sf.gheorghe_delta@yahoo.com"
+    phone: "+40-371337460"
+    population: 639
+    osm: 9883789
+    wikidata: Q5054095
+    coords: [44.92274, 29.43162]
+  - name: "Ceatalchioi"
+    country: RO
+    lang: ro
+    admin: "Tulcea"
+    site: "http://primaria-ceatalchioi.ro"
+    email: "primariaceatalchioi@gmail.com"
+    phone: "+40-371034711"
+    population: 531
+    osm: 9883782
+    wikidata: Q5113769
+    coords: [45.2756, 28.81471]

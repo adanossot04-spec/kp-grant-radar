@@ -39,6 +39,8 @@ community:
   border_uk: "поруч — пункт пропуску Вилок–Тисабеч на кордоні з Угорщиною"
   border_en: "Vylok–Tiszabecs border crossing with Hungary"
   border_de: "Grenzübergang Vylok–Tiszabecs zu Ungarn"
+  border_pl: "tuż przy przejściu granicznym Wyłok–Tiszabecs z Węgrami"
+  border_ro: "lângă punctul de trecere a frontierei Vylok–Tiszabecs cu Ungaria"
   border_hu: "a tiszabecsi határátkelő közvetlen szomszédságában"
   languages: "українська, угорська, англійська"
   fleet_uk: "сміттєзбиральні автомобілі 1991 та 1994 років випуску"
@@ -67,6 +69,23 @@ community:
     edu_hu: ["laptopok és multifunkciós nyomtatók az iskoláknak",
              "természettudományi és informatikai szaktantermek felszerelése",
              "iskolabusz"]
+    waste_pl:
+      - "śmieciarka z załadunkiem tylnym — 1 szt."
+      - "pojemniki na odpady 1,1 m3 — 50 szt."
+      - "ciągnik z przyczepą — 1 szt."
+    edu_pl:
+      - "laptopy i urządzenia wielofunkcyjne dla szkół"
+      - "wyposażenie pracowni przyrodniczych i informatycznych"
+      - "autobus szkolny"
+    waste_ro:
+      - "autogunoieră cu încărcare din spate — 1 buc."
+      - "containere pentru deșeuri 1,1 m3 — 50 buc."
+      - "tractor cu remorcă — 1 buc."
+    edu_ro:
+      - "laptopuri și echipamente multifuncționale pentru școli"
+      - "dotarea laboratoarelor de științe și informatică"
+      - "autobuz școlar"
+
   # ── Опис ситуації для листів донорам (редагується вільно) ──────────────
   # Цей блок підставляється в кожен лист замість короткої згадки про автопарк.
   # Для освітніх донорів використовується situation_edu.
@@ -263,6 +282,48 @@ community:
         3. doradztwo eksperckie i prawne przy tworzeniu oraz uruchomieniu
            partnerstwa publiczno-prywatnego.
 
+    ro: |
+      Situația actuală și riscurile de mediu
+
+      În prezent, în comunitatea noastră și în cele vecine colectarea deșeurilor
+      menajere solide nu se realizează deloc. În lipsa unui sistem centralizat de
+      colectare și transport al deșeurilor, amploarea amenințării ecologice crește
+      catastrofal:
+
+        - depozite necontrolate: gunoiul este aruncat masiv și haotic în
+          perdelele forestiere, de-a lungul drumurilor și pe terenuri deschise;
+        - amenințare pentru mediu: descompunerea deșeurilor poluează solul și
+          apele subterane, iar incendiile de la depozite emit substanțe toxice;
+        - scăderea calității vieții: este o amenințare directă pentru sănătatea
+          oamenilor și o pierdere a potențialului turistic și de agrement al
+          regiunii.
+
+      Viziunea soluției: o întreprindere comună public-privată
+
+      Eforturile unei singure comunități mici nu sunt suficiente. Soluția
+      strategică pe care o vedem este crearea unei întreprinderi comune
+      public-private, care să unească resursele comunității noastre și ale celor
+      vecine cu capacitățile sectorului privat pentru colectarea, transportul și
+      sortarea ulterioară a deșeurilor. Un astfel de format optimizează costurile
+      de administrare și asigură un serviciu de calitate locuitorilor mai multor
+      comunități deodată.
+
+      Nevoia de sprijin
+
+      Realizarea proiectului necesită investiții inițiale semnificative: utilaje
+      specializate (autogunoiere, containere) și infrastructură pentru stocarea
+      temporară și sortarea deșeurilor. Investiția de start depășește posibilitățile
+      bugetului comunității noastre, de aceea ne adresăm dumneavoastră pentru
+      sprijin financiar, tehnic sau de expertiză.
+
+      Suntem deschiși parteneriatului în următoarele forme:
+        1. cofinanțarea achiziției de utilaje și echipamente specializate pentru
+           colectarea și transportul deșeurilor menajere;
+        2. sprijin de tip grant pentru proiecte de infrastructură în domeniul
+           mediului și al gestionării deșeurilor;
+        3. asistență de expertiză și consultanță la constituirea juridică și
+           lansarea parteneriatului public-privat.
+
   situation_edu:
     uk: |
       Поточна ситуація
@@ -309,6 +370,138 @@ community:
       przyrodniczych i informatycznych oraz autobusu szkolnego dla dzieci z
       oddalonych wsi. Szukamy szkół partnerskich do wspólnych projektów,
       wymiany doświadczeń i wsparcia sprzętowego.
+
+    ro: |
+      Situația actuală
+
+      În școlile comunității învață copii din 11 localități, printre care și familii
+      de persoane strămutate intern. Lipsesc dotările de bază: laptopuri și
+      echipamente multifuncționale, dotarea laboratoarelor de științe și
+      informatică, un autobuz școlar pentru transportul copiilor din satele
+      îndepărtate. Căutăm parteneri pentru proiecte educaționale comune, schimb de
+      experiență între școli și sprijin cu echipamente.
+
+  water:
+    uk: |
+      Водний вимір проблеми
+
+      Вилок стоїть на Тисі — найбільшій притоці Дунаю. Усе, що не зібрано як
+      відходи у верхів'ї, під час весняних паводків змиває з берегів у річку:
+      вже за кілька днів пластик перетинає кордон біля Тисабеча, йде вниз
+      через Угорщину, Сербію та Румунію і зрештою потрапляє в Дунай і Чорне
+      море. За оцінками угорської ініціативи PET Kupa, Тиса щороку переносить
+      близько 250 тонн пластику, а Дунай — близько 1500 тонн; більша частина
+      того, що волонтери виловлюють з Верхньої Тиси, походить саме із
+      Закарпаття, де бракує інфраструктури збирання відходів.
+
+      Тому створення системи збирання та сортування у нашій громаді — це не
+      локальне питання благоустрою, а пряме зменшення забруднення спільного
+      басейну Дунаю: менше пластику в річці, чистіша питна вода, збережені
+      риболовні та рекреаційні ресурси для всіх громад нижче за течією. Ця
+      робота прямо працює на цілі Рамкової водної директиви ЄС, Конвенції про
+      охорону та сталий розвиток Дунаю (ICPDR), стороною якої є Україна, та
+      Стратегії ЄС для Дунайського регіону (EUSDR).
+    en: |
+      The water dimension of the problem
+
+      Vylok lies on the Tisza, the largest tributary of the Danube. Whatever is
+      not collected as waste in the upper catchment is washed off the banks by
+      the spring floods: within days the plastic crosses the border at
+      Tiszabecs, travels down through Hungary, Serbia and Romania and ends up
+      in the Danube and the Black Sea. According to the Hungarian PET Kupa
+      (Plastic Cup) initiative, the Tisza carries roughly 250 tonnes of plastic
+      a year and the Danube around 1,500 tonnes, and most of what volunteers
+      recover from the Upper Tisza originates in Zakarpattia, where waste
+      collection infrastructure is missing.
+
+      Building a collection and sorting system in our hromada is therefore not
+      a local amenity project but a direct reduction of pollution in the shared
+      Danube basin: less plastic in the river, cleaner drinking water, and
+      protected fisheries and recreation for every community downstream. It
+      serves the goals of the EU Water Framework Directive, of the Danube River
+      Protection Convention (ICPDR), to which Ukraine is a contracting party,
+      and of the EU Strategy for the Danube Region (EUSDR).
+    de: |
+      Die Gewässerdimension des Problems
+
+      Vylok liegt an der Theiß, dem größten Nebenfluss der Donau. Alles, was im
+      Oberlauf nicht als Abfall eingesammelt wird, spült das Frühjahrshochwasser
+      von den Ufern in den Fluss: binnen weniger Tage überquert der Kunststoff
+      bei Tiszabecs die Grenze, treibt durch Ungarn, Serbien und Rumänien und
+      gelangt schließlich in die Donau und ins Schwarze Meer. Nach Schätzungen
+      der ungarischen Initiative PET Kupa transportiert die Theiß jährlich rund
+      250 Tonnen Kunststoff, die Donau etwa 1.500 Tonnen; der größte Teil
+      dessen, was Freiwillige aus der Oberen Theiß bergen, stammt aus
+      Transkarpatien, wo die Sammelinfrastruktur fehlt.
+
+      Der Aufbau eines Sammel- und Sortiersystems in unserer Gemeinde ist daher
+      keine lokale Verschönerungsmaßnahme, sondern eine unmittelbare Entlastung
+      des gemeinsamen Donaueinzugsgebiets: weniger Plastik im Fluss, sauberes
+      Trinkwasser, geschützte Fischerei und Erholungsnutzung für alle
+      flussabwärts gelegenen Gemeinden. Das dient den Zielen der
+      EU-Wasserrahmenrichtlinie, des Donauschutzübereinkommens (IKSD/ICPDR),
+      dem die Ukraine als Vertragspartei angehört, sowie der EU-Strategie für
+      den Donauraum (EUSDR).
+    hu: |
+      A probléma vízügyi vetülete
+
+      Tiszaújlak a Tisza partján fekszik, amely a Duna legnagyobb mellékfolyója.
+      Mindaz, amit a felső vízgyűjtőn nem gyűjtenek össze hulladékként, a tavaszi
+      árvizekkel a partokról a folyóba mosódik: a műanyag néhány nap alatt
+      átlépi a határt Tiszabecsnél, végighalad Magyarországon, Szerbián és
+      Románián, végül a Dunába és a Fekete-tengerbe kerül. A PET Kupa becslése
+      szerint a Tisza évente mintegy 250 tonna műanyagot szállít, a Duna pedig
+      nagyjából 1500 tonnát, és a Felső-Tiszán kimentett hulladék nagyobb része
+      Kárpátaljáról érkezik, ahol hiányzik a gyűjtési infrastruktúra.
+
+      A gyűjtő- és válogatórendszer kiépítése tehát nálunk nem helyi
+      településszépítési kérdés, hanem a közös Duna-vízgyűjtő szennyezésének
+      közvetlen csökkentése: kevesebb műanyag a folyóban, tisztább ivóvíz,
+      megőrzött halászati és rekreációs értékek minden folyásirányban lejjebb
+      fekvő település számára. Ez közvetlenül szolgálja az EU
+      Víz Keretirányelvének, a Duna védelméről szóló egyezménynek (ICPDR),
+      amelynek Ukrajna is részes fele, valamint az EU Duna Régió Stratégiájának
+      (EUSDR) céljait.
+    pl: |
+      Wodny wymiar problemu
+
+      Wyłok leży nad Cisą — największym dopływem Dunaju. Wszystko, czego nie
+      zebrano jako odpady w górnym biegu rzeki, wiosenne powodzie spłukują z
+      brzegów do wody: w ciągu kilku dni plastik przekracza granicę pod
+      Tiszabecs, płynie przez Węgry, Serbię i Rumunię, by ostatecznie trafić do
+      Dunaju i Morza Czarnego. Według szacunków węgierskiej inicjatywy PET Kupa
+      Cisa przenosi rocznie około 250 ton plastiku, a Dunaj około 1500 ton;
+      większość tego, co wolontariusze wyławiają z Górnej Cisy, pochodzi z
+      Zakarpacia, gdzie brakuje infrastruktury zbiórki odpadów.
+
+      Budowa systemu zbiórki i sortowania w naszej gminie nie jest więc lokalną
+      sprawą porządkową, lecz bezpośrednim ograniczeniem zanieczyszczenia
+      wspólnego dorzecza Dunaju: mniej plastiku w rzece, czystsza woda pitna,
+      zachowane zasoby rybne i rekreacyjne dla wszystkich gmin położonych niżej.
+      Działanie to wprost realizuje cele Ramowej dyrektywy wodnej UE, Konwencji
+      o współpracy na rzecz ochrony i zrównoważonego użytkowania Dunaju (ICPDR),
+      której stroną jest Ukraina, oraz Strategii UE dla regionu Dunaju (EUSDR).
+    ro: |
+      Dimensiunea acvatică a problemei
+
+      Vylok este așezat pe Tisa, cel mai mare afluent al Dunării. Tot ceea ce nu
+      este colectat ca deșeu în bazinul superior este spălat de pe maluri de
+      viiturile de primăvară: în câteva zile plasticul trece frontiera la
+      Tiszabecs, coboară prin Ungaria, Serbia și România și ajunge în cele din
+      urmă în Dunăre și în Marea Neagră. Potrivit estimărilor inițiativei
+      maghiare PET Kupa, Tisa transportă anual circa 250 de tone de plastic, iar
+      Dunărea aproximativ 1.500 de tone, iar cea mai mare parte a deșeurilor
+      scoase din Tisa Superioară provine din Transcarpatia, unde lipsește
+      infrastructura de colectare.
+
+      Crearea unui sistem de colectare și sortare în comunitatea noastră nu este
+      așadar o simplă chestiune locală de salubrizare, ci o reducere directă a
+      poluării bazinului comun al Dunării: mai puțin plastic în râu, apă potabilă
+      mai curată, resurse piscicole și de agrement protejate pentru toate
+      localitățile din aval. Această activitate servește direct obiectivelor
+      Directivei-cadru privind apa a UE, ale Convenției pentru protecția fluviului
+      Dunărea (ICPDR), la care Ucraina este parte, și ale Strategiei UE pentru
+      Regiunea Dunării (EUSDR).
 
   contact:
     # УВАГА: значення пишеться ВСЕРЕДИНІ лапок, інакше YAML не прочитається:
