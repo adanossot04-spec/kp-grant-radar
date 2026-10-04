@@ -19,23 +19,71 @@ sources:
       # 31094501 = Forthcoming, 31094502 = Open
       statuses: ["31094501", "31094502"]
       page_size: 100
-      max_pages: 6
+      max_pages: 8
       # пошукові запити (кожен виконується окремо). *** = без текстового фільтра
       queries:
+        # ── відходи та циркулярна економіка ──
         - "waste management"
+        - "separate waste collection"
+        - "recycling infrastructure"
         - "circular economy municipal"
-        - "urban mobility public transport"
+        - "landfill remediation"
+        - "biowaste composting"
+        - "plastic packaging waste"
+        - "construction and demolition waste"
+        # ── благоустрій, вода, міське середовище ──
         - "green urban space"
+        - "nature based solutions cities"
+        - "water supply and sewerage"
+        - "wastewater treatment municipality"
+        - "climate adaptation cities"
+        - "public lighting energy efficiency"
+        # ── транспорт і техніка ──
+        - "urban mobility public transport"
+        - "clean buses electric fleet"
+        - "waste collection equipment"
+        - "procurement of vehicles municipalities"
+        - "machinery and equipment municipalities"
+        # ── громади, відновлення, Україна ──
         - "municipal infrastructure Ukraine"
         - "local authorities recovery"
         - "Ukraine reconstruction"
-        # освітній напрям
+        - "Ukraine municipalities support"
+        - "twinning cities cooperation"
+        - "civil protection shelters"
+        # ── освіта ──
         - "vocational education and training"
         - "school education infrastructure"
         - "skills development local"
-        # техніка та обладнання
-        - "waste collection equipment"
-        - "procurement of vehicles municipalities"
+        - "green skills training"
+        - "digital education capacity"
+        # ── інклюзивність і соціальна сфера ──
+        - "accessibility persons with disabilities"
+        - "inclusive public services"
+        - "social inclusion local communities"
+        - "assistive technologies accessibility"
+        # ── вода, річки, довкілля ──
+        - "river basin restoration"
+        - "water resources management"
+        - "nature restoration biodiversity"
+        - "green infrastructure cities"
+        # ── безпека, укриття, розмінування ──
+        - "civil protection local level"
+        - "humanitarian demining"
+        - "disaster risk reduction municipalities"
+        # ── здоров'я, культура, молодь, ветерани ──
+        - "mental health community services"
+        - "cultural heritage restoration"
+        - "youth participation local"
+        - "veterans reintegration support"
+        # ── житло, цифровізація, туризм ──
+        - "building renovation energy poverty"
+        - "digital public services municipalities"
+        - "sustainable tourism regions"
+        # ── бізнес і енергетика ──
+        - "SME circular economy support"
+        - "energy efficiency buildings municipalities"
+        - "renewable energy local communities"
 
   # ───────────────────────── ЄС: тендери (безкоштовний API, без ключа) ────────
   - id: ted
@@ -47,11 +95,19 @@ sources:
     beneficiary_hint: private      # підряди найчастіше для бізнесу
     params:
       limit: 40
+      # синтаксис експерт-запитів TED; today(-30) = за останні 30 днів
       queries:
-        - "notice-title ~ (waste)"
-        - "notice-title ~ (municipal)"
-        - "notice-title ~ (recycling)"
+        - "notice-title ~ (waste) AND publication-date>=today(-30)"
+        - "notice-title ~ (municipal) AND publication-date>=today(-30)"
+        - "notice-title ~ (recycling) AND publication-date>=today(-30)"
+        - "notice-title ~ (municipal waste collection)"
+        - "notice-title ~ (refuse OR garbage)"
         - "place-of-performance-country-lot=UKR"
+        - "buyer-country=UKR"
+        # CPV: 34144510 сміттєвози, 44613700 контейнери для сміття,
+        # 42914000 обладнання для переробки, 90500000 послуги з відходів
+        - "classification-cpv IN (34144510 44613700) AND publication-date>=today(-60)"
+        - "classification-cpv IN (42914000) AND publication-date>=today(-60)"
 
   # ───────────────────────── ЄС / транскордонні програми ──────────────────────
   - id: huskroua
@@ -93,6 +149,22 @@ sources:
     enabled: true
     weight: 0.9
     url: "https://danube-region.eu/feed/"
+
+  - id: euneighbours_east
+    name: "EU NEIGHBOURS east — можливості Східного партнерства"
+    type: rss
+    region: EU
+    enabled: true
+    weight: 1.1
+    url: "https://euneighbourseast.eu/feed/"
+
+  - id: eu4environment
+    name: "EU4Environment"
+    type: rss
+    region: EU
+    enabled: true
+    weight: 1.1
+    url: "https://www.eu4environment.org/feed/"
 
   # ───────────────────────── МФО / міжнародні донори ──────────────────────────
   - id: worldbank
@@ -171,6 +243,30 @@ sources:
     weight: 0.9
     url: "https://www.prostir.ua/feed/"
 
+  - id: prostir_tenders
+    name: "Громадський простір — тендери й закупівлі"
+    type: rss
+    region: UA
+    enabled: true
+    weight: 1.0
+    url: "https://www.prostir.ua/feed/?post_type=tender"
+
+  - id: hromady
+    name: "Hromady.org — дайджести можливостей для громад"
+    type: rss
+    region: UA
+    enabled: true
+    weight: 1.1
+    url: "https://hromady.org/feed/"
+
+  - id: ecoaction
+    name: "Екодія — довкіллєві ініціативи та фінансування"
+    type: rss
+    region: UA
+    enabled: true
+    weight: 0.8
+    url: "https://ecoaction.org.ua/feed"
+
   - id: eef
     name: "Фонд енергоефективності"
     type: rss
@@ -186,6 +282,67 @@ sources:
     enabled: true
     weight: 0.9
     url: "https://mepr.gov.ua/feed/"
+
+  # ─────────── Пошук по новинах: знаходить оголошення без власних RSS ─────────
+  # Безкоштовно, без ключа. Кожен рядок queries — окремий пошук.
+  # Оператори: "точна фраза", OR, -виключити, site:example.com, when:30d
+  - id: gnews_ua
+    name: "Пошук новин про гранти (укр.)"
+    type: gnews
+    region: UA
+    enabled: true
+    weight: 0.85
+    params:
+      lang: uk
+      country: UA
+      per_query: 20
+      queries:
+        - "грант громада відходи OR сміття when:120d"
+        - "\"конкурс грантів\" комунальне підприємство when:120d"
+        - "грант сміттєвоз OR контейнери OR спецтехніка громада when:180d"
+        - "грант благоустрій парк OR сквер громада when:120d"
+        - "грант водопостачання OR каналізація громада when:180d"
+        - "грант енергоефективність громада when:120d"
+        - "грант школа OR ліцей обладнання when:120d"
+        - "грант освіта громада конкурс заявок when:120d"
+        - "міжнародна технічна допомога громада конкурс when:120d"
+        - "програма підтримки громад донор конкурс заявок when:120d"
+        - "грантова програма приватне підприємство переробка when:180d"
+        - "Закарпаття грант проєкт громада when:180d"
+        # нові теми
+        - "грант інклюзивність OR безбар'єрність громада when:180d"
+        - "грант доступність для людей з інвалідністю заклад when:180d"
+        - "грант відновлення річки OR водойми OR берегоукріплення when:180d"
+        - "грант очисні споруди OR водоканал громада when:180d"
+        - "грант укриття OR захисна споруда школа громада when:180d"
+        - "грант розмінування OR генератор громада when:180d"
+        - "грант молодіжний центр OR спортивний майданчик when:180d"
+        - "грант бібліотека OR будинок культури проєкт when:180d"
+        - "грант ветерани простір OR реінтеграція громада when:180d"
+        - "грант ОСББ термомодернізація будинку when:180d"
+        - "грант цифровізація OR електронні послуги громада when:180d"
+        - "грант амбулаторія OR медичне обладнання громада when:180d"
+        - "грант туризм OR велосипедний маршрут громада when:180d"
+
+  - id: gnews_en
+    name: "Пошук новин про гранти (англ.)"
+    type: gnews
+    region: INT
+    enabled: true
+    weight: 0.8
+    params:
+      lang: en
+      country: US
+      per_query: 15
+      queries:
+        - "Ukraine municipalities grant call for proposals when:120d"
+        - "grant Ukraine waste management equipment when:180d"
+        - "funding Ukraine local communities reconstruction when:120d"
+        - "call for proposals Ukraine vocational education when:180d"
+        - "grant Ukraine accessibility inclusion disabilities when:180d"
+        - "grant Ukraine river restoration water resources when:180d"
+        - "grant Ukraine shelters civil protection communities when:180d"
+        - "grant Ukraine cultural heritage youth community when:180d"
 
   # ───────────────────────── Шаблон для власних джерел ────────────────────────
   # - id: my_source
