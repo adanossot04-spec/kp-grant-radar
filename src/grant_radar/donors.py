@@ -59,7 +59,7 @@ COUNTRY_MARKS: list[tuple[str, str]] = [
 
 COUNTRY_NAME = {
     "HU": "Угорщина", "DE": "Німеччина", "PL": "Польща", "SK": "Словаччина",
-    "RO": "Румунія", "SE": "Швеція", "NL": "Нідерланди", "LT": "Литва",
+    "RO": "Румунія", "SE": "Швеція", "SI": "Словенія", "IS": "Ісландія", "NL": "Нідерланди", "LT": "Литва",
     "LV": "Латвія", "EE": "Естонія", "CZ": "Чехія", "AT": "Австрія",
     "CH": "Швейцарія", "FR": "Франція", "LU": "Люксембург", "BE": "Бельгія",
     "DK": "Данія", "NO": "Норвегія", "FI": "Фінляндія", "GB": "Велика Британія",
@@ -70,7 +70,7 @@ COUNTRY_NAME = {
 # мова листування за країною
 LANG_BY_COUNTRY = {
     "HU": "hu", "DE": "de", "AT": "de", "CH": "de", "PL": "pl", "UA": "uk",
-    "RO": "ro",
+    "RO": "ro", "IT": "it", "LU": "de",
 }
 
 # ───────────────── що саме передали (тип допомоги) ─────────────────
@@ -102,8 +102,9 @@ NEED_SCORE = {"waste": 3, "edu": 3, "transport": 2, "energy": 1,
 
 # М — місток (чим ми «свої»); В — вартість входу (логістика)
 BRIDGE = {"HU": 3, "SK": 2, "PL": 2, "RO": 2, "AT": 1, "CZ": 1, "DE": 1,
-          "LT": 1, "SE": 1, "NL": 1}
+          "LT": 1, "SE": 1, "NL": 1, "SI": 1, "IT": 0}
 ENTRY_COST = {"HU": 0, "SK": 1, "PL": 1, "RO": 1, "AT": 1, "CZ": 1, "DE": 2,
+              "SI": 1, "IS": 3,
               "LT": 2, "LV": 2, "EE": 2, "CH": 2, "IT": 2, "FR": 2, "BE": 2,
               "NL": 2, "LU": 2, "DK": 2, "SE": 3, "NO": 3, "FI": 3, "GB": 3,
               "IE": 3, "ES": 3, "CA": 3, "US": 3, "??": 3}
@@ -135,6 +136,7 @@ CIRCLE_LABEL = {
     1: "1 · угорський канал", 2: "2 · прикордоння і Тиса",
     3: "3 · слід сусіда (Закарпаття)", 4: "4 · профільні мережі",
     5: "5 · освітні донори", 6: "6 · Дунайський басейн",
+    7: "7 · великі міста AT/IT/SI", 8: "8 · «зелені» міста",
 }
 
 STATUS_LABEL = {
@@ -455,6 +457,36 @@ Cu deosebită considerație,
 {name_en}
 {email} · {phone}{website_part}""",
 
+"it": """Oggetto: Proposta di partenariato – comunità di {center_en} ({center_hu}), Transcarpazia, Ucraina
+
+Gentile Sindaco, gentili colleghi,
+
+vi scriviamo a nome della comunità di {center_en} ({center_hu}) nella regione
+della Transcarpazia, Ucraina: {settlements} località, circa {population}
+abitanti, proprio sul confine dell'Unione Europea ({border}).
+
+{reference_it}
+
+{situation}
+{water}
+Le nostre necessità prioritarie:
+{needs_it}
+
+Ci facciamo carico delle pratiche doganali, del trasporto sul territorio
+ucraino, della manutenzione e dell'assicurazione. Documenteremo l'utilizzo
+dei mezzi con un reportage fotografico e siamo pronti a firmare un
+memorandum di cooperazione.
+
+Vi saremmo sinceramente grati per la possibilità di discutere le forme
+concrete di collaborazione in un incontro online o per corrispondenza.
+Crediamo che insieme possiamo fermare questa crisi ambientale e garantire
+acqua più pulita e un futuro sicuro lungo i fiumi che condividiamo.
+
+Cordiali saluti,
+{person_en}{position_part_en}
+{name_en}
+{email} · {phone}{website_part}""",
+
 "en": """Subject: Partnership request – {name_en} ({center_en}), Zakarpattia, Ukraine
 
 Dear Mayor, dear colleagues,
@@ -524,6 +556,8 @@ REFERENCE = {
           "«{what}». Dlatego zwracamy się do Państwa.",
     "ro": "Am aflat că {date_part}ați sprijinit o comunitate din Ucraina: "
           "«{what}». De aceea ne adresăm dumneavoastră.",
+    "it": "Abbiamo appreso che {date_part}avete sostenuto una comunità "
+          "ucraina: «{what}». Per questo ci rivolgiamo a voi.",
     "en": "We have learned that {date_part}you supported a Ukrainian community: "
           "«{what}». This is why we are turning to you.",
     "uk": "Ми дізналися, що {date_part}ви підтримали українську громаду: "
@@ -552,6 +586,11 @@ REFERENCE_DANUBE = {
           "al Dunării — trăim deci la cele două capete ale aceluiași bazin "
           "hidrografic: ceea ce se întâmplă la noi cu deșeurile ajunge în "
           "câteva zile și pe sectorul dumneavoastră de râu.",
+    "it": "Ci rivolgiamo al Comune di {donor} in quanto città situata sul "
+          "Danubio. La nostra comunità si trova sulla Tibisco, il maggiore "
+          "affluente del Danubio: viviamo quindi ai due estremi dello stesso "
+          "bacino idrografico, e ciò che accade qui con i rifiuti raggiunge in "
+          "pochi giorni anche il vostro tratto di fiume.",
     "en": "We are writing to the municipality of {donor} as a community on the "
           "Danube. Our hromada lies on the Tisza, the largest tributary of the "
           "Danube — we live at two ends of the same river basin: what happens "
@@ -563,11 +602,101 @@ REFERENCE_DANUBE = {
 }
 
 
+# ── привід для великих міст (власна служба відходів і бюджет) ──
+REFERENCE_BIG = {
+    "de": "Wir wenden uns an die Stadt {donor} als größere Kommune mit eigener "
+          "Abfallwirtschaft. Städte Ihrer Größe erneuern ihren Fuhrpark "
+          "regelmäßig — ausgemusterte, aber voll funktionsfähige Fahrzeuge und "
+          "Behälter sind für eine Gemeinde wie unsere der Unterschied zwischen "
+          "«gar keine Müllabfuhr» und einem funktionierenden System.",
+    "it": "Ci rivolgiamo al Comune di {donor} come città di grandi dimensioni "
+          "con un proprio servizio di igiene urbana. Le città della vostra "
+          "dimensione rinnovano regolarmente il parco mezzi: un veicolo "
+          "dismesso ma perfettamente funzionante, o una partita di cassonetti, "
+          "per una comunità come la nostra significa passare da «nessuna "
+          "raccolta» a un sistema funzionante.",
+    "pl": "Zwracamy się do miasta {donor} jako do dużego samorządu z własnym "
+          "zakładem gospodarki odpadami. Miasta tej wielkości regularnie "
+          "wymieniają tabor — wycofany, lecz sprawny pojazd albo partia "
+          "pojemników to dla naszej gminy różnica między brakiem wywozu "
+          "śmieci a działającym systemem.",
+    "hu": "Önökhöz, {donor} városához fordulunk, mint saját "
+          "hulladékgazdálkodási szolgálattal rendelkező nagyvároshoz. Az Önök "
+          "méretű városok rendszeresen újítják a járműparkot: egy kivont, de "
+          "teljesen működőképes gépjármű vagy egy konténerszállítmány a mi "
+          "közösségünk számára azt jelenti, hogy a semmiből működő rendszer "
+          "lesz.",
+    "ro": "Ne adresăm municipiului {donor} ca oraș mare, cu serviciu propriu "
+          "de salubritate. Orașele de dimensiunea dumneavoastră își "
+          "reînnoiesc periodic parcul auto: un utilaj scos din uz, dar perfect "
+          "funcțional, ori un lot de containere înseamnă pentru comunitatea "
+          "noastră trecerea de la lipsa totală a colectării la un sistem care "
+          "funcționează.",
+    "en": "We are writing to the city of {donor} as a large municipality with "
+          "its own waste management service. Cities of your size renew their "
+          "fleet regularly — a decommissioned but fully working vehicle, or a "
+          "batch of containers, is for a community like ours the difference "
+          "between no waste collection at all and a working system.",
+    "uk": "Звертаємося до міста {donor} як до великого самоврядування з "
+          "власною службою поводження з відходами. Міста вашого розміру "
+          "регулярно оновлюють парк техніки — списана, але цілком робоча "
+          "машина чи партія контейнерів для нашої громади означає різницю між "
+          "повною відсутністю вивезення сміття і робочою системою.",
+}
+
+# ── привід для міст, де Зелені у владі ──
+REFERENCE_GREEN = {
+    "de": "Wir wenden uns an {donor}, weil Umwelt- und Klimapolitik in Ihrer "
+          "Stadtregierung einen hohen Stellenwert hat. Unser Anliegen ist kein "
+          "allgemeines Hilfsgesuch, sondern ein konkretes Umweltprojekt: eine "
+          "Gemeinde ohne jede Abfallsammlung soll ein funktionierendes Sammel- "
+          "und Sortiersystem bekommen — am Oberlauf eines Flusses, der in die "
+          "Donau und ins Schwarze Meer mündet.",
+    "it": "Ci rivolgiamo a {donor} perché la politica ambientale e climatica "
+          "occupa un posto centrale nella vostra amministrazione comunale. La "
+          "nostra non è una generica richiesta di aiuto, ma un progetto "
+          "ambientale concreto: dotare di un sistema di raccolta e selezione "
+          "una comunità che oggi non ne ha alcuno, nel bacino superiore di un "
+          "fiume che sfocia nel Danubio e nel Mar Nero.",
+    "pl": "Zwracamy się do miasta {donor}, ponieważ polityka klimatyczna i "
+          "ochrona środowiska zajmują ważne miejsce w pracy Państwa "
+          "samorządu. To nie jest ogólna prośba o pomoc, lecz konkretny "
+          "projekt ekologiczny: stworzyć system zbiórki i segregacji tam, "
+          "gdzie dziś nie ma go wcale — w górnym biegu rzeki, która wpada do "
+          "Dunaju i Morza Czarnego.",
+    "hu": "Azért fordulunk {donor} városához, mert a környezet- és "
+          "klímapolitika kiemelt helyet foglal el az Önök önkormányzatának "
+          "munkájában. Nem általános segélykérésről van szó, hanem konkrét "
+          "környezetvédelmi projektről: gyűjtő- és válogatórendszert "
+          "teremteni ott, ahol ma egyáltalán nincs — egy olyan folyó felső "
+          "szakaszán, amely a Dunába és a Fekete-tengerbe ömlik.",
+    "ro": "Ne adresăm orașului {donor} pentru că politica de mediu și cea "
+          "climatică ocupă un loc important în activitatea administrației "
+          "dumneavoastră. Nu este o cerere generală de ajutor, ci un proiect "
+          "de mediu concret: crearea unui sistem de colectare și sortare acolo "
+          "unde astăzi nu există deloc — în bazinul superior al unui râu care "
+          "se varsă în Dunăre și în Marea Neagră.",
+    "en": "We are writing to {donor} because environmental and climate policy "
+          "holds a central place in your city government. This is not a "
+          "general request for aid but a concrete environmental project: to "
+          "build a collection and sorting system where today there is none — "
+          "in the headwaters of a river that flows into the Danube and the "
+          "Black Sea.",
+    "uk": "Звертаємося до міста {donor}, бо екологічна та кліматична політика "
+          "посідає важливе місце в роботі вашої міської влади. Це не загальне "
+          "прохання про допомогу, а конкретний екологічний проєкт: створити "
+          "систему збирання та сортування там, де її сьогодні немає взагалі — "
+          "у верхів'ї річки, що впадає в Дунай і Чорне море.",
+}
+
+
 MONTHS = {
     "de": ["", "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli",
            "August", "September", "Oktober", "November", "Dezember"],
     "en": ["", "January", "February", "March", "April", "May", "June", "July",
            "August", "September", "October", "November", "December"],
+    "it": ["", "gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno",
+           "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre"],
     "pl": ["", "styczniu", "lutym", "marcu", "kwietniu", "maju", "czerwcu",
            "lipcu", "sierpniu", "wrześniu", "październiku", "listopadzie",
            "grudniu"],
@@ -578,7 +707,7 @@ MONTHS = {
            "липні", "серпні", "вересні", "жовтні", "листопаді", "грудні"],
 }
 
-LETTER_LANGS = ("uk", "en", "de", "hu", "pl", "ro")
+LETTER_LANGS = ("uk", "en", "de", "hu", "pl", "ro", "it")
 
 
 def _needs_block(community: dict[str, Any], lang: str, goods: str) -> str:
@@ -658,6 +787,7 @@ def build_letter(donor: dict[str, Any], lang: str | None = None) -> str:
                 "hu": f"{d.year}. {d.month:02d}. hónapban ",
                 "de": f"im {months[d.month]} {d.year} ",
                 "pl": f"w {months[d.month]} {d.year} roku ",
+                "it": f"nel {months[d.month]} {d.year} ",
                 "ro": f"în {months[d.month]} {d.year} ",
                 "en": f"in {months[d.month]} {d.year} ",
                 "uk": f"у {months[d.month]} {d.year} року ",
@@ -671,10 +801,15 @@ def build_letter(donor: dict[str, Any], lang: str | None = None) -> str:
 
     what = donor.get("what") or ""
     ref_lang = lang if lang in REFERENCE else "en"
-    if str(donor.get("uid") or "").startswith("danube:"):
-        # громада з Дунаю: приводом є спільний річковий басейн, а не новина
-        reference = wrap(REFERENCE_DANUBE[ref_lang].format(
-            donor=donor.get("name") or ""))
+    uid = str(donor.get("uid") or "")
+    # для «каналів» (Дунай, великі міста, зелені) приводом є не новина,
+    # а сама природа адресата — спільна річка, розмір міста, пріоритети влади
+    channel_ref = {"danube:": REFERENCE_DANUBE, "bigcity:": REFERENCE_BIG,
+                   "green:": REFERENCE_GREEN}
+    opening = next((table for prefix, table in channel_ref.items()
+                    if uid.startswith(prefix)), None)
+    if opening is not None:
+        reference = wrap(opening[ref_lang].format(donor=donor.get("name") or ""))
     else:
         reference = wrap(REFERENCE[ref_lang].format(
             date_part=date_part, what=what,

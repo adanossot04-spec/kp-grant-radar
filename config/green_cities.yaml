@@ -1,0 +1,827 @@
+# «Зелені» міста Центральної та Північної Європи (понад 30 000 мешканців).
+#
+# Згенеровано автоматично: scripts/fetch_city_partners.py --only green
+# Джерело: Wikidata — чинний голова міста (P6), який є членом (P102)
+# партії, що входить до Європейської партії зелених (P463 → Q950179).
+#
+# ⚠️ ВАЖЛИВО. Склад правлячої коаліції у відкритих структурованих даних
+# не публікується: Wikidata знає посадовця, а не коаліційну угоду. Тому
+# автоматично сюди потрапляють лише міста, де мер — від Зелених. Міста,
+# де Зелені є молодшим партнером коаліції (Гамбург, Бремен, Цюрих, Берн,
+# Базель, Амстердам, Утрехт, Гент, Грац, Інсбрук, Стокгольм, Гельсінкі,
+# Осло та інші), додавайте сюди руками — і перед надсиланням листа
+# перевіряйте, чи коаліція ще чинна.
+#
+# Навіщо канал: там, де Зелені у владі, екологічний проєкт у сусідній
+# країні — це профільний пріоритет, а не «ще одне прохання про допомогу».
+
+partners:
+  - name: "Graz"
+    country: "AT"
+    lang: "de"
+    admin: "Steiermark"
+    site: "https://www.graz.at/"
+    email: "stadtverwaltung@stadt.graz.at"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 306971
+    wikidata: Q13298
+    coords: [47.07083, 15.43861]
+  - name: "Salzburg"
+    country: "AT"
+    lang: "de"
+    admin: "Salzburg"
+    site: "https://www.stadt-salzburg.at/"
+    email: "post@salzburg.gv.at"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 155021
+    wikidata: Q34713
+    coords: [47.8, 13.045]
+  - name: "Innsbruck"
+    country: "AT"
+    lang: "de"
+    admin: "Tirol"
+    site: "https://www.innsbruck.at/"
+    email: "kontakt@innsbruck.gv.at"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 132499
+    wikidata: Q1735
+    coords: [47.26833, 11.39333]
+  - name: "Gent"
+    country: "BE"
+    lang: "en"
+    admin: "Bezirk Gent"
+    site: "https://stad.gent/"
+    email: "gentinfo@stad.gent"
+    phone: "+32-9-210-10-10"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 272657
+    wikidata: Q1296
+    coords: [51.05361, 3.72528]
+  - name: "Löwen"
+    country: "BE"
+    lang: "en"
+    admin: "Bezirk Löwen"
+    site: "https://www.leuven.be"
+    email: "info@leuven.be"
+    phone: "+32-16-27-20-00"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 101032
+    wikidata: Q118958
+    coords: [50.8775, 4.70444]
+  - name: "Ottignies-Louvain-la-Neuve"
+    country: "BE"
+    lang: "en"
+    admin: "Bezirk Nivelles"
+    site: "https://www.olln.be"
+    email: "contact@olln.be"
+    phone: "+32-10-43-60-00"
+    mayor: "Julie Chantry"
+    party: "Ecolo"
+    note: "мер від Зелених (Wikidata P6 → P102)"
+    population: 31385
+    wikidata: Q329642
+    coords: [50.66696, 4.58925]
+  - name: "Zürich"
+    country: "CH"
+    lang: "de"
+    admin: "Bezirk Zürich"
+    site: "https://www.stadt-zuerich.ch/"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 452421
+    wikidata: Q72
+    coords: [47.37444, 8.54111]
+  - name: "Basel"
+    country: "CH"
+    lang: "de"
+    admin: "Schweiz"
+    site: "https://www.bs.ch/"
+    email: "info@bs.ch"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 200031
+    wikidata: Q12172
+    coords: [47.56667, 7.6]
+  - name: "Genf"
+    country: "CH"
+    lang: "de"
+    admin: "Kanton Genf"
+    site: "https://www.geneve.ch/"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 157322
+    wikidata: Q71
+    coords: [46.2, 6.15]
+  - name: "Lausanne"
+    country: "CH"
+    lang: "de"
+    admin: "Bezirk Lausanne"
+    site: "https://www.lausanne.ch/"
+    email: "informationaupublic@lausanne.ch"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 144873
+    wikidata: Q807
+    coords: [46.53333, 6.63333]
+  - name: "Bern"
+    country: "CH"
+    lang: "de"
+    admin: "Verwaltungskreis Bern-Mittelland"
+    site: "https://www.bern.ch/"
+    email: "info@bern.ch"
+    phone: "+41-313216111"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 136988
+    wikidata: Q70
+    coords: [46.94798, 7.44743]
+  - name: "Winterthur"
+    country: "CH"
+    lang: "de"
+    admin: "Bezirk Winterthur"
+    site: "https://stadt.winterthur.ch"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 120376
+    wikidata: Q9125
+    coords: [47.4992, 8.72671]
+  - name: "Luzern"
+    country: "CH"
+    lang: "de"
+    admin: "Wahlkreis Luzern-Stadt"
+    site: "https://www.stadtluzern.ch/"
+    email: "kommunikation@stadtluzern.ch"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 86234
+    wikidata: Q4191
+    coords: [47.0523, 8.3059]
+  - name: "Prag"
+    country: "CZ"
+    lang: "en"
+    admin: "Tschechien"
+    site: "https://praha.eu/"
+    email: "info@praha.eu"
+    phone: "+420 800 100 000"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 1397880
+    wikidata: Q1085
+    coords: [50.0875, 14.42139]
+  - name: "Brünn"
+    country: "CZ"
+    lang: "en"
+    admin: "Okres Brno-město"
+    site: "https://www.brno.cz/"
+    email: "informace@brno.cz"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 402739
+    wikidata: Q14960
+    coords: [49.19528, 16.60833]
+  - name: "Hamburg"
+    country: "DE"
+    lang: "de"
+    admin: "Deutschland"
+    site: "https://www.hamburg.com/"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 1869473
+    wikidata: Q1055
+    coords: [53.55, 10.0]
+  - name: "München"
+    country: "DE"
+    lang: "de"
+    admin: "Oberbayern"
+    site: "https://stadt.muenchen.de/rathaus.html"
+    email: "rathaus@muenchen.de"
+    phone: "+49-89-2330"
+    mayor: "Q123754669"
+    party: "Bündnis 90/Die Grünen"
+    note: "мер від Зелених (Wikidata P6 → P102)"
+    population: 1505036
+    wikidata: Q1726
+    coords: [48.1375, 11.575]
+  - name: "Köln"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Köln"
+    site: "https://www.stadt-koeln.de/"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 1025523
+    wikidata: Q365
+    coords: [50.94222, 6.95778]
+  - name: "Frankfurt am Main"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Darmstadt"
+    site: "https://frankfurt.de"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 760656
+    wikidata: Q1794
+    coords: [50.11056, 8.68222]
+  - name: "Freie Hansestadt Bremen"
+    country: "DE"
+    lang: "de"
+    admin: "Deutschland"
+    site: "https://www.bremen.de/"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 693204
+    wikidata: Q1209
+    coords: [53.13333, 8.73333]
+  - name: "Düsseldorf"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Düsseldorf"
+    site: "https://www.duesseldorf.de/"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 619444
+    wikidata: Q1718
+    coords: [51.22556, 6.77667]
+  - name: "Leipzig"
+    country: "DE"
+    lang: "de"
+    admin: "Sachsen"
+    site: "https://www.leipzig.de/"
+    email: "info@leipzig.de"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 615932
+    wikidata: Q2079
+    coords: [51.33962, 12.37129]
+  - name: "Stuttgart"
+    country: "DE"
+    lang: "de"
+    admin: "Neckarkreis"
+    site: "https://www.stuttgart.de/"
+    email: "post@stuttgart.de"
+    phone: "+49-711-2160"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 609365
+    wikidata: Q1022
+    coords: [48.7775, 9.18]
+  - name: "Hannover"
+    country: "DE"
+    lang: "de"
+    admin: "Region Hannover"
+    site: "https://www.hannover.de/"
+    mayor: "Belit Onay"
+    party: "Bündnis 90/Die Grünen"
+    note: "мер від Зелених (Wikidata P6 → P102)"
+    population: 522803
+    wikidata: Q1715
+    coords: [52.37444, 9.73861]
+  - name: "Bonn"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Köln"
+    site: "https://www.bonn.de/"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 323587
+    wikidata: Q586
+    coords: [50.73528, 7.10222]
+  - name: "Karlsruhe"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Karlsruhe"
+    site: "https://www.karlsruhe.de/"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 309247
+    wikidata: Q1040
+    coords: [49.01667, 8.4]
+  - name: "Münster"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Münster"
+    site: "https://www.stadt-muenster.de/"
+    email: "stadtverwaltung@stadt-muenster.de"
+    mayor: "Tilman Fuchs"
+    party: "Bündnis 90/Die Grünen"
+    note: "мер від Зелених (Wikidata P6 → P102)"
+    population: 306368
+    wikidata: Q2742
+    coords: [51.9625, 7.62556]
+  - name: "Augsburg"
+    country: "DE"
+    lang: "de"
+    admin: "Schwaben"
+    site: "https://www.augsburg.de/"
+    email: "augsburg@augsburg.de"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 301786
+    wikidata: Q2749
+    coords: [48.36889, 10.89778]
+  - name: "Aachen"
+    country: "DE"
+    lang: "de"
+    admin: "Kreis Aachen"
+    site: "https://www.aachen.de/"
+    email: "stadt.aachen@mail.aachen.de"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 263703
+    wikidata: Q1017
+    coords: [50.77621, 6.08379]
+  - name: "Kiel"
+    country: "DE"
+    lang: "de"
+    admin: "Schleswig-Holstein"
+    site: "https://www.kiel.de/"
+    email: "rathaus@kiel.de"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 251842
+    wikidata: Q1707
+    coords: [54.32333, 10.13944]
+  - name: "Freiburg im Breisgau"
+    country: "DE"
+    lang: "de"
+    admin: "Stadtamt Freiburg"
+    site: "https://www.freiburg.de/"
+    email: "buergerberatung@freiburg.de"
+    phone: "+49-761-2010"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 238299
+    wikidata: Q2833
+    coords: [47.995, 7.85]
+  - name: "Mainz"
+    country: "DE"
+    lang: "de"
+    admin: "Rheinland-Pfalz"
+    site: "https://www.mainz.de/"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 223888
+    wikidata: Q1720
+    coords: [49.99944, 8.27361]
+  - name: "Kassel"
+    country: "DE"
+    lang: "de"
+    admin: "Provinz Niederhessen"
+    site: "https://www.kassel.de/"
+    email: "servicecenter@kassel.de"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 196799
+    wikidata: Q2865
+    coords: [51.31578, 9.49792]
+  - name: "Potsdam"
+    country: "DE"
+    lang: "de"
+    admin: "Brandenburg"
+    site: "https://www.potsdam.de/"
+    email: "poststelle@rathaus.potsdam.de"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 185137
+    wikidata: Q1711
+    coords: [52.39886, 13.06566]
+  - name: "Oldenburg"
+    country: "DE"
+    lang: "de"
+    admin: "Niedersachsen"
+    site: "https://www.oldenburg.de/"
+    email: "servicecenter@stadt-oldenburg.de"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 177055
+    wikidata: Q2936
+    coords: [53.14389, 8.21389]
+  - name: "Darmstadt"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Darmstadt"
+    site: "https://www.darmstadt.de/"
+    email: "info@darmstadt.de"
+    mayor: "Jochen Partsch"
+    party: "Bündnis 90/Die Grünen"
+    note: "мер від Зелених (Wikidata P6 → P102)"
+    population: 168253
+    wikidata: Q2973
+    coords: [49.86667, 8.65]
+  - name: "Osnabrück"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Weser-Ems"
+    site: "https://www.osnabrueck.de/"
+    email: "presseamt@osnabrueck.de"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 166257
+    wikidata: Q2916
+    coords: [52.27889, 8.04306]
+  - name: "Heidelberg"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Karlsruhe"
+    site: "https://www.heidelberg.de/"
+    email: "stadt@heidelberg.de"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 156092
+    wikidata: Q2966
+    coords: [49.40936, 8.69472]
+  - name: "Würzburg"
+    country: "DE"
+    lang: "de"
+    admin: "Unterfranken"
+    site: "https://www.wuerzburg.de/"
+    email: "info@wuerzburg.de"
+    mayor: "Martin Heilig"
+    party: "Bündnis 90/Die Grünen"
+    note: "мер від Зелених (Wikidata P6 → P102)"
+    population: 133753
+    wikidata: Q2999
+    coords: [49.79444, 9.92944]
+  - name: "Göttingen"
+    country: "DE"
+    lang: "de"
+    admin: "Landkreis Göttingen"
+    site: "https://www.goettingen.de/"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 130521
+    wikidata: Q3033
+    coords: [51.53389, 9.93556]
+  - name: "Jena"
+    country: "DE"
+    lang: "de"
+    admin: "Thüringen"
+    site: "https://www.jena.de/"
+    email: "info@jena.de"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 109353
+    wikidata: Q3150
+    coords: [50.92722, 11.58639]
+  - name: "Tübingen"
+    country: "DE"
+    lang: "de"
+    admin: "Herzogtum Württemberg"
+    site: "https://tuebingen.de/"
+    email: "stadt@tuebingen.de"
+    mayor: "Boris Palmer"
+    party: "Bündnis 90/Die Grünen"
+    note: "мер від Зелених (Wikidata P6 → P102)"
+    population: 92607
+    wikidata: Q3806
+    coords: [48.52, 9.05556]
+  - name: "Konstanz"
+    country: "DE"
+    lang: "de"
+    admin: "Vereinbarte Verwaltungsgemeinschaft Konstanz"
+    site: "http://www.konstanz.de/"
+    email: "mail@konstanz.de"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 86691
+    wikidata: Q3834
+    coords: [47.66333, 9.17528]
+  - name: "Lüneburg"
+    country: "DE"
+    lang: "de"
+    admin: "Landkreis Lüneburg"
+    site: "https://www.hansestadtlueneburg.de/"
+    email: "stadt@stadt.lueneburg.de"
+    mayor: "Claudia Kalisch"
+    party: "Bündnis 90/Die Grünen"
+    note: "мер від Зелених (Wikidata P6 → P102)"
+    population: 74502
+    wikidata: Q3920
+    coords: [53.2525, 10.41444]
+  - name: "Marburg"
+    country: "DE"
+    lang: "de"
+    admin: "Landkreis Marburg-Biedenkopf"
+    site: "https://www.marburg.de/"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 73571
+    wikidata: Q3869
+    coords: [50.81667, 8.76667]
+  - name: "Göppingen"
+    country: "DE"
+    lang: "de"
+    admin: "Vereinbarte Verwaltungsgemeinschaft Göppingen"
+    site: "https://www.goeppingen.de/"
+    email: "stadtverwaltung@goeppingen.de"
+    mayor: "Q23564480"
+    party: "Bündnis 90/Die Grünen"
+    note: "мер від Зелених (Wikidata P6 → P102)"
+    population: 58678
+    wikidata: Q4072
+    coords: [48.7025, 9.65278]
+  - name: "Greifswald"
+    country: "DE"
+    lang: "de"
+    admin: "Landkreis Vorpommern-Greifswald"
+    site: "https://www.greifswald.de/"
+    email: "stadtverwaltung@greifswald.de"
+    mayor: "Stefan Fassbinder"
+    party: "Bündnis 90/Die Grünen"
+    note: "мер від Зелених (Wikidata P6 → P102)"
+    population: 56154
+    wikidata: Q4098
+    coords: [54.08333, 13.38333]
+  - name: "Böblingen"
+    country: "DE"
+    lang: "de"
+    admin: "Landkreis Böblingen"
+    site: "https://www.boeblingen.de/"
+    email: "stadt@boeblingen.de"
+    mayor: "Stefan Belz"
+    party: "Bündnis 90/Die Grünen"
+    note: "мер від Зелених (Wikidata P6 → P102)"
+    population: 51204
+    wikidata: Q6931
+    coords: [48.68333, 9.0]
+  - name: "Neustadt am Rübenberge"
+    country: "DE"
+    lang: "de"
+    admin: "Region Hannover"
+    site: "https://www.neustadt-a-rbge.de/"
+    mayor: "Dominic Herbst"
+    party: "Bündnis 90/Die Grünen"
+    note: "мер від Зелених (Wikidata P6 → P102)"
+    population: 44696
+    wikidata: Q7014
+    coords: [52.5055, 9.46358]
+  - name: "Nettetal"
+    country: "DE"
+    lang: "de"
+    admin: "Kreis Viersen"
+    site: "https://www.nettetal.de/"
+    email: "stadtnettetal@nettetal.de"
+    mayor: "Christian Küsters"
+    party: "Bündnis 90/Die Grünen"
+    note: "мер від Зелених (Wikidata P6 → P102)"
+    population: 41711
+    wikidata: Q14810
+    coords: [51.31667, 6.28333]
+  - name: "Königswinter"
+    country: "DE"
+    lang: "de"
+    admin: "Bürgermeisterei Königswinter"
+    site: "https://www.koenigswinter.de/"
+    email: "stadtverwaltung@koenigswinter.de"
+    mayor: "Lutz Wagner"
+    party: "Bündnis 90/Die Grünen"
+    note: "мер від Зелених (Wikidata P6 → P102)"
+    population: 40458
+    wikidata: Q12444
+    coords: [50.68333, 7.18333]
+  - name: "Nordhausen"
+    country: "DE"
+    lang: "de"
+    admin: "Landkreis Nordhausen"
+    site: "https://www.nordhausen.de/"
+    email: "rathaus@nordhausen.de"
+    phone: "+49-3631-6960"
+    mayor: "Kai Buchmann"
+    party: "Bündnis 90/Die Grünen"
+    note: "мер від Зелених (Wikidata P6 → P102)"
+    population: 40301
+    wikidata: Q7033
+    coords: [51.505, 10.79111]
+  - name: "Mörfelden-Walldorf"
+    country: "DE"
+    lang: "de"
+    admin: "Landkreis Groß-Gerau"
+    site: "https://www.moerfelden-walldorf.de/"
+    email: "info@moerfelden-walldorf.de"
+    mayor: "Thomas Winkler"
+    party: "Bündnis 90/Die Grünen"
+    note: "мер від Зелених (Wikidata P6 → P102)"
+    population: 31441
+    wikidata: Q16007
+    coords: [49.98958, 8.56611]
+  - name: "Lohmar"
+    country: "DE"
+    lang: "de"
+    admin: "Rhein-Sieg-Kreis"
+    site: "https://www.lohmar.de/"
+    email: "rathaus@lohmar.de"
+    mayor: "Claudia Wieja"
+    party: "Bündnis 90/Die Grünen"
+    note: "мер від Зелених (Wikidata P6 → P102)"
+    population: 30904
+    wikidata: Q12449
+    coords: [50.84148, 7.2166]
+  - name: "Kopenhagen"
+    country: "DK"
+    lang: "en"
+    admin: "Region Hovedstaden"
+    site: "https://www.kk.dk/"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 667099
+    wikidata: Q1748
+    coords: [55.67611, 12.56889]
+  - name: "Aarhus"
+    country: "DK"
+    lang: "en"
+    admin: "Aarhus Kommune"
+    site: "https://aarhus.dk"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 290598
+    wikidata: Q25319
+    coords: [56.15639, 10.20972]
+  - name: "Odense"
+    country: "DK"
+    lang: "en"
+    admin: "Odense Kommune"
+    site: "https://www.odense.dk/"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 185480
+    wikidata: Q25331
+    coords: [55.4, 10.38333]
+  - name: "Helsinki"
+    country: "FI"
+    lang: "en"
+    admin: "Uusimaa"
+    site: "https://www.hel.fi/sv"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 694392
+    wikidata: Q1757
+    coords: [60.17083, 24.9375]
+  - name: "Tampere"
+    country: "FI"
+    lang: "en"
+    admin: "Pirkanmaa"
+    site: "https://www.tampere.fi/"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 255333
+    wikidata: Q40840
+    coords: [61.49806, 23.76]
+  - name: "Oulu"
+    country: "FI"
+    lang: "en"
+    admin: "Nordösterbotten"
+    site: "https://www.ouka.fi/"
+    email: "oulu10@ouka.fi"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 217469
+    wikidata: Q47048
+    coords: [65.01417, 25.47194]
+  - name: "Espoo"
+    country: "FI"
+    lang: "en"
+    admin: "Uusimaa"
+    site: "https://www.espoo.fi"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 209667
+    wikidata: Q47034
+    coords: [60.20556, 24.65556]
+  - name: "Turku"
+    country: "FI"
+    lang: "en"
+    admin: "Varsinais-Suomi"
+    site: "https://turku.fi"
+    email: "turun.kaupunki@turku.fi"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 209633
+    wikidata: Q38511
+    coords: [60.45167, 22.26694]
+  - name: "Jyväskylä"
+    country: "FI"
+    lang: "en"
+    admin: "Mittelfinnland"
+    site: "https://www.jyvaskyla.fi/"
+    email: "jyväskyläkirjaamo@jyvaskyla.fikirjaamoyhteystiedot-haku"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 149895
+    wikidata: Q134620
+    coords: [62.24028, 25.74444]
+  - name: "Hämeenlinna"
+    country: "FI"
+    lang: "en"
+    admin: "Kanta-Häme"
+    site: "https://www.hameenlinna.fi/"
+    mayor: "Olli-Poika Parviainen"
+    party: "Grüner Bund"
+    note: "мер від Зелених (Wikidata P6 → P102)"
+    population: 68614
+    wikidata: Q202158
+    coords: [60.99444, 24.46667]
+  - name: "Budapest"
+    country: "HU"
+    lang: "hu"
+    admin: "Ungarn"
+    site: "https://budapest.hu/"
+    mayor: "Gergely Karácsony"
+    party: "LMP – Magyarország Zöld Pártja"
+    note: "мер від Зелених (Wikidata P6 → P102)"
+    population: 1685209
+    wikidata: Q1781
+    coords: [47.49833, 19.04083]
+  - name: "Gödöllő"
+    country: "HU"
+    lang: "hu"
+    admin: "Kreis Gödöllő"
+    site: "http://www.godollo.hu"
+    email: "pmh@godollo.hu"
+    mayor: "György Gémesi"
+    party: "LMP – Magyarország Zöld Pártja"
+    note: "мер від Зелених (Wikidata P6 → P102)"
+    population: 32410
+    wikidata: Q209988
+    coords: [47.6, 19.36667]
+  - name: "Luxembourg"
+    country: "LU"
+    lang: "de"
+    admin: "Kanton Luxemburg"
+    site: "https://www.vdl.lu/"
+    email: "admcommunale@vdl.lu"
+    phone: "+352 47961"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 137678
+    wikidata: Q1842
+    coords: [49.61139, 6.13]
+  - name: "Riga"
+    country: "LV"
+    lang: "en"
+    admin: "Lettland"
+    site: "https://www.riga.lv/"
+    mayor: "Viesturs Kleinbergs"
+    party: "Progresīvie"
+    note: "мер від Зелених (Wikidata P6 → P102)"
+    population: 588911
+    wikidata: Q1773
+    coords: [56.9475, 24.10694]
+  - name: "Jelgava"
+    country: "LV"
+    lang: "en"
+    admin: "Lettland"
+    site: "https://www.jelgava.lv"
+    email: "pasts@jelgava.lv"
+    mayor: "Andris Rāviņš"
+    party: "Zaļo un Zemnieku savienība"
+    note: "мер від Зелених (Wikidata P6 → P102)"
+    population: 54408
+    wikidata: Q179830
+    coords: [56.65222, 23.72444]
+  - name: "Jūrmala"
+    country: "LV"
+    lang: "en"
+    admin: "Lettland"
+    site: "https://www.jurmala.lv/"
+    mayor: "Inese Aizstrauta"
+    party: "Zaļo un Zemnieku savienība"
+    note: "мер від Зелених (Wikidata P6 → P102)"
+    population: 52926
+    wikidata: Q178382
+    coords: [56.9665, 23.72211]
+  - name: "Oslo"
+    country: "NO"
+    lang: "en"
+    admin: "Stadtbezirk Oslo"
+    site: "https://www.oslo.kommune.no/"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 717710
+    wikidata: Q585
+    coords: [59.91333, 10.73889]
+  - name: "Trondheim"
+    country: "NO"
+    lang: "en"
+    admin: "Gemeinde Trondheim"
+    site: "https://www.trondheim.kommune.no/"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 198777
+    wikidata: Q25804
+    coords: [63.44, 10.4]
+  - name: "Stockholm"
+    country: "SE"
+    lang: "en"
+    admin: "Gemeinde Stockholm"
+    site: "https://start.stockholm/"
+    email: "kontaktcenter@stockholm.se"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 984748
+    wikidata: Q1754
+    coords: [59.32944, 18.06861]
+  - name: "Göteborg"
+    country: "SE"
+    lang: "en"
+    admin: "Mölndal"
+    site: "https://goteborg.se/"
+    email: "stadsledningskontoret@stadshuset.goteborg.se"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 674529
+    wikidata: Q25287
+    coords: [57.7075, 11.9675]
+  - name: "Malmö"
+    country: "SE"
+    lang: "en"
+    admin: "Gemeinde Lomma"
+    site: "http://www.malmo.se"
+    email: "malmostad@malmo.se"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 339316
+    wikidata: Q2211
+    coords: [55.58333, 13.0]
+  - name: "Uppsala"
+    country: "SE"
+    lang: "en"
+    admin: "Gemeinde Uppsala"
+    site: "http://www.uppsala.se"
+    email: "uppsala.kommun@uppsala.se"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 174982
+    wikidata: Q25286
+    coords: [59.84976, 17.63895]
+  - name: "Lund"
+    country: "SE"
+    lang: "en"
+    admin: "Gemeinde Lund"
+    site: "http://www.lund.se"
+    email: "lunds.kommun@lund.se"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 98308
+    wikidata: Q2167
+    coords: [55.70831, 13.19916]
+  - name: "Ljubljana"
+    country: "SI"
+    lang: "en"
+    admin: "Stadtgemeinde Ljubljana"
+    site: "https://www.ljubljana.si"
+    email: "urbanizem@ljubljana.si"
+    note: "Зелені в міській коаліції (перевірити)"
+    population: 284293
+    wikidata: Q437
+    coords: [46.05139, 14.50611]

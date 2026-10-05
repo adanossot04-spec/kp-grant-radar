@@ -22,17 +22,31 @@ import requests
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
-YAML_PATH = ROOT / "config" / "danube_partners.yaml"
+DEFAULT_YAML = ROOT / "config" / "danube_partners.yaml"
 
-PAGES = ("", "kapcsolat", "elerhetoseg", "elerhetosegek", "onkormanyzat",
+PAGES = ("", "kontakt", "contatti", "contatto", "kapcsolat", "elerhetoseg", "elerhetosegek", "onkormanyzat",
          "hivatal", "polgarmesteri-hivatal", "kontakt", "impressum",
          "contact", "contacts", "contacte", "date-de-contact", "primaria",
-         "despre-noi/contact", "kapcsolatok", "ugyintezes")
+         "despre-noi/contact", "kapcsolatok", "ugyintezes", "contacto",
+         "amministrazione/contatti", "il-comune/contatti", "urp",
+         "uffici/urp", "servizi/urp", "comune/urp", "scrivici", "contattaci",
+         "aree-tematiche/urp", "municipio/contatti", "comune/contatti", "kontakta-oss",
+         "yhteystiedot", "kontaktinformasjon", "contact/colofon",
+         "over-deze-site/contact", "gemeinde/kontakt", "rathaus/kontakt")
 
+MAX_LOCAL = 32  # довші локальні частини — майже завжди склеєний текст
 EMAIL_RX = re.compile(r"[\w\.\-\+]+@[\w\-]+(?:\.[\w\-]+)+", re.I)
 JUNK = re.compile(r"(example|sentry|wixpress|wordpress|\.png$|\.jpg$|\.jpeg$|"
                   r"\.gif$|\.webp$|no-?reply|donotreply|sentry\.io|"
                   r"webmaster@localhost|@domain|@email|@site|@your)", re.I)
+# адреси, які технічно існують, але писати на них немає сенсу
+BAD = re.compile(r"(rechnung|invoice|faktur|szamla|bewerbung|job|karriere|"
+                 r"presse|press@|media@|datenschutz|privacy|dsgvo|abuse|"
+                 r"spam|phish|webmaster|redaktion|newsletter|szobaberlet|"
+                 r"bibliothek|museum|theater|tourist|shop|ticket)", re.I)
+# італійська PEC (сертифікована пошта) приймає листи лише з інших PEC-скриньок
+PEC = re.compile(r"@(pec|cert|postacert|legalmail|pecaziendale)\.|"
+                 r"@.*\.(pec|cert)\.|@pec\.|@legalmail\.it", re.I)
 GOOD = re.compile(r"(hivatal|onkormanyzat|önkormányzat|polgarmester|jegyzo|"
                   r"primaria|primar|consiliul|gemeinde|stadt|amt|rathaus|"
                   r"info|office|post|kontakt|contact|titkarsag|secretariat)", re.I)
@@ -53,7 +67,11 @@ def rank(mail: str, site_domain: str) -> tuple[int, int, int, str]:
     same = 0 if (site_domain and (mail_domain == site_domain
                                   or mail_domain.endswith("." + site_domain)
                                   or site_domain.endswith("." + mail_domain))) else 1
-    return (same, 0 if GOOD.search(mail) else 1, len(mail), mail)
+    local = mail.split("@")[0]
+    hashish = 1 if re.fullmatch(r"[0-9a-f]{16,}", local, re.I) else 0
+    return (same, hashish, 1 if PEC.search(mail) else 0,
+            1 if BAD.search(mail) else 0, 0 if GOOD.search(mail) else 1,
+            len(mail), mail)
 
 
 def harvest(entry: dict) -> list[str]:
@@ -73,7 +91,8 @@ def harvest(entry: dict) -> list[str]:
             continue
         for m in EMAIL_RX.findall(r.text):
             m = m.strip(".").lower()
-            if not JUNK.search(m) and len(m) < 60:
+            if (not JUNK.search(m) and len(m) < 60
+                    and len(m.split('@')[0]) <= MAX_LOCAL):
                 found.add(m)
         if any(rank(m, sd)[0] == 0 for m in found):
             break
@@ -81,7 +100,8 @@ def harvest(entry: dict) -> list[str]:
     return [m for m in ordered if rank(m, sd)[0] == 0][:3] or ordered[:1]
 
 
-ORDER = ("country", "lang", "admin", "site", "email", "email_alt", "phone")
+ORDER = ("country", "lang", "admin", "site", "email", "email_alt", "phone",
+         "mayor", "party", "note")
 
 
 def dump(partners: list[dict]) -> str:
@@ -95,10 +115,11 @@ def dump(partners: list[dict]) -> str:
         for key in ORDER:
             if not p.get(key):
                 continue
-            out.append(f"    {key}: {p[key]}" if key in ("country", "lang")
-                       else f"    {key}: {esc(p[key])}")
+            # усе в лапках: YAML 1.1 інакше перетворює country: NO на False
+            out.append(f"    {key}: {esc(p[key])}")
         out.append(f"    population: {p.get('population', 0)}")
-        out.append(f"    osm: {p.get('osm', 0)}")
+        if p.get("osm") is not None:
+            out.append(f"    osm: {p['osm']}")
         if p.get("wikidata"):
             out.append(f"    wikidata: {p['wikidata']}")
         if p.get("coords"):
@@ -110,8 +131,15 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--workers", type=int, default=8)
     ap.add_argument("--limit", type=int, default=0, help="0 — усі")
+    ap.add_argument("--file", default=str(DEFAULT_YAML),
+                    help="YAML із переліком громад "
+                         "(danube_partners.yaml | big_cities.yaml | green_cities.yaml)")
     args = ap.parse_args()
 
+    global YAML_PATH
+    YAML_PATH = Path(args.file)
+    if not YAML_PATH.is_absolute():
+        YAML_PATH = ROOT / YAML_PATH if (ROOT / YAML_PATH).exists() else YAML_PATH
     raw = YAML_PATH.read_text(encoding="utf-8")
     data = yaml.safe_load(raw)
     partners = data.get("partners") or []

@@ -243,6 +243,8 @@ kp-grant-radar/
 │   ├── profile.yaml          # ключові слова, ваги, пороги, тексти листів
 │   ├── donors.yaml           # довідник донорів для resolve
 │   ├── danube_partners.yaml  # 🌊 361 громада на Дунаї (AT/HU/RO) з контактами
+│   ├── big_cities.yaml       # 🏙 міста AT/IT/SI понад 100 тис. мешканців
+│   ├── green_cities.yaml     # 🌱 міста, де Зелені у міській владі
 │   ├── memory.example.yaml   # 📒 шаблон досьє (у репозиторії)
 │   └── memory.yaml           # ваша копія з реквізитами (у .gitignore)
 ├── docs/
@@ -258,9 +260,11 @@ kp-grant-radar/
 │   ├── draft.py              # генерація чернетки заявки
 │   ├── llm.py                # безкоштовні LLM-провайдери
 │   ├── danube.py             # 🌊 канал придунайських громад
+│   ├── cities.py             # 🏙🌱 канали «великі громади» і «зелені»
 │   ├── db.py · web.py · export.py · digest.py
 ├── scripts/
 │   ├── fetch_danube_partners.py  # OSM + Wikidata → перелік громад
+│   ├── fetch_city_partners.py    # Wikidata → великі й «зелені» міста
 │   └── harvest_emails.py         # добір e-mail із сайтів громад
 ├── data/                     # grants.sqlite, digest.md, drafts/
 └── .github/workflows/monitor.yml
@@ -490,6 +494,8 @@ python -m grant_radar letter --min-priority 4   # підготувати лис�
 python -m grant_radar letter --donor 31 --lang hu   # лист конкретному донору
 python -m grant_radar contacts --min-priority 4     # пошук e-mail на сайтах донорів
 python -m grant_radar danube            # 🌊 канал придунайських громад AT/HU/RO
+python -m grant_radar cities            # 🏙🌱 великі громади AT/IT/SI + «зелені» міста
+python -m grant_radar cities --channel green   # лише один канал
 ```
 
 Кожна новина вкладки 🤝 перетворюється на **картку донора**: хто, країна, тип
@@ -547,6 +553,23 @@ python -m grant_radar danube               # листи + CSV розсилки +
 
 Результат: `data/letters_danube/` (306 листів), `data/danube_mailing.csv`,
 сторінка `docs/danube.html`, у дашборді — `/donors?circle=6`.
+
+### 🏙 Великі громади та 🌱 «зелені» міста
+
+```bash
+python3 scripts/fetch_city_partners.py                            # перелік міст із Wikidata
+python3 scripts/harvest_emails.py --file config/big_cities.yaml   # добір e-mail
+python3 scripts/harvest_emails.py --file config/green_cities.yaml
+python -m grant_radar cities                                      # картки, листи, сторінки
+```
+
+Коло 7 — усі міста Австрії, Італії та Словенії понад 100 000 мешканців
+(у них є власна служба поводження з відходами й техніка, яку оновлюють).
+Коло 8 — міста ЦПЄ та Півночі понад 30 000 мешканців, де Зелені очолюють
+місто або входять до коаліції. Результат: `data/letters_big/`,
+`data/letters_green/`, CSV розсилки, сторінки `docs/cities_big.html` і
+`docs/cities_green.html`, у дашборді — `/donors?circle=7` і `?circle=8`.
+Докладно — [`docs/MISTA.md`](docs/MISTA.md).
 
 У кожному листі є окремий блок **«водний вимір»**: цифри PET Kupa (Тиса —
 ≈250 т пластику на рік, Дунай — ≈1500 т), посилання на Рамкову водну

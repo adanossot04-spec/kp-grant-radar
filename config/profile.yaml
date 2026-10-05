@@ -41,6 +41,7 @@ community:
   border_de: "Grenzübergang Vylok–Tiszabecs zu Ungarn"
   border_pl: "tuż przy przejściu granicznym Wyłok–Tiszabecs z Węgrami"
   border_ro: "lângă punctul de trecere a frontierei Vylok–Tiszabecs cu Ungaria"
+  border_it: "a ridosso del valico di frontiera Vylok–Tiszabecs con l'Ungheria"
   border_hu: "a tiszabecsi határátkelő közvetlen szomszédságában"
   languages: "українська, угорська, англійська"
   fleet_uk: "сміттєзбиральні автомобілі 1991 та 1994 років випуску"
@@ -85,6 +86,15 @@ community:
       - "laptopuri și echipamente multifuncționale pentru școli"
       - "dotarea laboratoarelor de științe și informatică"
       - "autobuz școlar"
+
+    waste_it:
+      - "autocompattatore con caricamento posteriore — 1 unità"
+      - "cassonetti per rifiuti da 1,1 m3 — 50 unità"
+      - "trattore con rimorchio — 1 unità"
+    edu_it:
+      - "computer portatili e stampanti multifunzione per le scuole"
+      - "attrezzature per i laboratori di scienze e informatica"
+      - "scuolabus"
 
   # ── Опис ситуації для листів донорам (редагується вільно) ──────────────
   # Цей блок підставляється в кожен лист замість короткої згадки про автопарк.
@@ -324,6 +334,48 @@ community:
         3. asistență de expertiză și consultanță la constituirea juridică și
            lansarea parteneriatului public-privat.
 
+    it: |
+      Situazione attuale e rischi ambientali
+
+      Oggi nella nostra comunità e in quelle vicine la raccolta dei rifiuti solidi
+      urbani non viene effettuata affatto. In assenza di un sistema centralizzato di
+      raccolta e trasporto dei rifiuti, la minaccia ambientale cresce in modo
+      drammatico:
+
+        - discariche abusive: i rifiuti vengono abbandonati in massa e senza
+          controllo nelle fasce boschive, lungo le strade e nei terreni aperti;
+        - pericolo per l'ambiente: la decomposizione dei rifiuti inquina il suolo e
+          le falde acquifere, mentre gli incendi delle discariche liberano sostanze
+          tossiche;
+        - qualità della vita: tutto questo minaccia direttamente la salute delle
+          persone e fa perdere alla regione il suo potenziale turistico e
+          ricreativo.
+
+      La soluzione che proponiamo: un'impresa mista pubblico-privata
+
+      Gli sforzi di una sola piccola comunità non bastano. La via d'uscita
+      strategica che vediamo è la creazione di un'impresa comune pubblico-privata
+      che unisca le risorse della nostra comunità e di quelle vicine alle capacità
+      del settore privato per la raccolta, il trasporto e la successiva selezione
+      dei rifiuti. Questo formato riduce i costi di gestione e garantisce un
+      servizio di qualità agli abitanti di più comunità contemporaneamente.
+
+      Perché chiediamo sostegno
+
+      La realizzazione del progetto richiede investimenti iniziali consistenti:
+      mezzi specializzati (autocompattatori, cassonetti) e infrastrutture per lo
+      stoccaggio temporaneo e la selezione. L'investimento iniziale supera di gran
+      lunga il bilancio della nostra comunità, per questo ci rivolgiamo a voi per un
+      sostegno finanziario, tecnico o di competenze.
+
+      Siamo aperti alla collaborazione nelle seguenti forme:
+        1. cofinanziamento dell'acquisto di mezzi e attrezzature per la raccolta e
+           il trasporto dei rifiuti urbani;
+        2. sostegno tramite contributi a progetti infrastrutturali in materia di
+           ambiente e gestione dei rifiuti;
+        3. assistenza tecnica e consulenza nella costituzione giuridica e
+           nell'avvio del partenariato pubblico-privato.
+
   situation_edu:
     uk: |
       Поточна ситуація
@@ -380,6 +432,16 @@ community:
       informatică, un autobuz școlar pentru transportul copiilor din satele
       îndepărtate. Căutăm parteneri pentru proiecte educaționale comune, schimb de
       experiență între școli și sprijin cu echipamente.
+
+    it: |
+      Situazione attuale
+
+      Nelle scuole della comunità studiano bambini provenienti da 11 località, tra
+      cui famiglie di sfollati interni. Mancano le dotazioni di base: computer
+      portatili e stampanti multifunzione, attrezzature per i laboratori di scienze
+      e informatica, uno scuolabus per gli alunni dei villaggi più lontani.
+      Cerchiamo partner per progetti educativi comuni, scambi tra scuole e sostegno
+      con attrezzature.
 
   water:
     uk: |
@@ -502,6 +564,28 @@ community:
       Directivei-cadru privind apa a UE, ale Convenției pentru protecția fluviului
       Dunărea (ICPDR), la care Ucraina este parte, și ale Strategiei UE pentru
       Regiunea Dunării (EUSDR).
+
+    it: |
+      La dimensione idrica del problema
+
+      Vylok sorge sulla Tibisco (Tisza), il maggiore affluente del Danubio. Tutto
+      ciò che non viene raccolto come rifiuto nel bacino superiore viene dilavato
+      dalle rive dalle piene primaverili: in pochi giorni la plastica attraversa il
+      confine a Tiszabecs, scende attraverso Ungheria, Serbia e Romania e finisce
+      nel Danubio e nel Mar Nero. Secondo le stime dell'iniziativa ungherese PET
+      Kupa, la Tibisco trasporta ogni anno circa 250 tonnellate di plastica e il
+      Danubio circa 1.500 tonnellate, e la maggior parte di ciò che i volontari
+      recuperano dall'Alta Tibisco proviene dalla Transcarpazia, dove manca
+      l'infrastruttura di raccolta.
+
+      Creare un sistema di raccolta e selezione nella nostra comunità non è dunque
+      una questione locale di decoro urbano, ma una riduzione diretta
+      dell'inquinamento del bacino comune del Danubio: meno plastica nel fiume,
+      acqua potabile più pulita, risorse ittiche e ricreative tutelate per tutte le
+      comunità a valle. Questo lavoro serve direttamente agli obiettivi della
+      Direttiva quadro europea sulle acque, della Convenzione per la protezione del
+      Danubio (ICPDR), di cui l'Ucraina è parte, e della Strategia dell'UE per la
+      regione del Danubio (EUSDR).
 
   contact:
     # УВАГА: значення пишеться ВСЕРЕДИНІ лапок, інакше YAML не прочитається:

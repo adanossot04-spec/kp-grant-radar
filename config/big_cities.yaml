@@ -1,0 +1,458 @@
+# Великі громади Австрії, Італії та Словенії (понад 100 000 мешканців).
+#
+# Згенеровано автоматично: scripts/fetch_city_partners.py --only big
+# Джерело: Wikidata (P1082 населення, P856 сайт, P968 e-mail, P1329 телефон).
+#
+# Навіщо канал: у місті понад 100 тис. мешканців є окремий департамент
+# екології або комунального господарства, бюджет на міжнародну співпрацю
+# і регулярне оновлення парку техніки — тобто є і з ким говорити, і що
+# передати. Листи таким адресатам підписує агент командою `cities`.
+#
+# Файл можна правити руками: уточнити e-mail профільного відділу
+# (Umweltamt / assessorato all'ambiente), додати або прибрати місто.
+
+partners:
+  - name: "Wien"
+    country: "AT"
+    lang: "de"
+    admin: "Österreich"
+    site: "https://www.wien.gv.at/"
+    email: "stadtservice@post.wien.gv.at"
+    note: "місто понад 100 тис. мешканців"
+    population: 2028289
+    wikidata: Q1741
+    coords: [0, 0]
+  - name: "Graz"
+    country: "AT"
+    lang: "de"
+    admin: "Steiermark"
+    site: "https://www.graz.at/"
+    email: "stadtverwaltung@stadt.graz.at"
+    note: "місто понад 100 тис. мешканців"
+    population: 306971
+    wikidata: Q13298
+    coords: [0, 0]
+  - name: "Linz"
+    country: "AT"
+    lang: "de"
+    admin: "Oberösterreich"
+    site: "https://www.linz.at/"
+    email: "info@mag.linz.at"
+    note: "місто понад 100 тис. мешканців"
+    population: 211944
+    wikidata: Q41329
+    coords: [0, 0]
+  - name: "Salzburg"
+    country: "AT"
+    lang: "de"
+    admin: "Salzburg"
+    site: "https://www.stadt-salzburg.at/"
+    email: "post@salzburg.gv.at"
+    note: "місто понад 100 тис. мешканців"
+    population: 155021
+    wikidata: Q34713
+    coords: [0, 0]
+  - name: "Innsbruck"
+    country: "AT"
+    lang: "de"
+    admin: "Tirol"
+    site: "https://www.innsbruck.at/"
+    email: "kontakt@innsbruck.gv.at"
+    note: "місто понад 100 тис. мешканців"
+    population: 132499
+    wikidata: Q1735
+    coords: [0, 0]
+  - name: "Klagenfurt"
+    country: "AT"
+    lang: "de"
+    admin: "Kärnten"
+    site: "https://www.klagenfurt.at"
+    email: "info@klagenfurt.at"
+    note: "місто понад 100 тис. мешканців"
+    population: 101403
+    wikidata: Q41753
+    coords: [0, 0]
+  - name: "Roma"
+    country: "IT"
+    lang: "it"
+    admin: "città metropolitana di Roma Capitale"
+    site: "https://www.comune.roma.it/"
+    note: "місто понад 100 тис. мешканців"
+    population: 2748109
+    wikidata: Q220
+    coords: [0, 0]
+  - name: "Milano"
+    country: "IT"
+    lang: "it"
+    admin: "città metropolitana di Milano"
+    site: "https://www.comune.milano.it/"
+    note: "місто понад 100 тис. мешканців"
+    population: 1354196
+    wikidata: Q490
+    coords: [0, 0]
+  - name: "Napoli"
+    country: "IT"
+    lang: "it"
+    admin: "città metropolitana di Napoli"
+    site: "https://www.comune.napoli.it/"
+    note: "місто понад 100 тис. мешканців"
+    population: 913462
+    wikidata: Q2634
+    coords: [0, 0]
+  - name: "Torino"
+    country: "IT"
+    lang: "it"
+    admin: "città metropolitana di Torino"
+    site: "http://www.comune.torino.it/"
+    note: "місто понад 100 тис. мешканців"
+    population: 841600
+    wikidata: Q495
+    coords: [0, 0]
+  - name: "Palermo"
+    country: "IT"
+    lang: "it"
+    admin: "città metropolitana di Palermo"
+    site: "https://www.comune.palermo.it"
+    note: "місто понад 100 тис. мешканців · на сайті лише PEC — писати через контактну форму"
+    population: 630167
+    wikidata: Q2656
+    coords: [0, 0]
+  - name: "Genova"
+    country: "IT"
+    lang: "it"
+    admin: "città metropolitana di Genova"
+    site: "https://www.comune.genova.it/"
+    note: "місто понад 100 тис. мешканців"
+    population: 558745
+    wikidata: Q1449
+    coords: [0, 0]
+  - name: "Firenze"
+    country: "IT"
+    lang: "it"
+    admin: "città metropolitana di Firenze"
+    site: "https://www.comune.fi.it/"
+    note: "місто понад 100 тис. мешканців"
+    population: 360930
+    wikidata: Q2044
+    coords: [0, 0]
+  - name: "Catania"
+    country: "IT"
+    lang: "it"
+    admin: "città metropolitana di Catania"
+    site: "https://www.comune.catania.it/"
+    note: "місто понад 100 тис. мешканців"
+    population: 311584
+    wikidata: Q1903
+    coords: [0, 0]
+  - name: "Verona"
+    country: "IT"
+    lang: "it"
+    admin: "provincia di Verona"
+    site: "https://www.comune.verona.it/"
+    email: "protocollo.informatico@comune.verona.it"
+    note: "місто понад 100 тис. мешканців"
+    population: 255588
+    wikidata: Q2028
+    coords: [0, 0]
+  - name: "Venezia"
+    country: "IT"
+    lang: "it"
+    admin: "città metropolitana di Venezia"
+    site: "http://www.comune.venezia.it/"
+    note: "місто понад 100 тис. мешканців"
+    population: 250369
+    wikidata: Q641
+    coords: [0, 0]
+  - name: "Messina"
+    country: "IT"
+    lang: "it"
+    admin: "città metropolitana di Messina"
+    site: "https://www.comune.messina.it/"
+    email: "protocollogenerale@comune.messina.it"
+    note: "місто понад 100 тис. мешканців"
+    population: 218786
+    wikidata: Q13666
+    coords: [0, 0]
+  - name: "Padova"
+    country: "IT"
+    lang: "it"
+    admin: "provincia di Padova"
+    site: "https://www.comune.padova.it/"
+    note: "місто понад 100 тис. мешканців"
+    population: 206496
+    wikidata: Q617
+    coords: [0, 0]
+  - name: "Trieste"
+    country: "IT"
+    lang: "it"
+    admin: "ente di decentramento regionale di Trieste"
+    site: "https://www.comune.trieste.it/"
+    note: "місто понад 100 тис. мешканців"
+    population: 198417
+    wikidata: Q546
+    coords: [0, 0]
+  - name: "Parma"
+    country: "IT"
+    lang: "it"
+    admin: "provincia di Parma"
+    site: "https://www.comune.parma.it"
+    note: "місто понад 100 тис. мешканців"
+    population: 196764
+    wikidata: Q2683
+    coords: [0, 0]
+  - name: "Prato"
+    country: "IT"
+    lang: "it"
+    admin: "provincia di Prato"
+    site: "http://www.comune.prato.it/"
+    email: "protocollogenerale@comune.prato.it"
+    note: "місто понад 100 тис. мешканців"
+    population: 195736
+    wikidata: Q13377
+    coords: [0, 0]
+  - name: "Taranto"
+    country: "IT"
+    lang: "it"
+    admin: "provincia di Taranto"
+    site: "http://www.comune.taranto.it/"
+    email: "comunicazione.urp@comune.taranto.it"
+    note: "місто понад 100 тис. мешканців"
+    population: 188098
+    wikidata: Q13498
+    coords: [0, 0]
+  - name: "Modena"
+    country: "IT"
+    lang: "it"
+    admin: "provincia di Modena"
+    site: "https://www.comune.modena.it/"
+    email: "piazzagrande@comune.modena.it"
+    note: "місто понад 100 тис. мешканців"
+    population: 184153
+    wikidata: Q279
+    coords: [0, 0]
+  - name: "Reggio Calabria"
+    country: "IT"
+    lang: "it"
+    admin: "città metropolitana di Reggio Calabria"
+    site: "http://www.reggiocal.it"
+    note: "місто понад 100 тис. мешканців · на сайті лише PEC — писати через контактну форму"
+    population: 170951
+    wikidata: Q8471
+    coords: [0, 0]
+  - name: "Reggio Emilia"
+    country: "IT"
+    lang: "it"
+    admin: "provincia di Reggio Emilia"
+    site: "https://www.reggioemiliawelcome.it"
+    note: "місто понад 100 тис. мешканців"
+    population: 169545
+    wikidata: Q13360
+    coords: [0, 0]
+  - name: "Perugia"
+    country: "IT"
+    lang: "it"
+    admin: "provincia di Perugia"
+    site: "https://www.comune.perugia.it/"
+    note: "місто понад 100 тис. мешканців"
+    population: 161748
+    wikidata: Q3437
+    coords: [0, 0]
+  - name: "Ravenna"
+    country: "IT"
+    lang: "it"
+    admin: "provincia di Ravenna"
+    site: "https://www.comune.ra.it/"
+    note: "місто понад 100 тис. мешканців · на сайті лише PEC — писати через контактну форму"
+    population: 155751
+    wikidata: Q13364
+    coords: [0, 0]
+  - name: "Livorno"
+    country: "IT"
+    lang: "it"
+    admin: "provincia di Livorno"
+    site: "https://www.visit-livorno.it/"
+    note: "місто понад 100 тис. мешканців"
+    population: 152914
+    wikidata: Q6761
+    coords: [0, 0]
+  - name: "Rimini"
+    country: "IT"
+    lang: "it"
+    admin: "governo di Rimini"
+    site: "https://www.comune.rimini.it/"
+    note: "місто понад 100 тис. мешканців · на сайті лише PEC — писати через контактну форму"
+    population: 149211
+    wikidata: Q13369
+    coords: [0, 0]
+  - name: "Foggia"
+    country: "IT"
+    lang: "it"
+    admin: "provincia di Foggia"
+    site: "https://www.comune.foggia.it/"
+    email: "urp@comune.foggia.it"
+    note: "місто понад 100 тис. мешканців"
+    population: 145348
+    wikidata: Q13464
+    coords: [0, 0]
+  - name: "Ferrara"
+    country: "IT"
+    lang: "it"
+    admin: "provincia di Ferrara"
+    site: "http://comune.fe.it/"
+    note: "місто понад 100 тис. мешканців · на сайті лише PEC — писати через контактну форму"
+    population: 129340
+    wikidata: Q13362
+    coords: [0, 0]
+  - name: "Latina"
+    country: "IT"
+    lang: "it"
+    admin: "provincia di Latina"
+    site: "https://www.comune.latina.it/"
+    email: "urp@comune.latina.it"
+    note: "місто понад 100 тис. мешканців"
+    population: 127564
+    wikidata: Q13410
+    coords: [0, 0]
+  - name: "Salerno"
+    country: "IT"
+    lang: "it"
+    admin: "provincia di Salerno"
+    site: "http://www.comune.salerno.it"
+    note: "місто понад 100 тис. мешканців"
+    population: 127186
+    wikidata: Q1083
+    coords: [0, 0]
+  - name: "Giugliano in Campania"
+    country: "IT"
+    lang: "it"
+    admin: "città metropolitana di Napoli"
+    site: "https://www.comune.giugliano.na.it/"
+    note: "місто понад 100 тис. мешканців"
+    population: 123679
+    wikidata: Q72125
+    coords: [0, 0]
+  - name: "Monza"
+    country: "IT"
+    lang: "it"
+    admin: "provincia di Monza e della Brianza"
+    site: "http://www.comune.monza.it"
+    email: "sportelloalcittadino@comune.monza.it"
+    note: "місто понад 100 тис. мешканців"
+    population: 121799
+    wikidata: Q6252
+    coords: [0, 0]
+  - name: "Sassari"
+    country: "IT"
+    lang: "it"
+    admin: "provincia di Sassari"
+    site: "https://www.comune.sassari.it/"
+    email: "urp@comune.sassari.it"
+    note: "місто понад 100 тис. мешканців"
+    population: 121021
+    wikidata: Q13629
+    coords: [0, 0]
+  - name: "Bergamo"
+    country: "IT"
+    lang: "it"
+    admin: "provincia di Bergamo"
+    site: "https://www.comune.bergamo.it"
+    note: "місто понад 100 тис. мешканців · на сайті лише PEC — писати через контактну форму"
+    population: 119534
+    wikidata: Q628
+    coords: [0, 0]
+  - name: "Pescara"
+    country: "IT"
+    lang: "it"
+    admin: "provincia di Pescara"
+    site: "http://www.comune.pescara.it"
+    note: "місто понад 100 тис. мешканців · на сайті лише PEC — писати через контактну форму"
+    population: 118657
+    wikidata: Q2704
+    coords: [0, 0]
+  - name: "Forlì"
+    country: "IT"
+    lang: "it"
+    admin: "provincia di Forlì-Cesena"
+    site: "http://www.comune.forli.fc.it"
+    email: "urp@comune.forli.fc.it"
+    note: "місто понад 100 тис. мешканців"
+    population: 118152
+    wikidata: Q13367
+    coords: [0, 0]
+  - name: "Siracusa"
+    country: "IT"
+    lang: "it"
+    admin: "libero consorzio comunale di Siracusa"
+    site: "https://www.comune.siracusa.it"
+    note: "місто понад 100 тис. мешканців"
+    population: 115515
+    wikidata: Q13670
+    coords: [0, 0]
+  - name: "Vicenza"
+    country: "IT"
+    lang: "it"
+    admin: "provincia di Vicenza"
+    site: "http://www.comune.vicenza.it"
+    email: "urp@comune.vicenza.it"
+    note: "місто понад 100 тис. мешканців"
+    population: 109823
+    wikidata: Q6537
+    coords: [0, 0]
+  - name: "Terni"
+    country: "IT"
+    lang: "it"
+    admin: "governo di Terni"
+    site: "http://www.comune.terni.it/"
+    note: "місто понад 100 тис. мешканців · на сайті лише PEC — писати через контактну форму"
+    population: 106370
+    wikidata: Q8621
+    coords: [0, 0]
+  - name: "Bolzano"
+    country: "IT"
+    lang: "it"
+    admin: "provincia autonoma di Bolzano"
+    site: "https://www.comune.bolzano.bz.it/"
+    email: "urp@comune.bolzano.it"
+    note: "місто понад 100 тис. мешканців"
+    population: 106107
+    wikidata: Q6526
+    coords: [0, 0]
+  - name: "Piacenza"
+    country: "IT"
+    lang: "it"
+    admin: "provincia di Piacenza"
+    site: "https://www.comune.piacenza.it/"
+    email: "urp@comune.piacenza.it"
+    note: "місто понад 100 тис. мешканців"
+    population: 102465
+    wikidata: Q13329
+    coords: [0, 0]
+  - name: "Novara"
+    country: "IT"
+    lang: "it"
+    admin: "provincia di Novara"
+    site: "http://www.comune.novara.it/"
+    note: "місто понад 100 тис. мешканців · на сайті лише PEC — писати через контактну форму"
+    population: 101257
+    wikidata: Q6046
+    coords: [0, 0]
+  - name: "Ljubljana"
+    country: "SI"
+    lang: "en"
+    admin: "Mestna občina Ljubljana"
+    site: "https://www.ljubljana.si"
+    email: "urbanizem@ljubljana.si"
+    note: "місто понад 100 тис. мешканців"
+    population: 284293
+    wikidata: Q437
+    coords: [0, 0]
+  - name: "Maribor"
+    country: "SI"
+    lang: "en"
+    admin: "Mestna občina Maribor"
+    site: "https://maribor.si/"
+    email: "mestna.obcina@maribor.si"
+    note: "місто понад 100 тис. мешканців"
+    population: 114301
+    wikidata: Q1010
+    coords: [0, 0]

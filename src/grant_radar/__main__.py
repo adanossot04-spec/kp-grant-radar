@@ -30,11 +30,14 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("command",
                     choices=["collect", "rescore", "resolve", "screen", "check", "serve", "export", "digest",
                              "sources", "top", "memory", "draft",
-                             "donors", "letter", "contacts", "danube"])
+                             "donors", "letter", "contacts", "danube",
+                             "cities"])
     ap.add_argument("--no-llm", action="store_true", help="не викликати LLM навіть за наявності ключа")
     ap.add_argument("--host", default="0.0.0.0")
     ap.add_argument("--port", type=int, default=8000)
     ap.add_argument("-n", "--limit", type=int, default=15)
+    ap.add_argument("--channel", choices=["big", "green"],
+                    help="для команди cities: лише один канал")
     ap.add_argument("--min-score", type=int, default=40)
     ap.add_argument("--all", action="store_true",
                     help="для resolve: перевіряти й ті записи, що вже опрацьовані")
@@ -156,6 +159,31 @@ def main(argv: list[str] | None = None) -> int:
         log.info("   📊 Список розсилки: %s", csv_path)
         page = export_mod.export_danube(db)
         log.info("   🌐 Сторінка: %s", page)
+        return 0
+
+    if args.command == "cities":
+        from . import cities as cities_mod
+        from . import donors as donors_mod
+        from . import export as export_mod
+        names = {"big": "🏙 Великі громади AT/IT/SI",
+                 "green": "🌱 «Зелені» міста"}
+        wanted = [args.channel] if args.channel else list(cities_mod.CHANNELS)
+        for channel in wanted:
+            res = cities_mod.seed(db, channel)
+            st = cities_mod.stats(db, channel)
+            log.info("%s: +%d нових, оновлено %d, усього %d",
+                     names.get(channel, channel), res["added"], res["updated"],
+                     st["total"])
+            for cc, cnt in sorted(st["by_country"].items()):
+                log.info("   %-3s %-14s %4d міст · з e-mail %d", cc,
+                         donors_mod.COUNTRY_NAME.get(cc, cc), cnt,
+                         st["with_email"].get(cc, 0))
+            paths = cities_mod.write_letters(db, channel)
+            log.info("   ✉️  Персональних листів: %d (тека data/%s)",
+                     len(paths), cities_mod.CHANNELS[channel]["letters_dir"])
+            log.info("   📊 Список розсилки: %s",
+                     cities_mod.export_mailing(db, channel))
+            log.info("   🌐 Сторінка: %s", export_mod.export_cities(db, channel))
         return 0
 
     if args.command == "letter":
