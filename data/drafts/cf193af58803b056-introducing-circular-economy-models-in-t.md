@@ -1,6 +1,6 @@
 # Чернетка заявки — Introducing circular economy models in the construction sector, from buildings to city scale
 
-> Згенеровано агентом «Грант-радар» 04.10.2026 20:00 · заповненість пам'яті: **15%**
+> Згенеровано агентом «Грант-радар» 05.10.2026 05:25 · заповненість пам'яті: **15%**
 
 ## 0. Паспорт можливості
 
@@ -10,7 +10,7 @@
 | Програма | 43108390 |
 | Ідентифікатор | HORIZON-MISS-2026-04-CIT-NEB-B4P-CCRI-03 |
 | Статус | open |
-| Дедлайн | 2026-10-08 (залишилось 3 дн.) |
+| Дедлайн | 2026-10-08 (залишилось 2 дн.) |
 | Релевантність | 100/100 |
 | Тип заявника | 🤝 Комунальні + приватні |
 | Посилання | https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/topic-details/HORIZON-MISS-2026-04-CIT-NEB-B4P-CCRI-03 |
