@@ -243,8 +243,8 @@ kp-grant-radar/
 │   ├── profile.yaml          # ключові слова, ваги, пороги, тексти листів
 │   ├── donors.yaml           # довідник донорів для resolve
 │   ├── danube_partners.yaml  # 🌊 361 громада на Дунаї (AT/HU/RO) з контактами
-│   ├── big_cities.yaml       # 🏙 міста AT/IT/SI понад 100 тис. мешканців
-│   ├── green_cities.yaml     # 🌱 міста, де Зелені у міській владі
+│   ├── big_cities.yaml       # 🏙 155 міст DE/IT/NL/BE/AT/SI понад 100 тис.
+│   ├── green_cities.yaml     # 🌱 107 міст ЄС+EFTA, де Зелені у міській владі
 │   ├── memory.example.yaml   # 📒 шаблон досьє (у репозиторії)
 │   └── memory.yaml           # ваша копія з реквізитами (у .gitignore)
 ├── docs/
@@ -265,6 +265,7 @@ kp-grant-radar/
 ├── scripts/
 │   ├── fetch_danube_partners.py  # OSM + Wikidata → перелік громад
 │   ├── fetch_city_partners.py    # Wikidata → великі й «зелені» міста
+│   ├── verify_mayor_mail.py      # SMTP-перевірка скриньки голови міста
 │   └── harvest_emails.py         # добір e-mail із сайтів громад
 ├── data/                     # grants.sqlite, digest.md, drafts/
 └── .github/workflows/monitor.yml
@@ -490,7 +491,7 @@ donors:
 
 ```bash
 python -m grant_radar donors            # перебудувати реєстр зі стрічки 🤝 + CSV
-python -m grant_radar letter --min-priority 4   # підготувати листи у data/letters/
+python -m grant_radar letter --donor <id>      # текст листа мовою донора (у консоль)
 python -m grant_radar letter --donor 31 --lang hu   # лист конкретному донору
 python -m grant_radar contacts --min-priority 4     # пошук e-mail на сайтах донорів
 python -m grant_radar danube            # 🌊 канал придунайських громад AT/HU/RO
@@ -519,8 +520,10 @@ python -m grant_radar cities --channel green   # лише один канал
 українською.
 Кожен лист починається з конкретного приводу («ми дізналися, що ви у липні 2026
 передали сміттєвоз Борисполю»), містить таблицю потреб, зобов'язання щодо
-розмитнення й звітності. Готові файли — у `data/letters/`, у дашборді — кнопка
-«✉️ лист», на статичному сайті — кнопка «📋 копіювати».
+розмитнення й звітності. Проєкт **не створює** тек із готовими листами:
+за потреби текст генерується на вимогу командою
+`python -m grant_radar letter --donor <id>`. У стрічці та реєстрах
+показуються контакти — e-mail громади й пряма скринька мера.
 
 ### 🌊 Канал «Дунайський басейн» — 361 громада AT / HU / RO
 
@@ -551,24 +554,26 @@ python3 scripts/harvest_emails.py          # добрати e-mail із сайт
 python -m grant_radar danube               # листи + CSV розсилки + сторінка
 ```
 
-Результат: `data/letters_danube/` (306 листів), `data/danube_mailing.csv`,
-сторінка `docs/danube.html`, у дашборді — `/donors?circle=6`.
+Результат: `data/danube_mailing.csv`, сторінка `docs/danube.html`,
+у дашборді — `/donors?circle=6`.
 
 ### 🏙 Великі громади та 🌱 «зелені» міста
 
 ```bash
-python3 scripts/fetch_city_partners.py                            # перелік міст із Wikidata
-python3 scripts/harvest_emails.py --file config/big_cities.yaml   # добір e-mail
+python3 scripts/fetch_city_partners.py                             # перелік міст із Wikidata
+python3 scripts/harvest_emails.py --file config/big_cities.yaml    # добір e-mail
 python3 scripts/harvest_emails.py --file config/green_cities.yaml
-python -m grant_radar cities                                      # картки, листи, сторінки
+python3 scripts/verify_mayor_mail.py --file config/big_cities.yaml # пошта мера (SMTP)
+python -m grant_radar cities                                       # картки, CSV, сторінки
 ```
 
-Коло 7 — усі міста Австрії, Італії та Словенії понад 100 000 мешканців
-(у них є власна служба поводження з відходами й техніка, яку оновлюють).
-Коло 8 — міста ЦПЄ та Півночі понад 30 000 мешканців, де Зелені очолюють
-місто або входять до коаліції. Результат: `data/letters_big/`,
-`data/letters_green/`, CSV розсилки, сторінки `docs/cities_big.html` і
-`docs/cities_green.html`, у дашборді — `/donors?circle=7` і `?circle=8`.
+Коло 7 — 155 міст Німеччини, Італії, Нідерландів, Бельгії, Австрії та
+Словенії понад 100 000 мешканців (у них є власна служба поводження з
+відходами й техніка, яку оновлюють). Коло 8 — 107 міст ЄС, Швейцарії,
+Норвегії та Ісландії понад 30 000 мешканців, де Зелені очолюють місто або
+входять до коаліції. Результат: CSV розсилки з колонкою «пошта мера»,
+сторінки `docs/cities_big.html` і `docs/cities_green.html`, у дашборді —
+`/donors?circle=7` і `?circle=8`.
 Докладно — [`docs/MISTA.md`](docs/MISTA.md).
 
 У кожному листі є окремий блок **«водний вимір»**: цифри PET Kupa (Тиса —

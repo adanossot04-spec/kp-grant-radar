@@ -324,8 +324,6 @@ DONORS_HTML = """<!DOCTYPE html>
  .badge{display:inline-block;background:var(--panel2);border:1px solid var(--line);border-radius:20px;padding:2px 9px;font-size:12px;color:#cfd8e8;margin:0 4px 3px 0}
  button.copy{background:#14301f;border:1px solid #2e9e66;color:#9be8bb;border-radius:8px;padding:5px 10px;font-size:12.5px;cursor:pointer}
  button.show{background:#182438;border:1px solid #2e4a6b;color:#cfe0ff;border-radius:8px;padding:5px 10px;font-size:12.5px;cursor:pointer;margin-top:4px}
- .letter{display:none;white-space:pre-wrap;background:#10141c;border:1px solid var(--line);border-radius:10px;
-         padding:12px;margin-top:8px;font:12.5px/1.55 ui-monospace,Menlo,Consolas,monospace;color:#d7dee9}
  .hint{background:#141a24;border:1px solid var(--line);border-radius:12px;padding:12px 15px;color:#b7c0cf;font-size:13px;margin:10px 0 14px}
  footer{color:var(--muted);font-size:12px;text-align:center;padding:22px}
 </style></head><body>
@@ -339,7 +337,7 @@ DONORS_HTML = """<!DOCTYPE html>
   <div class="stat"><b id="s_warm" style="color:#f4b740">0</b><span>🟡 теплі (4–6)</span></div>
   <div class="stat"><b id="s_cold" style="color:#6b7280">0</b><span>⚪ холодні</span></div>
  </div>
- <div class="hint">Натисніть «✉️ лист» — відкриється готовий текст мовою донора: перевірте контакти й надсилайте.
+ <div class="hint">Реєстр потенційних донорів із контактами та балом пріоритету.
   Методологія пошуку: <b>docs/METODOLOGIA_DONORIV.md</b>, довідник каналів: <b>docs/PARTNERSTVA.md</b>.</div>
  <div class="filters">
   <input type="text" id="q" placeholder="пошук: донор, подія, отримувач…">
@@ -349,7 +347,7 @@ DONORS_HTML = """<!DOCTYPE html>
   <select id="minp"><option value="0">пріоритет ≥ 0</option><option value="4">пріоритет ≥ 4</option><option value="7">пріоритет ≥ 7</option></select>
  </div>
  <table><thead><tr><th>бал</th><th>донор</th><th>країна</th><th>тип</th><th>коло</th><th>допомога</th>
-   <th>привід (що і кому передав)</th><th>лист</th></tr></thead><tbody id="rows"></tbody></table>
+   <th>привід (що і кому передав)</th><th>контакти</th></tr></thead><tbody id="rows"></tbody></table>
 </div>
 <footer>Реєстр формується командою <code>python -m grant_radar donors</code> · CSV: <code>data/donors.csv</code></footer>
 <script>
@@ -384,16 +382,8 @@ function render(){
       <td>${esc(d.what)}${d.recipient?`<div class="formula">отримувач: ${esc(d.recipient)}</div>`:""}
         ${d.event_date?`<div class="formula">${esc(d.event_date)}</div>`:""}
         ${d.news_url?`<div><a href="${esc(d.news_url)}" target="_blank">джерело ↗</a></div>`:""}</td>
-      <td><button class="copy" data-id="${d.id}">📋 копіювати</button>
-        <button class="show" data-id="${d.id}">✉️ лист</button>
-        <div class="letter" id="L${d.id}">${esc(d.letter)}</div></td></tr>`;}).join("");
-  document.querySelectorAll("button.show").forEach(b=>b.onclick=()=>{
-    const el=document.getElementById("L"+b.dataset.id);
-    el.style.display = el.style.display==="block" ? "none" : "block";});
-  document.querySelectorAll("button.copy").forEach(b=>b.onclick=()=>{
-    const d=D.find(x=>String(x.id)===b.dataset.id);
-    navigator.clipboard && navigator.clipboard.writeText(d.letter);
-    b.textContent="✅ скопійовано"; setTimeout(()=>b.textContent="📋 копіювати",1500);});
+      <td>${d.contact_email?`<a href="mailto:${esc(d.contact_email)}">${esc(d.contact_email)}</a>`:"<span class=\"badge\">немає</span>"}
+        ${d.site?`<div><a href="${esc(d.site)}" target="_blank">сайт ↗</a></div>`:""}</td></tr>`;}).join("");
 }
 ["q","circle","goods","country","minp"].forEach(id=>{
   const el=document.getElementById(id); el.addEventListener("input",render); el.addEventListener("change",render);});
@@ -403,15 +393,14 @@ render();
 
 
 def export_donors(db: Database, out_dir: Path | None = None) -> Path:
-    """Окрема статична сторінка реєстру донорів із готовими листами."""
+    """Окрема статична сторінка реєстру донорів: контакти й пріоритет."""
     from . import donors as donors_mod
 
     out_dir = Path(out_dir or config.DOCS_DIR)
     out_dir.mkdir(parents=True, exist_ok=True)
     rows = [r for r in db.donors(limit=2000)
-            if not str(r.get("uid") or "").startswith("danube:")]
-    for r in rows:
-        r["letter"] = donors_mod.build_letter(r)
+            if not str(r.get("uid") or "").split(":")[0]
+            in ("danube", "bigcity", "green")]
     org = config.load_profile().get("community", {})
     html = (DONORS_HTML
             .replace("__DONORS__", json.dumps(rows, ensure_ascii=False))
@@ -467,15 +456,17 @@ CHANNEL_HTML = """<!DOCTYPE html>
  <div class="stats" id="stats"></div>
  <div class="hint">__HINT__</div>
  <div class="filters">
-  <input type="text" id="q" placeholder="пошук: місто, e-mail, примітка…">
+  <input type="text" id="q" placeholder="пошук: місто, e-mail, мер, примітка…">
   <select id="country"><option value="">усі країни</option>__COUNTRY_OPTIONS__</select>
   <select id="mail"><option value="">усі</option><option value="1">лише з e-mail</option>
-   <option value="0">без e-mail (треба знайти)</option></select>
+   <option value="0">без e-mail (треба знайти)</option>
+   <option value="m">лише з поштою мера</option></select>
   <select id="pop"><option value="0">будь-який розмір</option><option value="30000">від 30 тис. мешканців</option>
    <option value="100000">від 100 тис.</option><option value="300000">від 300 тис.</option></select>
  </div>
  <table><thead><tr><th>бал</th><th>місто</th><th>країна</th><th>мешканців</th><th>мова</th>
-   <th>e-mail</th><th>телефон</th><th>сайт</th><th>примітка</th></tr></thead>
+   <th>e-mail</th><th>мер</th><th>пошта мера</th><th>телефон</th><th>сайт</th>
+   <th>примітка</th></tr></thead>
   <tbody id="rows"></tbody></table>
 </div>
 <footer>__FOOTER__</footer>
@@ -490,9 +481,9 @@ function draw(){
   const pf = parseInt(document.getElementById('pop').value, 10);
   const rows = P.filter(r =>
     (!cc || r.country === cc) &&
-    (mf === '' || (mf === '1' ? !!r.email : !r.email)) &&
+    (mf === '' || (mf === 'm' ? !!r.mayor_email : (mf === '1' ? !!r.email : !r.email))) &&
     (r.population || 0) >= pf &&
-    (!q || (r.name + ' ' + (r.email||'') + ' ' + (r.admin||'') + ' ' + (r.note||'')).toLowerCase().includes(q)));
+    (!q || (r.name + ' ' + (r.email||'') + ' ' + (r.mayor||'') + ' ' + (r.mayor_email||'') + ' ' + (r.admin||'') + ' ' + (r.note||'')).toLowerCase().includes(q)));
   document.getElementById('rows').innerHTML = rows.map(r => `
     <tr><td><span class="pri ${cls(r.priority)}">${r.priority}</span></td>
     <td><b>${esc(r.name)}</b>${r.admin ? '<div class="badge">' + esc(r.admin) + '</div>' : ''}</td>
@@ -500,13 +491,16 @@ function draw(){
     <td>${r.population ? r.population.toLocaleString('uk-UA') : '—'}</td>
     <td>${r.lang}</td>
     <td>${r.email ? '<a href="mailto:' + esc(r.email) + '?subject=' + encodeURIComponent(r.subject) + '">' + esc(r.email) + '</a>' : '<span class="badge">немає</span>'}</td>
+    <td>${r.mayor ? esc(r.mayor) : '—'}</td>
+    <td>${r.mayor_email ? '<a href="mailto:' + esc(r.mayor_email) + '?subject=' + encodeURIComponent(r.subject) + '">' + esc(r.mayor_email) + '</a>' : '—'}</td>
     <td>${r.phone ? esc(r.phone) : '—'}</td>
     <td>${r.site ? '<a href="' + esc(r.site) + '" target="_blank" rel="noopener">сайт</a>' : '—'}</td>
     <td>${esc(r.note || '')}</td></tr>`).join('');
   const counts = {};
   rows.forEach(r => counts[r.country] = (counts[r.country] || 0) + 1);
   const boxes = [`<div class="stat"><b>${rows.length}</b><span>міст у вибірці</span></div>`,
-    `<div class="stat"><b style="color:#5fd39a">${rows.filter(r => r.email).length}</b><span>з e-mail</span></div>`];
+    `<div class="stat"><b style="color:#5fd39a">${rows.filter(r => r.email).length}</b><span>з e-mail</span></div>`,
+    `<div class="stat"><b style="color:#f6cf7a">${rows.filter(r => r.mayor_email).length}</b><span>з поштою мера</span></div>`];
   Object.keys(counts).sort((a,b) => counts[b]-counts[a]).forEach(c =>
     boxes.push(`<div class="stat"><b>${counts[c]}</b><span>${esc(CN[c] || c)}</span></div>`));
   document.getElementById('stats').innerHTML = boxes.join('');
@@ -533,15 +527,20 @@ def _channel_rows(db: Database, donors_list: list[dict]) -> list[dict]:
     for d in donors_list:
         parts = [x for x in (d.get("notes") or "").split(" · ") if x]
         pop_part = next((x for x in parts if "мешканців" in x), "")
+        mayor_part = next((x for x in parts if x.startswith("мер: ")), "")
+        mail_part = next((x for x in parts if x.startswith("пошта мера: ")), "")
         population = int(re.sub(r"\D", "", pop_part) or 0) if pop_part else 0
         admin = parts[0] if parts and parts[0] != pop_part else ""
-        note = " · ".join(x for x in parts if x not in (admin, pop_part))
+        note = " · ".join(x for x in parts
+                          if x not in (admin, pop_part, mayor_part, mail_part))
         rows.append({
             "name": d.get("name", ""), "country": d.get("country", ""),
             "lang": d.get("lang", "en"), "email": d.get("contact_email", ""),
             "phone": d.get("contact_phone", ""), "site": d.get("site", ""),
             "priority": d.get("priority", 0), "admin": admin,
             "population": population, "note": note,
+            "mayor": mayor_part[5:] if mayor_part else "",
+            "mayor_email": mail_part[12:] if mail_part else "",
             "subject": _subject_for(d.get("lang", "en")),
         })
     return rows
@@ -584,9 +583,9 @@ def export_danube(db: Database, out_dir: Path | None = None) -> Path:
             "Дунаю</b>, і відходи, не зібрані у верхів'ї, за кілька днів опиняються "
             "нижче за течією. Наведення ладу з ТПВ у Вилоцькій громаді напряму "
             "зменшує забруднення спільного басейну — це мова Рамкової водної "
-            "директиви ЄС, ICPDR та стратегії EUSDR. Готові листи — у теці "
-            "<code>data/letters_danube/</code> і в дашборді (кнопка «✉️ лист»); "
-            "перелік громад — у <code>config/danube_partners.yaml</code>.")
+            "директиви ЄС, ICPDR та стратегії EUSDR. Перелік громад і контактів — "
+            "у <code>config/danube_partners.yaml</code>, список розсилки — "
+            "<code>data/danube_mailing.csv</code>.")
     return _write_channel_page(
         rows, page="danube.html",
         title="🌊 Придунайські громади: Австрія · Угорщина · Румунія",

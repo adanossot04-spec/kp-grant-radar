@@ -6,11 +6,10 @@
 
 | | Коло 7 · 🏙 Великі громади | Коло 8 · 🌱 Зелені |
 |---|---|---|
-| Хто | міста Австрії, Італії, Словенії понад 100 000 мешканців | міста ЦПЄ та Півночі понад 30 000 мешканців, де Зелені у владі |
+| Хто | міста DE, IT, NL, BE, AT, SI понад 100 000 мешканців | міста ЄС + CH/NO/IS понад 30 000 мешканців, де Зелені у владі |
 | Чому вони | власний департамент екології, бюджет на міжнародну співпрацю, парк техніки, який регулярно оновлюють | поводження з відходами — їхній профільний політичний пріоритет, а не «гуманітарка» |
 | Що просимо | списану, але робочу техніку та контейнери; співфінансування | партнерство в екологічному проєкті, грант, експертизу |
 | Перелік | `config/big_cities.yaml` | `config/green_cities.yaml` |
-| Листи | `data/letters_big/` | `data/letters_green/` |
 | Розсилка | `data/big_cities_mailing.csv` | `data/green_cities_mailing.csv` |
 | Сторінка | `docs/cities_big.html` | `docs/cities_green.html` |
 
@@ -30,16 +29,40 @@ python3 scripts/fetch_city_partners.py --only green # лише «зелені»
 визначаються як `P31/P279* → Q515`, щоб у вибірку не потрапляли землі,
 райони й округи.
 
-E-mail у Wikidata заповнений погано (4 із 47 великих міст), тому його
-добирає другий скрипт — заходить на офіційний сайт і читає сторінки
-контактів:
+E-mail у Wikidata заповнений погано (4 із 155 великих міст), тому його
+добирає другий скрипт — заходить на офіційний сайт, читає сторінки
+контактів, а заразом шукає пряму скриньку голови міста (розділи
+«Bürgermeister», «sindaco», «maire», «burgemeester»…):
 
 ```bash
 python3 scripts/harvest_emails.py --file config/big_cities.yaml --workers 8
 python3 scripts/harvest_emails.py --file config/green_cities.yaml --workers 8
 ```
 
-Скрипт свідомо **відкидає**:
+### Пошта мера
+
+Більшість великих міст не публікує адресу мера на сайті, але вона майже
+завжди існує за стандартним шаблоном. Третій скрипт перевіряє це без
+надсилання листа — командою SMTP `RCPT TO`:
+
+```bash
+python3 scripts/verify_mayor_mail.py --file config/big_cities.yaml
+python3 scripts/verify_mayor_mail.py --file config/green_cities.yaml
+```
+
+Перевіряються шаблони за країною (`buergermeister@`, `ob@`, `sindaco@`,
+`ufficio.sindaco@`, `maire@`, `burgemeester@`, `polgarmester@`,
+`prezydent@`, `borgmester@`, `pormestari@`, `byradsleder@`, `alcalde@`,
+`zupan@`) і варіанти з прізвища мера (`stephan.keller@duesseldorf.de`).
+Захист від хибних спрацювань: спершу питаємо вигадану адресу — якщо
+сервер приймає і її, домен «catch-all» і місто пропускається.
+
+⚠️ Потрібен вихідний порт 25. На GitHub Actions він закритий, тому це
+**локальний** крок; у хмарі скрипт просто нічого не знайде і нічого не
+зіпсує. Знайдене потрапляє в колонку «пошта мера» на сторінці каналу й
+у CSV розсилки.
+
+Скрипт добору e-mail свідомо **відкидає**:
 - італійські PEC-скриньки (`@pec.`, `@cert.`, `@legalmail.it`) — сертифікована
   пошта Італії приймає листи лише з інших PEC-акаунтів, звичайний лист туди
   просто не дійде;
@@ -52,8 +75,9 @@ python3 scripts/harvest_emails.py --file config/green_cities.yaml --workers 8
 (доведеність + місток + збіг потреби − вартість входу).
 
 - **Великі громади**: Д = 2 для міст понад 500 тис. (є програма міжнародної
-  співпраці), інакше 1. Австрія і Словенія мають місток (сусідство, Дунай)
-  і дешевий вхід, Італія — дорожчий, тому її бал нижчий, хоча міст більше.
+  співпраці), інакше 1. Австрія, Словенія та Німеччина мають місток
+  (сусідство, басейн Дунаю), Італія, Нідерланди й Бельгія — дорожчий вхід,
+  тому їхній бал нижчий, хоча міст більше.
 - **Зелені**: Д = 2, якщо **мер** від Зелених (рішення ухвалюється швидше),
   Д = 1, якщо Зелені — партнер коаліції.
 
@@ -78,18 +102,19 @@ python3 scripts/harvest_emails.py --file config/green_cities.yaml --workers 8
 ## Повний цикл
 
 ```bash
-python3 scripts/fetch_city_partners.py                            # 1. реєстр міст
-python3 scripts/harvest_emails.py --file config/big_cities.yaml   # 2. контакти
+python3 scripts/fetch_city_partners.py                             # 1. реєстр міст
+python3 scripts/harvest_emails.py --file config/big_cities.yaml    # 2. контакти
 python3 scripts/harvest_emails.py --file config/green_cities.yaml
-PYTHONPATH=src python3 -m grant_radar cities                      # 3. картки, листи, сторінки
-PYTHONPATH=src python3 -m grant_radar cities --channel green      #    або лише один канал
+python3 scripts/verify_mayor_mail.py --file config/big_cities.yaml # 3. пошта мера
+python3 scripts/verify_mayor_mail.py --file config/green_cities.yaml
+PYTHONPATH=src python3 -m grant_radar cities                       # 4. картки, CSV, сторінки
+PYTHONPATH=src python3 -m grant_radar cities --channel green       #    або лише один канал
 ```
 
 Після цього:
 - у дашборді з'являються кола 7 і 8 (`/donors?circle=7`, `/donors?circle=8`);
-- у `data/letters_big/` і `data/letters_green/` лежать готові листи
-  італійською, німецькою, угорською та англійською — лишається перевірити
-  звертання й надіслати;
+- у CSV розсилки є колонки «e-mail», «пошта мера» і «мер» — звідки
+  надсилати запит і на чиє ім'я;
 - у CSV-файлах розсилки є колонка «статус» для обліку.
 
 ## Мови листів
@@ -100,7 +125,9 @@ PYTHONPATH=src python3 -m grant_radar cities --channel green      #    або л
 | AT, DE, CH, LU | німецька |
 | HU | угорська |
 | PL | польська |
-| SI, NL, BE, CZ, SK, DK, SE, NO, FI, IS, EE, LV, LT | англійська |
+| SI, NL, BE, CZ, SK, DK, SE, NO, FI, IS, EE, LV, LT, FR, ES, PT, IE, GR, HR, BG, CY, MT | англійська |
 
-Італійський шаблон додано спеціально для цього каналу: 39 із 47 великих
-міст — італійські.
+Мова потрібна для звертання й для вибору шаблону, якщо ви складаєте
+лист самі: готові файли листів проєкт більше не створює (команда
+`python -m grant_radar letter --donor <id>` за потреби згенерує текст у
+консоль).

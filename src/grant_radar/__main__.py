@@ -153,8 +153,6 @@ def main(argv: list[str] | None = None) -> int:
             log.info("   %-3s %-12s %4d громад · з e-mail %d", cc,
                      donors_mod.COUNTRY_NAME.get(cc, cc), cnt,
                      st["with_email"].get(cc, 0))
-        paths = danube_mod.write_letters(db, limit=args.limit if args.limit > 15 else 1000)
-        log.info("   ✉️  Персональних листів: %d (тека data/letters_danube)", len(paths))
         csv_path = danube_mod.export_mailing(db)
         log.info("   📊 Список розсилки: %s", csv_path)
         page = export_mod.export_danube(db)
@@ -165,8 +163,8 @@ def main(argv: list[str] | None = None) -> int:
         from . import cities as cities_mod
         from . import donors as donors_mod
         from . import export as export_mod
-        names = {"big": "🏙 Великі громади AT/IT/SI",
-                 "green": "🌱 «Зелені» міста"}
+        names = {"big": "🏙 Великі громади DE/IT/NL/BE/AT/SI",
+                 "green": "🌱 «Зелені» міста Європи"}
         wanted = [args.channel] if args.channel else list(cities_mod.CHANNELS)
         for channel in wanted:
             res = cities_mod.seed(db, channel)
@@ -178,9 +176,6 @@ def main(argv: list[str] | None = None) -> int:
                 log.info("   %-3s %-14s %4d міст · з e-mail %d", cc,
                          donors_mod.COUNTRY_NAME.get(cc, cc), cnt,
                          st["with_email"].get(cc, 0))
-            paths = cities_mod.write_letters(db, channel)
-            log.info("   ✉️  Персональних листів: %d (тека data/%s)",
-                     len(paths), cities_mod.CHANNELS[channel]["letters_dir"])
             log.info("   📊 Список розсилки: %s",
                      cities_mod.export_mailing(db, channel))
             log.info("   🌐 Сторінка: %s", export_mod.export_cities(db, channel))

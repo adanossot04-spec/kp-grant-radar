@@ -7,7 +7,10 @@
 (hivatal, onkormanyzat, primaria, gemeinde, info, office…). Результат
 дописується в той самий YAML — повторний запуск не чіпає вже заповнені рядки.
 
-Запуск:  python3 scripts/harvest_emails.py [--workers 8] [--limit 0]
+Окремо шукає пряму скриньку голови міста (Bürgermeister, sindaco, maire,
+burgemeester, polgármester…) — її видно в колонці «пошта мера».
+
+Запуск:  python3 scripts/harvest_emails.py [--file config/…] [--workers 8]
 """
 from __future__ import annotations
 
@@ -51,6 +54,115 @@ GOOD = re.compile(r"(hivatal|onkormanyzat|önkormányzat|polgarmester|jegyzo|"
                   r"primaria|primar|consiliul|gemeinde|stadt|amt|rathaus|"
                   r"info|office|post|kontakt|contact|titkarsag|secretariat)", re.I)
 
+# сторінки, де зазвичай є пряма скринька мера
+MAYOR_PAGES = ("buergermeister", "oberbuergermeister", "rathaus/buergermeister",
+               "stadt/buergermeister", "politik/buergermeister", "sindaco",
+               "il-sindaco", "amministrazione/sindaco", "maire", "le-maire",
+               "mairie/le-maire", "burgemeester", "college-van-burgemeester-en-wethouders",
+               "bestuur/burgemeester", "mayor", "alcaldia", "alcalde",
+               "polgarmester", "primar", "borgmester", "borgmastare",
+               "pormestari", "kaupunginjohtaja", "byradsleder", "ordforer",
+               "prezydent", "starosta", "zupan", "gradonacelnik", "kmet",
+               "borgmesteren", "stadtpraesident", "stadtpraesidentin")
+
+# локальні частини, що вказують на скриньку голови міста
+MAYOR_BOX = re.compile(
+    r"(b(ü|ue)rgermeister|stadtpr(ä|ae)sident|sindaco|burgemeester|"
+    r"polg(á|a)rmester|borgmester|borgm(ä|a)stare|borgmesteren|pormestari|"
+    r"kaupunginjohtaja|byr(å|a)dsleder|ordf(ø|o)rer|prezydent|burmistrz|"
+    r"alcald|(ž|z)upan|gradona(č|c)elnik|starosta|"
+    r"^ob@|^obm@|^maire|^lemaire|^le-maire|^cabinet|^mayor|^primar|"
+    r"^segreteria\.sindaco|^ufficio\.sindaco|^gabinetto)", re.I)
+
+# посилання на сторінку голови міста трапляються під різними адресами,
+# тому додатково йдемо за посиланнями з головної
+MAYOR_LINK = re.compile(
+    r"(b(ü|ue)rgermeister|stadtpr(ä|ae)sident|sindaco|maire|burgemeester|"
+    r"mayor|polg(á|a)rmester|primar|borgmester|borgm(ä|a)stare|pormestari|"
+    r"byr(å|a)dsleder|ordf(ø|o)rer|prezydent|burmistrz|alcald|(ž|z)upan|"
+    r"gradona(č|c)elnik|кмет|starosta)", re.I)
+A_TAG = re.compile(r'<a\s[^>]*href=["\']([^"\'#]+)["\'][^>]*>(.{0,120}?)</a>',
+                   re.I | re.S)
+HUB_LINK = re.compile(
+    r"(rathaus|stadtverwaltung|verwaltung|politik|amministrazione|municipio|"
+    r"il-comune|bestuur|college|gemeenteraad|mairie|municipalite|"
+    r"onkormanyzat|hivatal|urzad|miasto|primaria|ayuntamiento|concello|"
+    r"kommune|kaupunki|stadshuset|administration|city-council|council|"
+    r"government|organisation)", re.I)
+
+
+def hub_links(html: str, site: str, limit: int = 2) -> list[str]:
+    """Розділи «Ратуша / Політика / Amministrazione», де зазвичай мер."""
+    out: list[str] = []
+    for href, text in A_TAG.findall(html):
+        if len(out) >= limit:
+            break
+        label = re.sub(r"<[^>]+>", " ", text)
+        if HUB_LINK.search(href) or HUB_LINK.search(label):
+            url = urljoin(site, href)
+            if url.startswith("http") and url not in out:
+                out.append(url)
+    return out
+
+
+def mayor_links(html: str, site: str, limit: int = 4) -> list[str]:
+    """Посилання, що ведуть на сторінку голови міста."""
+    out: list[str] = []
+    for href, text in A_TAG.findall(html):
+        if len(out) >= limit:
+            break
+        label = re.sub(r"<[^>]+>", " ", text)
+        if MAYOR_LINK.search(href) or MAYOR_LINK.search(label):
+            url = urljoin(site, href)
+            if url.startswith("http") and url not in out:
+                out.append(url)
+    return out
+
+
+# Сторінки підбираються за країною: інакше кожне місто означає 45 запитів.
+GEN = {
+    "de": ("", "kontakt", "impressum", "rathaus/kontakt", "gemeinde/kontakt"),
+    "it": ("", "contatti", "urp", "amministrazione/contatti", "comune/contatti"),
+    "nl": ("", "contact", "contact/colofon", "over-deze-site/contact"),
+    "fr": ("", "contact", "contactez-nous", "mairie", "nous-contacter"),
+    "hu": ("", "kapcsolat", "elerhetoseg", "onkormanyzat", "hivatal"),
+    "pl": ("", "kontakt", "urzad"),
+    "ro": ("", "contact", "primaria", "date-de-contact"),
+    "es": ("", "contacto", "contactar", "ayuntamiento"),
+    "nord": ("", "kontakt", "kontakta-oss", "yhteystiedot", "kontaktinformasjon"),
+    "en": ("", "contact", "contacts", "contact-us"),
+}
+MAY = {
+    "de": ("buergermeister", "oberbuergermeister", "rathaus/buergermeister",
+           "stadtpraesident"),
+    "it": ("sindaco", "il-sindaco", "amministrazione/sindaco"),
+    "nl": ("burgemeester", "bestuur/burgemeester",
+           "college-van-burgemeester-en-wethouders"),
+    "fr": ("maire", "le-maire", "mairie/le-maire"),
+    "hu": ("polgarmester",),
+    "pl": ("prezydent", "burmistrz"),
+    "ro": ("primar", "primarul"),
+    "es": ("alcaldia", "alcalde", "presidente"),
+    "nord": ("borgmester", "borgmastare", "pormestari", "byradsleder",
+             "ordforer", "kaupunginjohtaja"),
+    "en": ("mayor", "mayor-and-council"),
+}
+GROUP = {"DE": "de", "AT": "de", "CH": "de", "LU": "fr", "LI": "de",
+         "IT": "it", "NL": "nl", "BE": "nl", "FR": "fr", "HU": "hu",
+         "PL": "pl", "RO": "ro", "ES": "es", "PT": "es",
+         "DK": "nord", "SE": "nord", "NO": "nord", "FI": "nord", "IS": "nord"}
+
+
+def pages_for(entry: dict) -> tuple[tuple[str, ...], tuple[str, ...]]:
+    group = GROUP.get((entry.get("country") or "").upper(), "en")
+    general = tuple(dict.fromkeys(GEN[group] + GEN["en"]))
+    mayor = tuple(dict.fromkeys(MAY[group] + MAY["en"]))
+    if group == "nl" and (entry.get("country") == "BE"):
+        general += GEN["fr"][1:]
+        mayor += MAY["fr"]
+    return general, mayor
+
+
 HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; KP-GrantRadar/1.0; "
                          "+mailto:adanossot@ukr.net)",
            "Accept-Language": "hu,ro,de,en;q=0.8"}
@@ -74,34 +186,96 @@ def rank(mail: str, site_domain: str) -> tuple[int, int, int, str]:
             len(mail), mail)
 
 
-def harvest(entry: dict) -> list[str]:
+def mayor_keys(entry: dict) -> list[str]:
+    """Прізвище мера латиницею — щоб упізнати особисту скриньку."""
+    name = (entry.get("mayor") or "").lower()
+    name = re.sub(r"[^\w\s\-]", " ", name, flags=re.U)
+    parts = [x for x in re.split(r"[\s\-]+", name) if len(x) > 3]
+    return parts[-2:]
+
+
+def pick_mayor(mails: set[str], entry: dict, site_domain: str) -> str:
+    """Серед знайдених адрес шукає скриньку голови міста."""
+    keys = mayor_keys(entry)
+    same = [m for m in mails
+            if not site_domain or m.split("@")[-1].endswith(site_domain)]
+    pool = same or list(mails)
+    box = [m for m in pool if MAYOR_BOX.search(m.split("@")[0])]
+    if box:
+        return sorted(box, key=len)[0]
+    named = [m for m in pool
+             if any(k in m.split("@")[0].lower() for k in keys)]
+    return sorted(named, key=len)[0] if named else ""
+
+
+def harvest(entry: dict) -> tuple[list[str], str]:
+    """Повертає (загальні адреси, скринька мера) для однієї громади."""
     site = entry.get("site") or ""
     if not site:
-        return []
+        return [], ""
     found: set[str] = set()
     sd = domain(site)
     session = requests.Session()
-    for page in PAGES:
-        url = urljoin(site.rstrip("/") + "/", page)
+    general_pages, mayor_pages = pages_for(entry)
+    extra_links: list[str] = []
+    mayor_pool: set[str] = set()
+    need_general = not entry.get("email")
+    need_mayor = not entry.get("mayor_email")
+    queue = list(general_pages + mayor_pages)
+    for page in queue:
+        is_mayor_page = (page in mayor_pages and page not in general_pages) \
+            or page in extra_links
+        if is_mayor_page and not need_mayor:
+            break
+        if not is_mayor_page and not need_general and not need_mayor:
+            continue
+        url = page if page.startswith("http") else urljoin(site.rstrip("/") + "/", page)
         try:
             r = session.get(url, headers=HEADERS, timeout=12, allow_redirects=True)
         except Exception:
             continue
         if r.status_code != 200 or "text/html" not in r.headers.get("content-type", ""):
             continue
+        if page == "" and need_mayor:
+            # з головної збираємо прямі посилання «Bürgermeister / sindaco…»,
+            # а якщо їх немає — заходимо в розділ «Ратуша / Amministrazione»
+            extra_links = mayor_links(r.text, r.url)
+            if not extra_links:
+                for hub in hub_links(r.text, r.url):
+                    try:
+                        hr = session.get(hub, headers=HEADERS, timeout=12)
+                    except Exception:
+                        continue
+                    if hr.status_code == 200:
+                        extra_links += mayor_links(hr.text, hr.url, limit=2)
+                    if extra_links:
+                        break
+            queue.extend(extra_links)
         for m in EMAIL_RX.findall(r.text):
             m = m.strip(".").lower()
             if (not JUNK.search(m) and len(m) < 60
                     and len(m.split('@')[0]) <= MAX_LOCAL):
                 found.add(m)
-        if any(rank(m, sd)[0] == 0 for m in found):
-            break
+                mayor_pool.add(m)
+        # загальні сторінки перебираємо до першого влучання,
+        # сторінки мера — завжди, бо там інша скринька
+        if not is_mayor_page and any(rank(m, sd)[0] == 0 for m in found):
+            need_general = False
+        if pick_mayor(mayor_pool, entry, sd):
+            need_mayor = False
+            if not need_general:
+                break
     ordered = sorted(found, key=lambda m: rank(m, sd))
-    return [m for m in ordered if rank(m, sd)[0] == 0][:3] or ordered[:1]
+    general = [m for m in ordered if rank(m, sd)[0] == 0][:3] or ordered[:1]
+    return general, pick_mayor(mayor_pool, entry, sd)
 
 
-ORDER = ("country", "lang", "admin", "site", "email", "email_alt", "phone",
-         "mayor", "party", "note")
+def _is_mayor_box(mail: str) -> bool:
+    return bool(MAYOR_BOX.search(mail.split("@")[0]))
+
+
+ORDER = ("country", "lang", "admin", "site", "email", "email_alt",
+         "mayor_email", "phone", "mayor", "party", "note")
 
 
 def dump(partners: list[dict]) -> str:
@@ -143,34 +317,43 @@ def main() -> int:
     raw = YAML_PATH.read_text(encoding="utf-8")
     data = yaml.safe_load(raw)
     partners = data.get("partners") or []
-    todo = [p for p in partners if not p.get("email") and p.get("site")]
+    todo = [p for p in partners
+            if p.get("site") and not (p.get("email") and p.get("mayor_email"))]
     if args.limit:
         todo = todo[:args.limit]
     print(f"Шукаю e-mail для {len(todo)} громад (усього {len(partners)})…",
           flush=True)
 
-    results: dict[int, list[str]] = {}
+    results: dict[int, tuple[list[str], str]] = {}
     with ThreadPoolExecutor(max_workers=args.workers) as pool:
-        for i, mails in zip(range(len(todo)), pool.map(harvest, todo)):
-            results[i] = mails
-            if mails:
-                print(f"  ✉️  {todo[i]['name']}: {mails[0]}", flush=True)
+        for i, res in zip(range(len(todo)), pool.map(harvest, todo)):
+            results[i] = res
+            mails, mayor_mail = res
+            if mails or mayor_mail:
+                tail = f" · мер: {mayor_mail}" if mayor_mail else ""
+                print(f"  ✉️  {todo[i]['name']}: "
+                      f"{mails[0] if mails else '—'}{tail}", flush=True)
 
     # перезаписуємо файл, зберігаючи шапку з коментарями
-    added = 0
+    added = mayors = 0
     for i, p in enumerate(todo):
-        mails = results.get(i) or []
-        if mails:
+        mails, mayor_mail = results.get(i) or ([], "")
+        if mails and not p.get("email"):
             p["email"] = mails[0]
             if len(mails) > 1:
                 p["email_alt"] = ", ".join(mails[1:])
             added += 1
+        if mayor_mail and not p.get("mayor_email"):
+            p["mayor_email"] = mayor_mail
+            mayors += 1
     head = raw.split("\npartners:")[0]
     YAML_PATH.write_text(head + "\npartners:\n" + dump(partners), encoding="utf-8")
 
     check = yaml.safe_load(YAML_PATH.read_text(encoding="utf-8"))["partners"]
     have = sum(1 for p in check if p.get("email"))
-    print(f"✅ додано {added} адрес · тепер з e-mail: {have} з {len(check)}")
+    have_m = sum(1 for p in check if p.get("mayor_email"))
+    print(f"✅ додано {added} адрес (+{mayors} скриньок мера) · "
+          f"тепер з e-mail: {have} з {len(check)}, зі скринькою мера: {have_m}")
     return 0
 
 

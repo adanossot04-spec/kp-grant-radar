@@ -18,161 +18,1206 @@ partners:
     admin: "Österreich"
     site: "https://www.wien.gv.at/"
     email: "stadtservice@post.wien.gv.at"
+    email_alt: "dr@ma53.wien.gv.at"
     note: "місто понад 100 тис. мешканців"
     population: 2028289
     wikidata: Q1741
-    coords: [0, 0]
+    coords: [48.20833, 16.3725]
   - name: "Graz"
     country: "AT"
     lang: "de"
     admin: "Steiermark"
     site: "https://www.graz.at/"
     email: "stadtverwaltung@stadt.graz.at"
+    mayor: "Elke Kahr"
     note: "місто понад 100 тис. мешканців"
     population: 306971
     wikidata: Q13298
-    coords: [0, 0]
+    coords: [47.07083, 15.43861]
   - name: "Linz"
     country: "AT"
     lang: "de"
     admin: "Oberösterreich"
     site: "https://www.linz.at/"
     email: "info@mag.linz.at"
+    mayor: "Dietmar Prammer"
     note: "місто понад 100 тис. мешканців"
     population: 211944
     wikidata: Q41329
-    coords: [0, 0]
+    coords: [48.30583, 14.28639]
   - name: "Salzburg"
     country: "AT"
     lang: "de"
     admin: "Salzburg"
     site: "https://www.stadt-salzburg.at/"
     email: "post@salzburg.gv.at"
+    mayor: "Bernhard Auinger"
     note: "місто понад 100 тис. мешканців"
     population: 155021
     wikidata: Q34713
-    coords: [0, 0]
+    coords: [47.8, 13.045]
   - name: "Innsbruck"
     country: "AT"
     lang: "de"
     admin: "Tirol"
     site: "https://www.innsbruck.at/"
     email: "kontakt@innsbruck.gv.at"
+    mayor_email: "buergermeister@innsbruck.gv.at"
+    mayor: "Johannes Anzengruber"
     note: "місто понад 100 тис. мешканців"
     population: 132499
     wikidata: Q1735
-    coords: [0, 0]
+    coords: [47.26833, 11.39333]
   - name: "Klagenfurt"
     country: "AT"
     lang: "de"
     admin: "Kärnten"
     site: "https://www.klagenfurt.at"
     email: "info@klagenfurt.at"
+    email_alt: "stadtkommunikation@klagenfurt.at, presse@klagenfurt.at"
+    mayor: "Christian Scheider"
     note: "місто понад 100 тис. мешканців"
     population: 101403
     wikidata: Q41753
-    coords: [0, 0]
+    coords: [46.61667, 14.3]
+  - name: "Antwerpen"
+    country: "BE"
+    lang: "en"
+    admin: "Arrondissement Antwerpen"
+    site: "https://www.antwerpen.be/en"
+    email: "info@antwerpen.be"
+    mayor_email: "burgemeester@antwerpen.be"
+    phone: "+32-3-22-11-333"
+    mayor: "Els van Doesburg"
+    note: "місто понад 100 тис. мешканців"
+    population: 529247
+    wikidata: Q12892
+    coords: [51.22111, 4.39972]
+  - name: "Gent"
+    country: "BE"
+    lang: "en"
+    admin: "Arrondissement Gent"
+    site: "https://stad.gent/"
+    email: "gentinfo@stad.gent"
+    mayor_email: "burgemeester@stad.gent"
+    phone: "+32-9-210-10-10"
+    mayor: "Mathias De Clercq"
+    note: "місто понад 100 тис. мешканців"
+    population: 272657
+    wikidata: Q1296
+    coords: [51.05361, 3.72528]
+  - name: "Brussel"
+    country: "BE"
+    lang: "en"
+    admin: "Arrondissement Brussel-Hoofdstad"
+    site: "https://www.bruxelles.be/"
+    mayor_email: "philippe.close@bruxelles.be"
+    phone: "+32-2-279-22-11"
+    mayor: "Philippe Close"
+    note: "місто понад 100 тис. мешканців"
+    population: 195546
+    wikidata: Q239
+    coords: [50.84667, 4.35167]
+  - name: "Luik"
+    country: "BE"
+    lang: "en"
+    admin: "Arrondissement Luik"
+    site: "https://www.liege.be"
+    phone: "+32-4-221-81-11"
+    mayor: "Willy Demeyer"
+    note: "місто понад 100 тис. мешканців"
+    population: 195278
+    wikidata: Q3992
+    coords: [50.63972, 5.57056]
+  - name: "Anderlecht"
+    country: "BE"
+    lang: "en"
+    admin: "Arrondissement Brussel-Hoofdstad"
+    site: "https://www.anderlecht.be/"
+    email: "info@anderlecht.brussels"
+    phone: "+32-2-558-08-00"
+    mayor: "Fabrice Cumps"
+    note: "місто понад 100 тис. мешканців"
+    population: 120887
+    wikidata: Q12886
+    coords: [50.83917, 4.32972]
+  - name: "Brugge"
+    country: "BE"
+    lang: "en"
+    admin: "Arrondissement Brugge"
+    site: "https://www.brugge.be/"
+    email: "info@brugge.be"
+    mayor_email: "burgemeester@brugge.be"
+    phone: "+32-50-44-80-00"
+    mayor: "Dirk De fauw"
+    note: "місто понад 100 тис. мешканців"
+    population: 118509
+    wikidata: Q12994
+    coords: [51.20889, 3.22417]
+  - name: "Namen"
+    country: "BE"
+    lang: "en"
+    admin: "Arrondissement Namen"
+    site: "https://www.namur.be/"
+    email: "information@ville.namur.be"
+    phone: "+32-81-24-62-46"
+    mayor: "Maxime Prévot"
+    note: "місто понад 100 тис. мешканців"
+    population: 115330
+    wikidata: Q134121
+    coords: [50.46667, 4.86667]
+  - name: "Leuven"
+    country: "BE"
+    lang: "en"
+    admin: "Arrondissement Leuven"
+    site: "https://www.leuven.be"
+    email: "info@leuven.be"
+    phone: "+32-16-27-20-00"
+    mayor: "Mohamed Ridouani"
+    note: "місто понад 100 тис. мешканців"
+    population: 101032
+    wikidata: Q118958
+    coords: [50.8775, 4.70444]
+  - name: "Berlin"
+    country: "DE"
+    lang: "de"
+    admin: "Deutschland"
+    site: "https://www.berlin.de/"
+    mayor: "Kai Wegner"
+    note: "місто понад 100 тис. мешканців"
+    population: 3700577
+    wikidata: Q64
+    coords: [52.51667, 13.38333]
+  - name: "Hamburg"
+    country: "DE"
+    lang: "de"
+    admin: "Deutschland"
+    site: "https://www.hamburg.de/"
+    email: "info-office@hamburg.de"
+    email_alt: "support@hamburg.de, presseinfo@hamburg.de"
+    mayor: "Peter Tschentscher"
+    note: "місто понад 100 тис. мешканців"
+    population: 1869473
+    wikidata: Q1055
+    coords: [53.55, 10.0]
+  - name: "München"
+    country: "DE"
+    lang: "de"
+    admin: "Oberbayern"
+    site: "https://stadt.muenchen.de/rathaus.html"
+    email: "rathaus@muenchen.de"
+    mayor_email: "ob@muenchen.de"
+    phone: "+49-89-2330"
+    note: "місто понад 100 тис. мешканців"
+    population: 1505036
+    wikidata: Q1726
+    coords: [48.1375, 11.575]
+  - name: "Köln"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Köln"
+    site: "https://www.stadt-koeln.de/"
+    mayor: "Torsten Burmester"
+    note: "місто понад 100 тис. мешканців"
+    population: 1025523
+    wikidata: Q365
+    coords: [50.94222, 6.95778]
+  - name: "Frankfurt am Main"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Darmstadt"
+    site: "https://frankfurt.de"
+    mayor: "Mike Josef"
+    note: "місто понад 100 тис. мешканців"
+    population: 760656
+    wikidata: Q1794
+    coords: [50.11056, 8.68222]
+  - name: "Freie Hansestadt Bremen"
+    country: "DE"
+    lang: "de"
+    admin: "Deutschland"
+    site: "https://www.bremen.de/"
+    mayor: "Andreas Bovenschulte"
+    note: "місто понад 100 тис. мешканців"
+    population: 693204
+    wikidata: Q1209
+    coords: [53.13333, 8.73333]
+  - name: "Düsseldorf"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Düsseldorf"
+    site: "https://www.duesseldorf.de/"
+    mayor_email: "stephan.keller@duesseldorf.de"
+    mayor: "Stephan Keller"
+    note: "місто понад 100 тис. мешканців"
+    population: 619444
+    wikidata: Q1718
+    coords: [51.22556, 6.77667]
+  - name: "Leipzig"
+    country: "DE"
+    lang: "de"
+    admin: "Sachsen"
+    site: "https://www.leipzig.de/"
+    email: "info@leipzig.de"
+    email_alt: "obm@leipzig.de, dezernat1@leipzig.de"
+    mayor_email: "oberbuergermeister@leipzig.de"
+    mayor: "Burkhard Jung"
+    note: "місто понад 100 тис. мешканців"
+    population: 615932
+    wikidata: Q2079
+    coords: [51.33962, 12.37129]
+  - name: "Stuttgart"
+    country: "DE"
+    lang: "de"
+    admin: "Neckarkreis"
+    site: "https://www.stuttgart.de/"
+    email: "post@stuttgart.de"
+    phone: "+49-711-2160"
+    mayor: "Frank Nopper"
+    note: "місто понад 100 тис. мешканців"
+    population: 609365
+    wikidata: Q1022
+    coords: [48.7775, 9.18]
+  - name: "Dortmund"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Arnsberg"
+    site: "https://www.dortmund.de/"
+    email: "agentur@dortmund.de"
+    email_alt: "oberbuergermeister@dortmund.de"
+    mayor_email: "oberbuergermeister@dortmund.de"
+    mayor: "Alexander Kalouti"
+    note: "місто понад 100 тис. мешканців"
+    population: 600880
+    wikidata: Q1295
+    coords: [51.51389, 7.46528]
+  - name: "Bremen"
+    country: "DE"
+    lang: "de"
+    admin: "Freie Hansestadt Bremen"
+    site: "https://www.bremen.de/"
+    mayor: "Andreas Bovenschulte"
+    note: "місто понад 100 тис. мешканців"
+    population: 588413
+    wikidata: Q24879
+    coords: [53.07583, 8.80722]
+  - name: "Essen"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Düsseldorf"
+    site: "https://www.essen.de/"
+    email: "info@essen.de"
+    email_alt: "poststelle@essen.de, digital@essen.de"
+    mayor: "Thomas Kufen"
+    note: "місто понад 100 тис. мешканців"
+    population: 573618
+    wikidata: Q2066
+    coords: [51.45083, 7.01306]
+  - name: "Dresden"
+    country: "DE"
+    lang: "de"
+    admin: "Sachsen"
+    site: "https://www.dresden.de/"
+    email: "poststelle@dresden.de"
+    email_alt: "stadtverwaltung@dresden.de, ebit@dresden.de"
+    mayor_email: "oberbuergermeister@dresden.de"
+    mayor: "Dirk Hilbert"
+    note: "місто понад 100 тис. мешканців"
+    population: 562764
+    wikidata: Q1731
+    coords: [51.0833, 13.7666]
+  - name: "Nürnberg"
+    country: "DE"
+    lang: "de"
+    admin: "Mittelfranken"
+    site: "https://www.nuernberg.de/"
+    mayor: "Marcus König"
+    note: "місто понад 100 тис. мешканців"
+    population: 531159
+    wikidata: Q2090
+    coords: [49.45389, 11.0775]
+  - name: "Hannover"
+    country: "DE"
+    lang: "de"
+    admin: "Region Hannover"
+    site: "https://www.hannover.de/"
+    email: "redaktion@hannover.de"
+    mayor: "Belit Onay"
+    note: "місто понад 100 тис. мешканців"
+    population: 522803
+    wikidata: Q1715
+    coords: [52.37444, 9.73861]
+  - name: "Duisburg"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Düsseldorf"
+    site: "https://duisburg.de"
+    email: "info@stadt-duisburg.de"
+    mayor: "Sören Link"
+    note: "місто понад 100 тис. мешканців"
+    population: 500810
+    wikidata: Q2100
+    coords: [51.43222, 6.76111]
+  - name: "Bochum"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Arnsberg"
+    site: "https://www.bochum.de/"
+    email: "info@bochum.de"
+    email_alt: "maweiss@bochum.de, nlorenz@bochum.de"
+    mayor_email: "oberbuergermeister@bochum.de"
+    mayor: "Jörg Lukat"
+    note: "місто понад 100 тис. мешканців"
+    population: 358880
+    wikidata: Q2103
+    coords: [51.48333, 7.21667]
+  - name: "Wuppertal"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Düsseldorf"
+    site: "https://www.wuppertal.de/"
+    mayor: "Miriam Scherff"
+    note: "місто понад 100 тис. мешканців"
+    population: 357243
+    wikidata: Q2107
+    coords: [51.26667, 7.18333]
+  - name: "Bielefeld"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Detmold"
+    site: "https://www.bielefeld.de/"
+    email: "posteingang@bielefeld.de"
+    email_alt: "datenschutzbeauftragter@bielefeld.de"
+    mayor_email: "oberbuergermeister@bielefeld.de"
+    note: "місто понад 100 тис. мешканців"
+    population: 331419
+    wikidata: Q2112
+    coords: [52.01667, 8.53333]
+  - name: "Bonn"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Köln"
+    site: "https://www.bonn.de/"
+    mayor: "Guido Déus"
+    note: "місто понад 100 тис. мешканців"
+    population: 323587
+    wikidata: Q586
+    coords: [50.73528, 7.10222]
+  - name: "Mannheim"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Karlsruhe"
+    site: "https://www.mannheim.de/"
+    email: "stadtverwaltung@mannheim.de"
+    email_alt: "stadtentwaesserung@mannheim.de, 76ccc@mannheim.de"
+    mayor: "Christian Specht"
+    note: "місто понад 100 тис. мешканців"
+    population: 319536
+    wikidata: Q2119
+    coords: [49.48778, 8.46611]
+  - name: "Karlsruhe"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Karlsruhe"
+    site: "https://www.karlsruhe.de/"
+    mayor_email: "ob@karlsruhe.de"
+    mayor: "Frank Mentrup"
+    note: "місто понад 100 тис. мешканців"
+    population: 309247
+    wikidata: Q1040
+    coords: [49.01667, 8.4]
+  - name: "Münster"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Münster"
+    site: "https://www.stadt-muenster.de/"
+    email: "post@stadt-muenster.de"
+    email_alt: "sepa@stadt-muenster.de, buergeranliegen@stadt-muenster.de"
+    mayor_email: "oberbuergermeister@stadt-muenster.de"
+    mayor: "Tilman Fuchs"
+    note: "місто понад 100 тис. мешканців"
+    population: 306368
+    wikidata: Q2742
+    coords: [51.9625, 7.62556]
+  - name: "Augsburg"
+    country: "DE"
+    lang: "de"
+    admin: "Schwaben"
+    site: "https://www.augsburg.de/"
+    email: "augsburg@augsburg.de"
+    email_alt: "bgm.wurm@augsburg.de, ob.freund@augsburg.de"
+    note: "місто понад 100 тис. мешканців"
+    population: 301786
+    wikidata: Q2749
+    coords: [48.36889, 10.89778]
+  - name: "Wiesbaden"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Darmstadt"
+    site: "https://www.wiesbaden.de/"
+    email: "wiesbaden.deredaktion@wicm.de"
+    mayor: "Gert-Uwe Mende"
+    note: "місто понад 100 тис. мешканців"
+    population: 288584
+    wikidata: Q1721
+    coords: [50.0825, 8.24]
+  - name: "Mönchengladbach"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Düsseldorf"
+    site: "https://www.moenchengladbach.de/"
+    email: "post@moenchengladbach.de"
+    email_alt: "oberbuergermeister@moenchengladbach.de, presse@moenchengladbach.de"
+    mayor_email: "oberbuergermeister@moenchengladbach.de"
+    mayor: "Felix Heinrichs"
+    note: "місто понад 100 тис. мешканців"
+    population: 267176
+    wikidata: Q2758
+    coords: [51.2, 6.43333]
+  - name: "Gelsenkirchen"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Münster"
+    site: "https://www.gelsenkirchen.de/"
+    email: "stadt@gelsenkirchen.de"
+    email_alt: "oberbuergermeisterin@gelsenkirchen.de, internetredaktion@gelsenkirchen.de"
+    mayor_email: "oberbuergermeisterin@gelsenkirchen.de"
+    mayor: "Andrea Henze"
+    note: "місто понад 100 тис. мешканців"
+    population: 266199
+    wikidata: Q2765
+    coords: [51.51028, 7.09417]
+  - name: "Aachen"
+    country: "DE"
+    lang: "de"
+    admin: "Kreis Aachen"
+    site: "https://www.aachen.de/"
+    email: "stadt.aachen@mail.aachen.de"
+    mayor_email: "oberbuergermeister@mail.aachen.de"
+    mayor: "Michael Ziemons"
+    note: "місто понад 100 тис. мешканців"
+    population: 263703
+    wikidata: Q1017
+    coords: [50.77621, 6.08379]
+  - name: "Braunschweig"
+    country: "DE"
+    lang: "de"
+    admin: "Niedersachsen"
+    site: "https://www.braunschweig.de/"
+    mayor_email: "thorsten.kornblum@braunschweig.de"
+    mayor: "Thorsten Kornblum"
+    note: "місто понад 100 тис. мешканців"
+    population: 252811
+    wikidata: Q2773
+    coords: [52.26917, 10.52111]
+  - name: "Kiel"
+    country: "DE"
+    lang: "de"
+    admin: "Schleswig-Holstein"
+    site: "https://www.kiel.de/"
+    email: "rathaus@kiel.de"
+    email_alt: "idee@kiel.de"
+    note: "місто понад 100 тис. мешканців"
+    population: 251842
+    wikidata: Q1707
+    coords: [54.32333, 10.13944]
+  - name: "Chemnitz"
+    country: "DE"
+    lang: "de"
+    admin: "Sachsen"
+    site: "https://www.chemnitz.de/"
+    mayor: "Sven Schulze"
+    note: "місто понад 100 тис. мешканців"
+    population: 247252
+    wikidata: Q2795
+    coords: [50.83235, 12.91891]
+  - name: "Magdeburg"
+    country: "DE"
+    lang: "de"
+    admin: "Sachsen-Anhalt"
+    site: "https://www.magdeburg.de/"
+    email: "info@magdeburg.de"
+    email_alt: "rechtsamt@magdeburg.de, info@stadt.magdeburg.de"
+    mayor: "Simone Borris"
+    note: "місто понад 100 тис. мешканців"
+    population: 244494
+    wikidata: Q1733
+    coords: [52.13159, 11.63996]
+  - name: "Freiburg im Breisgau"
+    country: "DE"
+    lang: "de"
+    admin: "Stadtamt Freiburg"
+    site: "https://www.freiburg.de/"
+    email: "buergerberatung@freiburg.de"
+    phone: "+49-761-2010"
+    mayor: "Martin Horn"
+    note: "місто понад 100 тис. мешканців"
+    population: 238299
+    wikidata: Q2833
+    coords: [47.995, 7.85]
+  - name: "Krefeld"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Düsseldorf"
+    site: "https://www.krefeld.de/"
+    email: "stadtservice@krefeld.de"
+    email_alt: "ratundehrenamt@krefeld.de, serviceportal@krefeld.de"
+    mayor_email: "oberbuergermeister@krefeld.de"
+    mayor: "Frank Meyer"
+    note: "місто понад 100 тис. мешканців"
+    population: 230738
+    wikidata: Q2805
+    coords: [51.33333, 6.56667]
+  - name: "Halle (Saale)"
+    country: "DE"
+    lang: "de"
+    admin: "Sachsen-Anhalt"
+    site: "https://halle.de/"
+    email: "amtsblatt@halle.de"
+    email_alt: "einwohnerbeteiligungen@halle.de, pressestelle@halle.de"
+    mayor_email: "ob@halle.de"
+    mayor: "Alexander Vogt"
+    note: "місто понад 100 тис. мешканців"
+    population: 226186
+    wikidata: Q2814
+    coords: [51.48278, 11.96972]
+  - name: "Mainz"
+    country: "DE"
+    lang: "de"
+    admin: "Rheinland-Pfalz"
+    site: "https://www.mainz.de/"
+    mayor: "Nino Haase"
+    note: "місто понад 100 тис. мешканців"
+    population: 223888
+    wikidata: Q1720
+    coords: [49.99944, 8.27361]
+  - name: "Erfurt"
+    country: "DE"
+    lang: "de"
+    admin: "Thüringen"
+    site: "https://www.erfurt.de/"
+    mayor: "Andreas Horn"
+    note: "місто понад 100 тис. мешканців"
+    population: 217159
+    wikidata: Q1729
+    coords: [50.97806, 11.02889]
+  - name: "Lübeck"
+    country: "DE"
+    lang: "de"
+    admin: "Schleswig-Holstein"
+    site: "https://www.luebeck.de/"
+    email: "presse@luebeck.de"
+    mayor_email: "buergermeister@luebeck.de"
+    mayor: "Jan Lindenau"
+    note: "місто понад 100 тис. мешканців"
+    population: 217061
+    wikidata: Q2843
+    coords: [53.86972, 10.68639]
+  - name: "Oberhausen"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Düsseldorf"
+    site: "https://www.oberhausen.de/"
+    email: "thorsten.berg@oberhausen.de"
+    mayor_email: "thorsten.berg@oberhausen.de"
+    mayor: "Thorsten Berg"
+    note: "місто понад 100 тис. мешканців"
+    population: 213178
+    wikidata: Q2838
+    coords: [51.4699, 6.8514]
+  - name: "Rostock"
+    country: "DE"
+    lang: "de"
+    admin: "Mecklenburg-Vorpommern"
+    site: "https://www.rostock.de/"
+    email: "ob@rostock.de"
+    email_alt: "marketing@rostock.de"
+    mayor_email: "oberbuergermeister@rostock.de"
+    mayor: "Eva-Maria Kröger"
+    note: "місто понад 100 тис. мешканців"
+    population: 204929
+    wikidata: Q2861
+    coords: [54.08333, 12.13333]
+  - name: "Kassel"
+    country: "DE"
+    lang: "de"
+    admin: "Provinz Niederhessen"
+    site: "https://www.kassel.de/"
+    email: "servicecenter@kassel.de"
+    mayor: "Sven Schoeller"
+    note: "місто понад 100 тис. мешканців"
+    population: 196799
+    wikidata: Q2865
+    coords: [51.31578, 9.49792]
+  - name: "Hagen"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Arnsberg"
+    site: "https://www.hagen.de/"
+    mayor: "Dennis Rehbein"
+    note: "місто понад 100 тис. мешканців"
+    population: 189983
+    wikidata: Q2871
+    coords: [51.35944, 7.475]
+  - name: "Potsdam"
+    country: "DE"
+    lang: "de"
+    admin: "Brandenburg"
+    site: "https://www.potsdam.de/"
+    email: "poststelle@rathaus.potsdam.de"
+    email_alt: "kommunikation-partizipation@rathaus.potsdam.de, datenschutz@rathaus.potsdam.de"
+    mayor_email: "oberbuergermeister@rathaus.potsdam.de"
+    mayor: "Noosha Aubel"
+    note: "місто понад 100 тис. мешканців"
+    population: 185137
+    wikidata: Q1711
+    coords: [52.39886, 13.06566]
+  - name: "Saarbrücken"
+    country: "DE"
+    lang: "de"
+    admin: "Regionalverband Saarbrücken"
+    site: "https://saarbruecken.de"
+    email: "stadt@saarbruecken.de"
+    email_alt: "medien@saarbruecken.de, buerger@saarbruecken.de"
+    mayor_email: "oberbuergermeister@saarbruecken.de"
+    note: "місто понад 100 тис. мешканців"
+    population: 182859
+    wikidata: Q1724
+    coords: [49.23333, 7.0]
+  - name: "Hamm"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Arnsberg"
+    site: "https://www.hamm.de/"
+    email: "vps@stadt.hamm.de"
+    mayor: "Marc Herter"
+    note: "місто понад 100 тис. мешканців"
+    population: 179108
+    wikidata: Q2880
+    coords: [51.68139, 7.81917]
+  - name: "Ludwigshafen am Rhein"
+    country: "DE"
+    lang: "de"
+    admin: "Rheinland-Pfalz"
+    site: "https://ludwigshafen.de"
+    mayor_email: "oberbuergermeister@ludwigshafen.de"
+    mayor: "Klaus Blettner"
+    note: "місто понад 100 тис. мешканців"
+    population: 177355
+    wikidata: Q2910
+    coords: [49.48111, 8.43528]
+  - name: "Oldenburg"
+    country: "DE"
+    lang: "de"
+    admin: "Niedersachsen"
+    site: "https://www.oldenburg.de/"
+    email: "servicecenter@stadt-oldenburg.de"
+    mayor_email: "buergermeister@stadt-oldenburg.de"
+    mayor: "Jürgen Krogmann"
+    note: "місто понад 100 тис. мешканців"
+    population: 177055
+    wikidata: Q2936
+    coords: [53.14389, 8.21389]
+  - name: "Mülheim an der Ruhr"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Düsseldorf"
+    site: "https://www.muelheim-ruhr.de/"
+    email: "info@muelheim-ruhr.de"
+    mayor: "Alfred Jutzi"
+    note: "місто понад 100 тис. мешканців"
+    population: 171674
+    wikidata: Q2899
+    coords: [51.4275, 6.8825]
+  - name: "Leverkusen"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Köln"
+    site: "https://www.leverkusen.de/"
+    mayor: "Uwe Richrath"
+    note: "місто понад 100 тис. мешканців"
+    population: 168299
+    wikidata: Q2938
+    coords: [51.03333, 6.98333]
+  - name: "Darmstadt"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Darmstadt"
+    site: "https://www.darmstadt.de/"
+    email: "info@darmstadt.de"
+    email_alt: "kommunikation@darmstadt.de"
+    mayor: "Jochen Partsch"
+    note: "місто понад 100 тис. мешканців"
+    population: 168253
+    wikidata: Q2973
+    coords: [49.86667, 8.65]
+  - name: "Osnabrück"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Weser-Ems"
+    site: "https://www.osnabrueck.de/"
+    email: "buergeramt@osnabrueck.de"
+    email_alt: "rathausinfo@osnabrueck.de, osb@osnabrueck.de"
+    mayor_email: "oberbuergermeisterin@osnabrueck.de"
+    mayor: "Katharina Pötter"
+    note: "місто понад 100 тис. мешканців"
+    population: 166257
+    wikidata: Q2916
+    coords: [52.27889, 8.04306]
+  - name: "Solingen"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Düsseldorf"
+    site: "https://www.solingen.de/"
+    email: "post@solingen.de"
+    mayor: "Daniel Flemm"
+    note: "місто понад 100 тис. мешканців"
+    population: 164621
+    wikidata: Q2942
+    coords: [51.17194, 7.08472]
+  - name: "Herne"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Arnsberg"
+    site: "https://www.herne.de/"
+    email: "pgp@herne.de"
+    mayor: "Frank Dudda"
+    note: "місто понад 100 тис. мешканців"
+    population: 156266
+    wikidata: Q2904
+    coords: [51.54258, 7.21897]
+  - name: "Heidelberg"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Karlsruhe"
+    site: "https://www.heidelberg.de/cn/home.html"
+    email: "obhd@heidelberg.de"
+    email_alt: "wirtschaftsfoerderung@heidelberg.de"
+    mayor: "Eckart Würzner"
+    note: "місто понад 100 тис. мешканців"
+    population: 156092
+    wikidata: Q2966
+    coords: [49.40936, 8.69472]
+  - name: "Paderborn"
+    country: "DE"
+    lang: "de"
+    admin: "Kreis Paderborn"
+    site: "https://www.paderborn.de/"
+    note: "місто понад 100 тис. мешканців"
+    population: 155906
+    wikidata: Q2971
+    coords: [51.71667, 8.76667]
+  - name: "Neuss"
+    country: "DE"
+    lang: "de"
+    admin: "Rhein-Kreis Neuss"
+    site: "https://www.neuss.de/"
+    email: "vps@stadt.neuss.de"
+    email_alt: "stadtverwaltung@stadt.neuss.de"
+    mayor_email: "buergermeister@stadt.neuss.de"
+    mayor: "Reiner Breuer"
+    note: "місто понад 100 тис. мешканців"
+    population: 153767
+    wikidata: Q2948
+    coords: [51.20028, 6.69389]
+  - name: "Regensburg"
+    country: "DE"
+    lang: "de"
+    admin: "Oberpfalz"
+    site: "https://www.regensburg.de/"
+    mayor_email: "oberbuergermeister@regensburg.de"
+    mayor: "Thomas Burger"
+    note: "місто понад 100 тис. мешканців"
+    population: 151517
+    wikidata: Q2978
+    coords: [49.01667, 12.08333]
+  - name: "Ingolstadt"
+    country: "DE"
+    lang: "de"
+    admin: "Oberbayern"
+    site: "https://www.ingolstadt.de/"
+    email: "stadtverwaltung@ingolstadt.de"
+    email_alt: "presseamt@ingolstadt.de"
+    mayor: "Christian Scharpf"
+    note: "місто понад 100 тис. мешканців"
+    population: 140799
+    wikidata: Q3004
+    coords: [48.76306, 11.425]
+  - name: "Pforzheim"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Karlsruhe"
+    site: "https://www.pforzheim.de/"
+    email: "hosting@jweiland.net"
+    mayor: "Peter Boch"
+    note: "місто понад 100 тис. мешканців"
+    population: 134422
+    wikidata: Q3046
+    coords: [48.89154, 8.7156]
+  - name: "Würzburg"
+    country: "DE"
+    lang: "de"
+    admin: "Unterfranken"
+    site: "https://www.wuerzburg.de/"
+    email: "info@wuerzburg.de"
+    email_alt: "international.affairs@stadt.wuerzburg.de, pressestelle@stadt.wuerzburg.de"
+    mayor: "Martin Heilig"
+    note: "місто понад 100 тис. мешканців"
+    population: 133753
+    wikidata: Q2999
+    coords: [49.79444, 9.92944]
+  - name: "Offenbach am Main"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Darmstadt"
+    site: "https://www.offenbach.de/"
+    mayor: "Felix Schwenke"
+    note: "місто понад 100 тис. мешканців"
+    population: 133195
+    wikidata: Q3042
+    coords: [50.1, 8.76667]
+  - name: "Heilbronn"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Stuttgart"
+    site: "https://www.heilbronn.de/"
+    email: "posteingang@heilbronn.de"
+    email_alt: "kommunikation@heilbronn.de"
+    mayor_email: "oberbuergermeister@heilbronn.de"
+    mayor: "Harry Mergel"
+    note: "місто понад 100 тис. мешканців"
+    population: 132516
+    wikidata: Q715
+    coords: [49.14043, 9.21795]
+  - name: "Fürth"
+    country: "DE"
+    lang: "de"
+    admin: "Mittelfranken"
+    site: "https://www.fuerth.de"
+    mayor_email: "thomas.jung@fuerth.de"
+    mayor: "Thomas Jung"
+    note: "місто понад 100 тис. мешканців"
+    population: 131344
+    wikidata: Q3075
+    coords: [49.47833, 10.99028]
+  - name: "Göttingen"
+    country: "DE"
+    lang: "de"
+    admin: "Landkreis Göttingen"
+    site: "https://www.goettingen.de/"
+    mayor: "Petra Broistedt"
+    note: "місто понад 100 тис. мешканців"
+    population: 130521
+    wikidata: Q3033
+    coords: [51.53389, 9.93556]
+  - name: "Ulm"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Tübingen"
+    site: "https://www.ulm.de/"
+    mayor: "Martin Ansbacher"
+    note: "місто понад 100 тис. мешканців"
+    population: 130288
+    wikidata: Q3012
+    coords: [48.39861, 9.99111]
+  - name: "Wolfsburg"
+    country: "DE"
+    lang: "de"
+    admin: "Niedersachsen"
+    site: "https://www.wolfsburg.de/"
+    email: "poststelle@stadt.wolfsburg.de"
+    email_alt: "servicecenter@stadt.wolfsburg.de, onlinekommunikation@stadt.wolfsburg.de"
+    mayor_email: "sekretariat.oberbuergermeister@stadt.wolfsburg.de"
+    mayor: "Dennis Weilmann"
+    note: "місто понад 100 тис. мешканців"
+    population: 129813
+    wikidata: Q3014
+    coords: [52.42306, 10.78722]
+  - name: "Reutlingen"
+    country: "DE"
+    lang: "de"
+    admin: "Landkreis Reutlingen"
+    site: "https://www.reutlingen.de/"
+    mayor: "Thomas Keck"
+    note: "місто понад 100 тис. мешканців"
+    population: 119040
+    wikidata: Q3085
+    coords: [48.48333, 9.21667]
+  - name: "Bremerhaven"
+    country: "DE"
+    lang: "de"
+    admin: "Freie Hansestadt Bremen"
+    site: "https://www.bremerhaven.de/"
+    email: "stadtverwaltung@magistrat.bremerhaven.de"
+    email_alt: "webmaster@bremerhaven.de, presse@magistrat.bremerhaven.de"
+    mayor_email: "buergermeister@magistrat.bremerhaven.de"
+    mayor: "Melf Grantz"
+    note: "місто понад 100 тис. мешканців"
+    population: 118502
+    wikidata: Q2706
+    coords: [53.55, 8.58333]
+  - name: "Bottrop"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Münster"
+    site: "https://www.bottrop.de/"
+    mayor: "Matthias Buschfeld"
+    note: "місто понад 100 тис. мешканців"
+    population: 118482
+    wikidata: Q3069
+    coords: [51.52325, 6.92527]
+  - name: "Erlangen"
+    country: "DE"
+    lang: "de"
+    admin: "Mittelfranken"
+    site: "https://www.erlangen.de/"
+    email: "ob@stadt.erlangen.de"
+    email_alt: "stadt@stadt.erlangen.de, u003eob@stadt.erlangen.de"
+    mayor_email: "ob@stadt.erlangen.de"
+    mayor: "Florian Janik"
+    note: "місто понад 100 тис. мешканців"
+    population: 116450
+    wikidata: Q3126
+    coords: [49.5925, 11.005]
+  - name: "Recklinghausen"
+    country: "DE"
+    lang: "de"
+    admin: "Kreis Recklinghausen"
+    site: "https://www.recklinghausen.de/"
+    email: "info@gkd-re.de"
+    mayor: "Axel Tschersich"
+    note: "місто понад 100 тис. мешканців"
+    population: 114851
+    wikidata: Q3050
+    coords: [51.61667, 7.2]
+  - name: "Remscheid"
+    country: "DE"
+    lang: "de"
+    admin: "Regierungsbezirk Düsseldorf"
+    site: "https://www.remscheid.de/"
+    mayor_email: "oberbuergermeister@remscheid.de"
+    mayor: "Sven Wolf"
+    note: "місто понад 100 тис. мешканців"
+    population: 113333
+    wikidata: Q3097
+    coords: [51.17987, 7.19435]
+  - name: "Koblenz"
+    country: "DE"
+    lang: "de"
+    admin: "Rheinland-Pfalz"
+    site: "https://www.koblenz.de/"
+    email: "internet@stadt.koblenz.de"
+    email_alt: "poststelle@stadt.koblenz.de, pressestelle@stadt.koblenz.de"
+    mayor: "David Langner"
+    note: "місто понад 100 тис. мешканців"
+    population: 113020
+    wikidata: Q3104
+    coords: [50.35972, 7.59778]
+  - name: "Bergisch Gladbach"
+    country: "DE"
+    lang: "de"
+    admin: "Rheinisch-Bergischer Kreis"
+    site: "https://www.bergischgladbach.de/"
+    email: "buergermeister@stadt-gl.de"
+    mayor_email: "buergermeister@stadt-gl.de"
+    mayor: "Marcel Kreutz"
+    note: "місто понад 100 тис. мешканців"
+    population: 111174
+    wikidata: Q3117
+    coords: [50.99167, 7.13667]
+  - name: "Jena"
+    country: "DE"
+    lang: "de"
+    admin: "Thüringen"
+    site: "https://www.jena.de/"
+    email: "info@jena.de"
+    email_alt: "buero-ob@jena.de, chefredakteur@jena.de"
+    mayor_email: "oberbuergermeister@jena.de"
+    mayor: "Thomas Nitzsche"
+    note: "місто понад 100 тис. мешканців"
+    population: 109353
+    wikidata: Q3150
+    coords: [50.92722, 11.58639]
+  - name: "Trier"
+    country: "DE"
+    lang: "de"
+    admin: "Rheinland-Pfalz"
+    site: "https://www.trier.de/"
+    mayor: "Wolfram Leibe"
+    note: "місто понад 100 тис. мешканців"
+    population: 105054
+    wikidata: Q3138
+    coords: [49.75565, 6.63935]
+  - name: "Salzgitter"
+    country: "DE"
+    lang: "de"
+    admin: "Niedersachsen"
+    site: "https://www.salzgitter.de/"
+    mayor: "Frank Klingebiel"
+    note: "місто понад 100 тис. мешканців"
+    population: 104433
+    wikidata: Q3200
+    coords: [52.15028, 10.35931]
+  - name: "Siegen"
+    country: "DE"
+    lang: "de"
+    admin: "Kreis Siegen-Wittgenstein"
+    site: "https://www.siegen.de/"
+    mayor: "Tristan Vitt"
+    note: "місто понад 100 тис. мешканців"
+    population: 102450
+    wikidata: Q3167
+    coords: [50.87556, 8.01667]
+  - name: "Moers"
+    country: "DE"
+    lang: "de"
+    admin: "Kreis Wesel"
+    site: "https://www.moers.de/"
+    email: "info@moers.de"
+    email_alt: "fabian.pagor@moers.de, julia.zupancic@moers.de"
+    mayor_email: "julia.zupancic@moers.de"
+    mayor: "Julia Zupancic"
+    note: "місто понад 100 тис. мешканців"
+    population: 101298
+    wikidata: Q3132
+    coords: [51.45917, 6.61972]
+  - name: "Kaiserslautern"
+    country: "DE"
+    lang: "de"
+    admin: "Rheinland-Pfalz"
+    site: "https://www.kaiserslautern.de/"
+    email: "stadt@kaiserslautern.de"
+    email_alt: "oberbuergermeisterin@kaiserslautern.de, webmaster@kaiserslautern.de"
+    mayor_email: "oberbuergermeisterin@kaiserslautern.de"
+    mayor: "Beate Kimmel"
+    note: "місто понад 100 тис. мешканців"
+    population: 100247
+    wikidata: Q3758
+    coords: [49.44472, 7.76889]
   - name: "Roma"
     country: "IT"
     lang: "it"
     admin: "città metropolitana di Roma Capitale"
     site: "https://www.comune.roma.it/"
+    email: "segreteriaufficiostampa@comune.roma.it"
+    email_alt: "poterisostitutivi.gabsindaco@comune.roma.it, protocollo.gabinettosindaco@pec.comune.roma.it"
+    mayor_email: "poterisostitutivi.gabsindaco@comune.roma.it"
+    mayor: "Roberto Gualtieri"
     note: "місто понад 100 тис. мешканців"
     population: 2748109
     wikidata: Q220
-    coords: [0, 0]
+    coords: [41.89306, 12.48278]
   - name: "Milano"
     country: "IT"
     lang: "it"
     admin: "città metropolitana di Milano"
     site: "https://www.comune.milano.it/"
+    mayor_email: "ufficio.sindaco@comune.milano.it"
+    mayor: "Giuseppe Sala"
     note: "місто понад 100 тис. мешканців"
     population: 1354196
     wikidata: Q490
-    coords: [0, 0]
+    coords: [45.46694, 9.19]
   - name: "Napoli"
     country: "IT"
     lang: "it"
     admin: "città metropolitana di Napoli"
     site: "https://www.comune.napoli.it/"
+    mayor: "Gaetano Manfredi"
     note: "місто понад 100 тис. мешканців"
     population: 913462
     wikidata: Q2634
-    coords: [0, 0]
+    coords: [40.83583, 14.24861]
   - name: "Torino"
     country: "IT"
     lang: "it"
     admin: "città metropolitana di Torino"
     site: "http://www.comune.torino.it/"
+    email: "sindaco.lorusso@comune.torino.it"
+    mayor_email: "sindaco.lorusso@comune.torino.it"
+    mayor: "Chiara Appendino"
     note: "місто понад 100 тис. мешканців"
     population: 841600
     wikidata: Q495
-    coords: [0, 0]
+    coords: [45.07917, 7.67611]
   - name: "Palermo"
     country: "IT"
     lang: "it"
     admin: "città metropolitana di Palermo"
     site: "https://www.comune.palermo.it"
-    note: "місто понад 100 тис. мешканців · на сайті лише PEC — писати через контактну форму"
+    email: "segnalazioneweb@comune.palermo.it"
+    email_alt: "protocollo@cert.comune.palermo.it"
+    mayor: "Roberto Lagalla"
+    note: "місто понад 100 тис. мешканців"
     population: 630167
     wikidata: Q2656
-    coords: [0, 0]
+    coords: [38.11566, 13.36126]
   - name: "Genova"
     country: "IT"
     lang: "it"
     admin: "città metropolitana di Genova"
     site: "https://www.comune.genova.it/"
+    mayor_email: "segreteria.sindaco@comune.genova.it"
+    mayor: "Silvia Salis"
     note: "місто понад 100 тис. мешканців"
     population: 558745
     wikidata: Q1449
-    coords: [0, 0]
+    coords: [44.40722, 8.93389]
   - name: "Firenze"
     country: "IT"
     lang: "it"
     admin: "città metropolitana di Firenze"
     site: "https://www.comune.fi.it/"
+    mayor_email: "sindaco@comune.fi.it"
+    mayor: "Sara Funaro"
     note: "місто понад 100 тис. мешканців"
     population: 360930
     wikidata: Q2044
-    coords: [0, 0]
+    coords: [43.77139, 11.25417]
   - name: "Catania"
     country: "IT"
     lang: "it"
     admin: "città metropolitana di Catania"
     site: "https://www.comune.catania.it/"
+    mayor_email: "sindaco@comune.catania.it"
+    mayor: "Enrico Trantino"
     note: "місто понад 100 тис. мешканців"
     population: 311584
     wikidata: Q1903
-    coords: [0, 0]
+    coords: [37.50267, 15.08727]
   - name: "Verona"
     country: "IT"
     lang: "it"
     admin: "provincia di Verona"
     site: "https://www.comune.verona.it/"
     email: "protocollo.informatico@comune.verona.it"
+    email_alt: "protocollo.informatico@pec.comune.verona.it"
+    mayor: "Damiano Tommasi"
     note: "місто понад 100 тис. мешканців"
     population: 255588
     wikidata: Q2028
-    coords: [0, 0]
+    coords: [45.43861, 10.99278]
   - name: "Venezia"
     country: "IT"
     lang: "it"
     admin: "città metropolitana di Venezia"
     site: "http://www.comune.venezia.it/"
+    mayor: "Simone Venturini"
     note: "місто понад 100 тис. мешканців"
     population: 250369
     wikidata: Q641
-    coords: [0, 0]
+    coords: [45.43972, 12.33194]
   - name: "Messina"
     country: "IT"
     lang: "it"
     admin: "città metropolitana di Messina"
     site: "https://www.comune.messina.it/"
     email: "protocollogenerale@comune.messina.it"
+    email_alt: "protocollo@pec.comune.messina.it"
     note: "місто понад 100 тис. мешканців"
     population: 218786
     wikidata: Q13666
-    coords: [0, 0]
+    coords: [38.19361, 15.55417]
   - name: "Padova"
     country: "IT"
     lang: "it"
@@ -181,35 +1226,38 @@ partners:
     note: "місто понад 100 тис. мешканців"
     population: 206496
     wikidata: Q617
-    coords: [0, 0]
+    coords: [45.40778, 11.87333]
   - name: "Trieste"
     country: "IT"
     lang: "it"
     admin: "ente di decentramento regionale di Trieste"
     site: "https://www.comune.trieste.it/"
+    mayor_email: "sindaco@comune.trieste.it"
     note: "місто понад 100 тис. мешканців"
     population: 198417
     wikidata: Q546
-    coords: [0, 0]
+    coords: [45.65028, 13.77028]
   - name: "Parma"
     country: "IT"
     lang: "it"
     admin: "provincia di Parma"
     site: "https://www.comune.parma.it"
+    email: "comunediparma@postemailcertificata.it"
     note: "місто понад 100 тис. мешканців"
     population: 196764
     wikidata: Q2683
-    coords: [0, 0]
+    coords: [44.80147, 10.328]
   - name: "Prato"
     country: "IT"
     lang: "it"
     admin: "provincia di Prato"
     site: "http://www.comune.prato.it/"
-    email: "protocollogenerale@comune.prato.it"
+    email: "redazioneweb@comune.prato.it"
+    email_alt: "protocollogenerale@comune.prato.it"
     note: "місто понад 100 тис. мешканців"
     population: 195736
     wikidata: Q13377
-    coords: [0, 0]
+    coords: [43.88081, 11.09656]
   - name: "Taranto"
     country: "IT"
     lang: "it"
@@ -219,35 +1267,39 @@ partners:
     note: "місто понад 100 тис. мешканців"
     population: 188098
     wikidata: Q13498
-    coords: [0, 0]
+    coords: [40.47111, 17.24306]
   - name: "Modena"
     country: "IT"
     lang: "it"
     admin: "provincia di Modena"
     site: "https://www.comune.modena.it/"
     email: "piazzagrande@comune.modena.it"
+    email_alt: "segnalazioni@comune.modena.it, ufficio.comunicazione@comune.modena.it"
+    mayor_email: "sindaco@comune.modena.it"
     note: "місто понад 100 тис. мешканців"
     population: 184153
     wikidata: Q279
-    coords: [0, 0]
+    coords: [44.64582, 10.92572]
   - name: "Reggio Calabria"
     country: "IT"
     lang: "it"
     admin: "città metropolitana di Reggio Calabria"
     site: "http://www.reggiocal.it"
-    note: "місто понад 100 тис. мешканців · на сайті лише PEC — писати через контактну форму"
+    note: "місто понад 100 тис. мешканців"
     population: 170951
     wikidata: Q8471
-    coords: [0, 0]
+    coords: [38.11444, 15.65]
   - name: "Reggio Emilia"
     country: "IT"
     lang: "it"
     admin: "provincia di Reggio Emilia"
     site: "https://www.reggioemiliawelcome.it"
+    email: "5e2cd928c0f94eb98c81bf3e7c94b68f@www.reggioemiliawelcome.it"
+    email_alt: "6f48ec99ca0b43a19b2eb8b68cbbcabc@www.reggioemiliawelcome.it, a551daedb2104392877db9fc7a2427ca@www.reggioemiliawelcome.it"
     note: "місто понад 100 тис. мешканців"
     population: 169545
     wikidata: Q13360
-    coords: [0, 0]
+    coords: [44.7, 10.63333]
   - name: "Perugia"
     country: "IT"
     lang: "it"
@@ -256,203 +1308,466 @@ partners:
     note: "місто понад 100 тис. мешканців"
     population: 161748
     wikidata: Q3437
-    coords: [0, 0]
+    coords: [43.11192, 12.38855]
   - name: "Ravenna"
     country: "IT"
     lang: "it"
     admin: "provincia di Ravenna"
     site: "https://www.comune.ra.it/"
-    note: "місто понад 100 тис. мешканців · на сайті лише PEC — писати через контактну форму"
+    mayor: "Michele De Pascale"
+    note: "місто понад 100 тис. мешканців"
     population: 155751
     wikidata: Q13364
-    coords: [0, 0]
+    coords: [44.41611, 12.20167]
   - name: "Livorno"
     country: "IT"
     lang: "it"
     admin: "provincia di Livorno"
     site: "https://www.visit-livorno.it/"
+    mayor: "Luca Salvetti"
     note: "місто понад 100 тис. мешканців"
     population: 152914
     wikidata: Q6761
-    coords: [0, 0]
+    coords: [43.55, 10.31667]
   - name: "Rimini"
     country: "IT"
     lang: "it"
     admin: "governo di Rimini"
     site: "https://www.comune.rimini.it/"
-    note: "місто понад 100 тис. мешканців · на сайті лише PEC — писати через контактну форму"
+    email: "ufficiorette@comune.rimini.it"
+    email_alt: "dipartimento2@pec.comune.rimini.it, protocollo.generale@pec.comune.rimini.it"
+    mayor: "Andrea Gnassi"
+    note: "місто понад 100 тис. мешканців"
     population: 149211
     wikidata: Q13369
-    coords: [0, 0]
+    coords: [44.05944, 12.56833]
   - name: "Foggia"
     country: "IT"
     lang: "it"
     admin: "provincia di Foggia"
     site: "https://www.comune.foggia.it/"
     email: "urp@comune.foggia.it"
+    email_alt: "protocollo.generale@cert.comune.foggia.it"
+    mayor_email: "sindaco@comune.foggia.it"
     note: "місто понад 100 тис. мешканців"
     population: 145348
     wikidata: Q13464
-    coords: [0, 0]
+    coords: [41.45845, 15.55188]
   - name: "Ferrara"
     country: "IT"
     lang: "it"
     admin: "provincia di Ferrara"
     site: "http://comune.fe.it/"
-    note: "місто понад 100 тис. мешканців · на сайті лише PEC — писати через контактну форму"
+    email: "urp@comune.fe.it"
+    email_alt: "segreteriasindaco@comune.fe.it, comune.ferrara@cert.comune.fe.it"
+    mayor_email: "segreteriasindaco@comune.fe.it"
+    note: "місто понад 100 тис. мешканців"
     population: 129340
     wikidata: Q13362
-    coords: [0, 0]
+    coords: [44.83917, 11.6175]
   - name: "Latina"
     country: "IT"
     lang: "it"
     admin: "provincia di Latina"
     site: "https://www.comune.latina.it/"
     email: "urp@comune.latina.it"
+    email_alt: "segreteria.sindaco@comune.latina.it, protocollo@pec.comune.latina.it"
+    mayor_email: "segreteria.sindaco@comune.latina.it"
     note: "місто понад 100 тис. мешканців"
     population: 127564
     wikidata: Q13410
-    coords: [0, 0]
+    coords: [41.46722, 12.90361]
   - name: "Salerno"
     country: "IT"
     lang: "it"
     admin: "provincia di Salerno"
     site: "http://www.comune.salerno.it"
+    mayor_email: "sindaco@comune.salerno.it"
     note: "місто понад 100 тис. мешканців"
     population: 127186
     wikidata: Q1083
-    coords: [0, 0]
+    coords: [40.68056, 14.75944]
   - name: "Giugliano in Campania"
     country: "IT"
     lang: "it"
     admin: "città metropolitana di Napoli"
     site: "https://www.comune.giugliano.na.it/"
+    mayor_email: "segreteria.sindaco@comune.giugliano.na.it"
     note: "місто понад 100 тис. мешканців"
     population: 123679
     wikidata: Q72125
-    coords: [0, 0]
+    coords: [40.92835, 14.20108]
   - name: "Monza"
     country: "IT"
     lang: "it"
     admin: "provincia di Monza e della Brianza"
     site: "http://www.comune.monza.it"
     email: "sportelloalcittadino@comune.monza.it"
+    email_alt: "monza@pec.comune.monza.it"
+    mayor: "Paolo Pilotto"
     note: "місто понад 100 тис. мешканців"
     population: 121799
     wikidata: Q6252
-    coords: [0, 0]
+    coords: [45.58361, 9.27361]
   - name: "Sassari"
     country: "IT"
     lang: "it"
     admin: "provincia di Sassari"
     site: "https://www.comune.sassari.it/"
     email: "urp@comune.sassari.it"
+    email_alt: "sindaco@comune.sassari.it"
+    mayor_email: "sindaco@comune.sassari.it"
+    mayor: "Nicola Sanna"
     note: "місто понад 100 тис. мешканців"
     population: 121021
     wikidata: Q13629
-    coords: [0, 0]
+    coords: [40.72667, 8.55917]
   - name: "Bergamo"
     country: "IT"
     lang: "it"
     admin: "provincia di Bergamo"
     site: "https://www.comune.bergamo.it"
-    note: "місто понад 100 тис. мешканців · на сайті лише PEC — писати через контактну форму"
+    mayor: "Elena Carnevali"
+    note: "місто понад 100 тис. мешканців"
     population: 119534
     wikidata: Q628
-    coords: [0, 0]
+    coords: [45.695, 9.67]
   - name: "Pescara"
     country: "IT"
     lang: "it"
     admin: "provincia di Pescara"
     site: "http://www.comune.pescara.it"
-    note: "місто понад 100 тис. мешканців · на сайті лише PEC — писати через контактну форму"
+    mayor: "Marco Alessandrini"
+    note: "місто понад 100 тис. мешканців"
     population: 118657
     wikidata: Q2704
-    coords: [0, 0]
+    coords: [42.46428, 14.21419]
   - name: "Forlì"
     country: "IT"
     lang: "it"
     admin: "provincia di Forlì-Cesena"
     site: "http://www.comune.forli.fc.it"
     email: "urp@comune.forli.fc.it"
+    email_alt: "redazione.civica@comune.forli.fc.it, comune.forli@pec.comune.forli.fc.it"
+    mayor_email: "sindaco@comune.forli.fc.it"
+    mayor: "Gian Luca Zattini"
     note: "місто понад 100 тис. мешканців"
     population: 118152
     wikidata: Q13367
-    coords: [0, 0]
+    coords: [44.22278, 12.04139]
   - name: "Siracusa"
     country: "IT"
     lang: "it"
     admin: "libero consorzio comunale di Siracusa"
     site: "https://www.comune.siracusa.it"
+    mayor_email: "sindaco@comune.siracusa.it"
+    mayor: "Francesco Italia"
     note: "місто понад 100 тис. мешканців"
     population: 115515
     wikidata: Q13670
-    coords: [0, 0]
+    coords: [37.06917, 15.2875]
   - name: "Vicenza"
     country: "IT"
     lang: "it"
     admin: "provincia di Vicenza"
     site: "http://www.comune.vicenza.it"
     email: "urp@comune.vicenza.it"
+    email_alt: "vicenza@cert.comune.vicenza.it"
     note: "місто понад 100 тис. мешканців"
     population: 109823
     wikidata: Q6537
-    coords: [0, 0]
+    coords: [45.55, 11.55]
   - name: "Terni"
     country: "IT"
     lang: "it"
     admin: "governo di Terni"
     site: "http://www.comune.terni.it/"
-    note: "місто понад 100 тис. мешканців · на сайті лише PEC — писати через контактну форму"
+    email: "stefano.bandecchi@comune.terni.it"
+    mayor: "Leopoldo Di Girolamo"
+    note: "місто понад 100 тис. мешканців"
     population: 106370
     wikidata: Q8621
-    coords: [0, 0]
+    coords: [42.56077, 12.64678]
   - name: "Bolzano"
     country: "IT"
     lang: "it"
     admin: "provincia autonoma di Bolzano"
     site: "https://www.comune.bolzano.bz.it/"
     email: "urp@comune.bolzano.it"
+    mayor_email: "sindaco@comune.bolzano.it"
+    mayor: "Claudio Corrarati"
     note: "місто понад 100 тис. мешканців"
     population: 106107
     wikidata: Q6526
-    coords: [0, 0]
+    coords: [46.49811, 11.35478]
   - name: "Piacenza"
     country: "IT"
     lang: "it"
     admin: "provincia di Piacenza"
     site: "https://www.comune.piacenza.it/"
     email: "urp@comune.piacenza.it"
+    email_alt: "protocollo.generale@cert.comune.piacenza.it"
     note: "місто понад 100 тис. мешканців"
     population: 102465
     wikidata: Q13329
-    coords: [0, 0]
+    coords: [45.05, 9.7]
   - name: "Novara"
     country: "IT"
     lang: "it"
     admin: "provincia di Novara"
     site: "http://www.comune.novara.it/"
-    note: "місто понад 100 тис. мешканців · на сайті лише PEC — писати через контактну форму"
+    note: "місто понад 100 тис. мешканців"
     population: 101257
     wikidata: Q6046
-    coords: [0, 0]
+    coords: [45.45, 8.62]
+  - name: "Amsterdam"
+    country: "NL"
+    lang: "en"
+    admin: "Amsterdam"
+    site: "https://amsterdam.nl"
+    mayor: "Femke Halsema"
+    note: "місто понад 100 тис. мешканців"
+    population: 921468
+    wikidata: Q727
+    coords: [52.36667, 4.88333]
+  - name: "Rotterdam"
+    country: "NL"
+    lang: "en"
+    admin: "Rotterdam"
+    site: "https://www.rotterdam.nl/"
+    mayor_email: "burgemeester@rotterdam.nl"
+    mayor: "Carola Schouten"
+    note: "місто понад 100 тис. мешканців"
+    population: 664311
+    wikidata: Q34370
+    coords: [51.92, 4.48]
+  - name: "Den Haag"
+    country: "NL"
+    lang: "en"
+    admin: "Zuid-Holland"
+    site: "https://www.denhaag.nl/"
+    email: "ibdienstpost@denhaag.nl"
+    phone: "+31070"
+    mayor: "Jan van Zanen"
+    note: "місто понад 100 тис. мешканців"
+    population: 548320
+    wikidata: Q36600
+    coords: [52.08, 4.31]
+  - name: "Utrecht"
+    country: "NL"
+    lang: "en"
+    admin: "Utrecht"
+    site: "https://www.utrecht.nl/"
+    email: "secretariaatburgemeester@utrecht.nl"
+    mayor_email: "secretariaatburgemeester@utrecht.nl"
+    mayor: "Sharon Dijksma"
+    note: "місто понад 100 тис. мешканців"
+    population: 359370
+    wikidata: Q803
+    coords: [52.09083, 5.12167]
+  - name: "Eindhoven"
+    country: "NL"
+    lang: "en"
+    admin: "Noord-Brabant"
+    site: "https://www.eindhoven.nl/"
+    email: "gemeente@eindhoven.nl"
+    mayor_email: "secretariaatburgemeester@eindhoven.nl"
+    phone: "+31040"
+    mayor: "Jeroen Dijsselbloem"
+    note: "місто понад 100 тис. мешканців"
+    population: 243730
+    wikidata: Q9832
+    coords: [51.43444, 5.48417]
+  - name: "Groningen"
+    country: "NL"
+    lang: "en"
+    admin: "Groningen"
+    site: "https://groningen.nl/"
+    mayor_email: "burgemeester@groningen.nl"
+    mayor: "Koen Schuiling"
+    note: "місто понад 100 тис. мешканців"
+    population: 238147
+    wikidata: Q749
+    coords: [53.21889, 6.5675]
+  - name: "Tilburg"
+    country: "NL"
+    lang: "en"
+    admin: "Noord-Brabant"
+    site: "https://www.tilburg.nl/"
+    email: "gemeente@tilburg.nl"
+    mayor_email: "burgemeester@tilburg.nl"
+    phone: "+31013"
+    mayor: "Theo Weterings"
+    note: "місто понад 100 тис. мешканців"
+    population: 227707
+    wikidata: Q26430
+    coords: [51.5575, 5.09056]
+  - name: "Almere"
+    country: "NL"
+    lang: "en"
+    admin: "Flevoland"
+    site: "https://www.almere.nl/"
+    email: "info@almere.nl"
+    phone: "+31036"
+    mayor: "Franc Weerwind"
+    note: "місто понад 100 тис. мешканців"
+    population: 214715
+    wikidata: Q83178
+    coords: [52.37583, 5.22556]
+  - name: "Breda"
+    country: "NL"
+    lang: "en"
+    admin: "Breda"
+    site: "https://www.breda.nl/"
+    mayor_email: "burgemeester@breda.nl"
+    note: "місто понад 100 тис. мешканців"
+    population: 188078
+    wikidata: Q40844
+    coords: [51.58889, 4.77583]
+  - name: "Arnhem"
+    country: "NL"
+    lang: "en"
+    admin: "Gelderland"
+    site: "https://www.arnhem.nl/"
+    email: "burgemeester@arnhem.nl"
+    mayor_email: "burgemeester@arnhem.nl"
+    mayor: "Ahmed Marcouch"
+    note: "місто понад 100 тис. мешканців"
+    population: 164096
+    wikidata: Q1310
+    coords: [51.98333, 5.91667]
+  - name: "Haarlem"
+    country: "NL"
+    lang: "en"
+    admin: "Noord-Holland"
+    site: "https://haarlem.nl/"
+    email: "antwoord@haarlem.nl"
+    phone: "+31023"
+    mayor: "Jos Wienen"
+    note: "місто понад 100 тис. мешканців"
+    population: 162543
+    wikidata: Q9920
+    coords: [52.38139, 4.63556]
+  - name: "'s-Hertogenbosch"
+    country: "NL"
+    lang: "en"
+    admin: "'s-Hertogenbosch"
+    site: "https://www.s-hertogenbosch.nl/"
+    note: "місто понад 100 тис. мешканців"
+    population: 158753
+    wikidata: Q2766547
+    coords: [51.7, 5.31667]
+  - name: "Apeldoorn"
+    country: "NL"
+    lang: "en"
+    admin: "Apeldoorn"
+    site: "https://www.apeldoorn.nl/"
+    note: "місто понад 100 тис. мешканців"
+    population: 138945
+    wikidata: Q3018561
+    coords: [52.21, 5.97]
+  - name: "Zwolle"
+    country: "NL"
+    lang: "en"
+    admin: "Overijssel"
+    site: "https://www.zwolle.nl/"
+    email: "postbus@zwolle.nl"
+    phone: "+31038"
+    mayor: "Henk Jan Meijer"
+    note: "місто понад 100 тис. мешканців"
+    population: 129840
+    wikidata: Q793
+    coords: [52.51667, 6.1]
+  - name: "Zoetermeer"
+    country: "NL"
+    lang: "en"
+    admin: "Zuid-Holland"
+    site: "https://www.zoetermeer.nl/"
+    email: "Antwoord@zoetermeer.nl"
+    mayor_email: "burgemeester@zoetermeer.nl"
+    mayor: "Michel Bezuijen"
+    note: "місто понад 100 тис. мешканців"
+    population: 125267
+    wikidata: Q26432
+    coords: [52.06111, 4.49333]
+  - name: "Leiden"
+    country: "NL"
+    lang: "en"
+    admin: "Zuid-Holland"
+    site: "https://gemeente.leiden.nl/"
+    phone: "+31071"
+    mayor: "Henri Lenferink"
+    note: "місто понад 100 тис. мешканців"
+    population: 124093
+    wikidata: Q43631
+    coords: [52.16, 4.49]
+  - name: "Dordrecht"
+    country: "NL"
+    lang: "en"
+    admin: "Zuid-Holland"
+    site: "https://cms.dordrecht.nl/"
+    phone: "+31078"
+    mayor: "Peter van der Velden"
+    note: "місто понад 100 тис. мешканців"
+    population: 122070
+    wikidata: Q26421
+    coords: [51.79583, 4.67833]
+  - name: "Maastricht"
+    country: "NL"
+    lang: "en"
+    admin: "Limburg"
+    site: "https://www.gemeentemaastricht.nl/"
+    email: "post@maastricht.nl"
+    phone: "+31043"
+    note: "місто понад 100 тис. мешканців"
+    population: 120227
+    wikidata: Q1309
+    coords: [50.86667, 5.68333]
+  - name: "Alphen aan den Rijn"
+    country: "NL"
+    lang: "en"
+    admin: "Zuid-Holland"
+    site: "https://www.alphenaandenrijn.nl/"
+    email: "gemeente@alphenaandenrijn.nl"
+    mayor_email: "burgemeester@alphenaandenrijn.nl"
+    phone: "+310172"
+    note: "місто понад 100 тис. мешканців"
+    population: 114182
+    wikidata: Q213246
+    coords: [52.13333, 4.65]
+  - name: "Delft"
+    country: "NL"
+    lang: "en"
+    admin: "Zuid-Holland"
+    site: "https://www.delft.nl/"
+    phone: "+31 15 260 22 22"
+    mayor: "Alexander Pechtold"
+    note: "місто понад 100 тис. мешканців"
+    population: 109435
+    wikidata: Q690
+    coords: [52.01167, 4.35917]
   - name: "Ljubljana"
     country: "SI"
     lang: "en"
     admin: "Mestna občina Ljubljana"
     site: "https://www.ljubljana.si"
     email: "urbanizem@ljubljana.si"
+    email_alt: "glavna.pisarna@ljubljana.si, tajnistvo.zupana@ljubljana.si"
+    mayor_email: "tajnistvo.zupana@ljubljana.si"
+    mayor: "Zoran Janković"
     note: "місто понад 100 тис. мешканців"
     population: 284293
     wikidata: Q437
-    coords: [0, 0]
+    coords: [46.05139, 14.50611]
   - name: "Maribor"
     country: "SI"
     lang: "en"
     admin: "Mestna občina Maribor"
     site: "https://maribor.si/"
-    email: "mestna.obcina@maribor.si"
+    email: "zupan@maribor.si"
+    email_alt: "mestna.obcina@maribor.si"
+    mayor_email: "zupan@maribor.si"
     note: "місто понад 100 тис. мешканців"
     population: 114301
     wikidata: Q1010
-    coords: [0, 0]
+    coords: [46.55, 15.63333]

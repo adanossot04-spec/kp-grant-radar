@@ -77,7 +77,7 @@
 
   <div class="hint">
     Порядок роботи: <b>7+</b> — лист цього тижня, <b>4–6</b> — після гарячих,
-    <b>&lt;4</b> — резерв. Кнопка «✉️ лист» відкриває готовий текст мовою донора
+    <b>&lt;4</b> — резерв. Контакти беруться з реєстрів каналів
     (підставлено паспорт громади з <code>config/profile.yaml</code> → <code>community</code>).
     Методологія: <code>docs/METODOLOGIA_DONORIV.md</code>.
   </div>
@@ -148,7 +148,6 @@
         {% if d.followup_at %}<div class="formula">нагадати: {{ d.followup_at }}</div>{% endif %}
       </td>
       <td class="act">
-        <a class="mail" href="/donors/{{ d.id }}/letter" target="_blank">✉️ лист</a>
         <a href="/donors/{{ d.id }}/status?value=letter_sent">📨 надіслано</a>
         <a href="/donors/{{ d.id }}/status?value=replied">💬 відповідь</a>
         <a href="/donors/{{ d.id }}/status?value=received">🎁 отримано</a>

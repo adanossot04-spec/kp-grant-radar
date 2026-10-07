@@ -132,39 +132,21 @@ def _slug(text: str) -> str:
     return text[:40] or "partner"
 
 
-def write_letters(db: Database, out_dir: Path | None = None,
-                  only_with_email: bool = True, limit: int = 1000) -> list[Path]:
-    """Готує персональні листи придунайським громадам."""
-    from . import donors as donors_mod
-
-    out_dir = Path(out_dir or config.DATA_DIR / "letters_danube")
-    out_dir.mkdir(parents=True, exist_ok=True)
-    paths: list[Path] = []
-    for d in list_donors(db, only_with_email=only_with_email)[:limit]:
-        text = donors_mod.build_letter(d)
-        path = out_dir / f"{d['country']}-{_slug(d['name'])}.txt"
-        path.write_text(text, encoding="utf-8")
-        paths.append(path)
-    return paths
-
-
 def export_mailing(db: Database, out: Path | None = None) -> Path:
-    """CSV для розсилки: кому, якою мовою, на яку адресу, з яким листом."""
+    """CSV для розсилки: кому, якою мовою, на яку адресу."""
     out = Path(out or config.DATA_DIR / "danube_mailing.csv")
     out.parent.mkdir(parents=True, exist_ok=True)
     rows = list_donors(db)
     with out.open("w", encoding="utf-8-sig", newline="") as fh:
         w = csv.writer(fh, delimiter=";")
-        w.writerow(["країна", "громада", "мова листа", "e-mail", "телефон",
-                    "сайт", "населення", "пріоритет", "статус", "файл листа"])
+        w.writerow(["країна", "громада", "мова", "e-mail", "телефон",
+                    "сайт", "населення", "пріоритет", "статус"])
         for d in rows:
-            fname = (f"data/letters_danube/{d['country']}-{_slug(d['name'])}.txt"
-                     if d.get("contact_email") else "")
             pop = re.search(r"([\d\s]+) мешканців", d.get("notes") or "")
             w.writerow([d.get("country", ""), d.get("name", ""), d.get("lang", ""),
                         d.get("contact_email", ""), d.get("contact_phone", ""),
                         d.get("site", ""), pop.group(1).strip() if pop else "",
-                        d.get("priority", 0), d.get("status", ""), fname])
+                        d.get("priority", 0), d.get("status", "")])
     return out
 
 

@@ -1,20 +1,21 @@
 """Два міські канали партнерства: «великі громади» і «зелені».
 
-**Великі громади** — усі міста Австрії, Італії та Словенії понад 100 000
-мешканців. Логіка проста: у великому місті є окремий департамент екології
+**Великі громади** — усі міста Німеччини, Італії, Нідерландів, Бельгії,
+Австрії та Словенії понад 100 000 мешканців. Логіка проста: у великому місті є окремий департамент екології
 чи комунального господарства, бюджет на міжнародну співпрацю і парк
 техніки, який регулярно оновлюють. Списана, але цілком робоча машина для
 них — рядок у відомості на утилізацію, для нас — ціла система вивезення.
 
-**Зелені** — міста Центральної та Північної Європи понад 30 000 мешканців,
-де Зелені у міській владі. Для такої ради наш проєкт — не чергове
+**Зелені** — міста 27 країн ЄС плюс Швейцарії, Норвегії та Ісландії
+понад 30 000 мешканців, де Зелені у міській владі. Для такої ради наш проєкт — не чергове
 прохання про допомогу, а профільний екологічний проєкт у верхів'ї річки,
 що впадає в Дунай і Чорне море.
 
 Переліки збирає `scripts/fetch_city_partners.py` (Wikidata, безкоштовно),
-e-mail добирає `scripts/harvest_emails.py --file config/<файл>.yaml`.
+e-mail добирає `scripts/harvest_emails.py --file config/<файл>.yaml`,
+пряму скриньку голови міста — `scripts/verify_mayor_mail.py`.
 Цей модуль перетворює їх на картки донорів, рахує пріоритет за тією самою
-методологією (Д + М + З − В) і готує листи та список розсилки.
+методологією (Д + М + З − В) і формує список розсилки.
 """
 from __future__ import annotations
 
@@ -34,18 +35,19 @@ CHANNELS: dict[str, dict[str, Any]] = {
         "circle": 7,
         "what": "велике місто (понад 100 тис. мешканців) — власна служба "
                 "поводження з відходами",
-        "letters_dir": "letters_big",
         "csv": "big_cities_mailing.csv",
         "page": "cities_big.html",
-        "title": "🏙 Великі громади: Австрія · Італія · Словенія",
+        "title": "🏙 Великі громади: DE · IT · NL · BE · AT · SI",
         "sub": "міста понад 100 000 мешканців із власною комунальною службою",
-        "hint": "Критерій добору: місто Австрії, Італії або Словенії з "
-                "населенням <b>понад 100 000 мешканців</b> (Wikidata P1082) і "
+        "hint": "Критерій добору: місто Німеччини, Італії, Нідерландів, "
+                "Бельгії, Австрії або Словенії з населенням "
+                "<b>понад 100 000 мешканців</b> (Wikidata P1082) і "
                 "чинним офіційним сайтом. У такому місті є профільний "
                 "департамент, бюджет на міжнародну співпрацю і парк техніки, "
                 "який оновлюється — тобто є і з ким говорити, і що передати. "
-                "Листи італійською, німецькою та англійською лежать у теці "
-                "<code>data/letters_big/</code>; перелік — у "
+                "Колонка «пошта мера» — пряма скринька голови міста: "
+                "знайдена на сайті або перевірена через поштовий сервер "
+                "(<code>scripts/verify_mayor_mail.py</code>). Перелік — у "
                 "<code>config/big_cities.yaml</code>.",
         "footer": "Оновлення: <code>python scripts/fetch_city_partners.py "
                   "--only big</code> → <code>python -m grant_radar cities</code> "
@@ -57,11 +59,11 @@ CHANNELS: dict[str, dict[str, Any]] = {
         "circle": 8,
         "what": "місто, де Зелені у складі міської влади — екологія є "
                 "політичним пріоритетом",
-        "letters_dir": "letters_green",
         "csv": "green_cities_mailing.csv",
         "page": "cities_green.html",
-        "title": "🌱 «Зелені» міста Центральної та Північної Європи",
-        "sub": "міста понад 30 000 мешканців, де Зелені у міській владі",
+        "title": "🌱 «Зелені» міста Європи",
+        "sub": "ЄС + Швейцарія, Норвегія, Ісландія · понад 30 000 мешканців, "
+               "де Зелені у міській владі",
         "hint": "Два способи потрапити в перелік. <b>Автоматично</b> — чинний "
                 "голова міста (Wikidata P6) є членом партії, що входить до "
                 "Європейської партії зелених (примітка «мер від Зелених»). "
@@ -69,7 +71,8 @@ CHANNELS: dict[str, dict[str, Any]] = {
                 "коаліції: склад коаліцій у відкритих структурованих даних не "
                 "публікується, тому такі міста внесено списком і позначено "
                 "«коаліція (перевірити)» — перед листом варто переконатися, що "
-                "коаліція ще чинна. Правиться у "
+                "коаліція ще чинна. Колонка «пошта мера» — пряма скринька "
+                "голови міста. Правиться у "
                 "<code>config/green_cities.yaml</code>.",
         "footer": "Оновлення: <code>python scripts/fetch_city_partners.py "
                   "--only green</code> → <code>python -m grant_radar cities</code> "
@@ -111,7 +114,9 @@ def card(channel: str, p: dict[str, Any]) -> dict[str, Any]:
     if population:
         notes.append(f"{population:,}".replace(",", " ") + " мешканців")
     if p.get("mayor"):
-        notes.append(f"{p['mayor']} ({p.get('party', '')})".strip(" ()"))
+        notes.append("мер: " + f"{p['mayor']} ({p.get('party', '')})".strip(" ()"))
+    if p.get("mayor_email"):
+        notes.append(f"пошта мера: {p['mayor_email']}")
     notes.append(p.get("note") or meta["what"])
     return {
         "uid": _uid(channel, p),
@@ -179,41 +184,28 @@ def _slug(text: str) -> str:
             or "city")
 
 
-def write_letters(db: Database, channel: str, out_dir: Path | None = None,
-                  only_with_email: bool = True, limit: int = 1000) -> list[Path]:
-    from . import donors as donors_mod
-
-    meta = CHANNELS[channel]
-    out_dir = Path(out_dir or config.DATA_DIR / meta["letters_dir"])
-    out_dir.mkdir(parents=True, exist_ok=True)
-    paths: list[Path] = []
-    for d in list_donors(db, channel, only_with_email=only_with_email)[:limit]:
-        path = out_dir / f"{d['country']}-{_slug(d['name'])}.txt"
-        path.write_text(donors_mod.build_letter(d), encoding="utf-8")
-        paths.append(path)
-    return paths
-
-
 def export_mailing(db: Database, channel: str, out: Path | None = None) -> Path:
     meta = CHANNELS[channel]
     out = Path(out or config.DATA_DIR / meta["csv"])
     out.parent.mkdir(parents=True, exist_ok=True)
     with out.open("w", encoding="utf-8-sig", newline="") as fh:
         w = csv.writer(fh, delimiter=";")
-        w.writerow(["країна", "місто", "мова листа", "e-mail", "телефон",
-                    "сайт", "населення", "пріоритет", "примітка", "статус",
-                    "файл листа"])
+        w.writerow(["країна", "місто", "мова", "e-mail", "пошта мера", "мер",
+                    "телефон", "сайт", "населення", "пріоритет", "примітка",
+                    "статус"])
         for d in list_donors(db, channel):
-            pop = re.search(r"([\d\s]+) мешканців", d.get("notes") or "")
-            fname = (f"data/{meta['letters_dir']}/"
-                     f"{d['country']}-{_slug(d['name'])}.txt"
-                     if d.get("contact_email") else "")
-            note = (d.get("notes") or "").split(" · ")[-1]
+            notes = d.get("notes") or ""
+            pop = re.search(r"([\d\s]+) мешканців", notes)
+            mayor = re.search(r"мер: ([^·]+)", notes)
+            mayor_mail = re.search(r"пошта мера: (\S+)", notes)
+            note = notes.split(" · ")[-1]
             w.writerow([d.get("country", ""), d.get("name", ""),
                         d.get("lang", ""), d.get("contact_email", ""),
+                        mayor_mail.group(1) if mayor_mail else "",
+                        mayor.group(1).strip() if mayor else "",
                         d.get("contact_phone", ""), d.get("site", ""),
                         pop.group(1).strip() if pop else "",
-                        d.get("priority", 0), note, d.get("status", ""), fname])
+                        d.get("priority", 0), note, d.get("status", "")])
     return out
 
 

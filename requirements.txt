@@ -7,3 +7,4 @@ jinja2>=3.1
 python-dateutil>=2.9
 beautifulsoup4
 lxml
+dnspython>=2.4   # MX-записи для перевірки скриньки мера (scripts/verify_mayor_mail.py)

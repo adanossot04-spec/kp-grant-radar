@@ -45,12 +45,16 @@ WDQS = "https://query.wikidata.org/sparql"
 BIG = {
     "file": "big_cities.yaml",
     "min_pop": 100000,
-    "countries": {"AT": ("Q40", "de"), "IT": ("Q38", "it"), "SI": ("Q215", "sl")},
-    "lang": {"AT": "de", "IT": "it", "SI": "en"},   # якою мовою писати листа
+    "countries": {"AT": ("Q40", "de"), "IT": ("Q38", "it"), "SI": ("Q215", "sl"),
+                  "DE": ("Q183", "de"), "BE": ("Q31", "nl"),
+                  "NL": ("Q55", "nl")},
+    "lang": {"AT": "de", "IT": "it", "SI": "en",    # якою мовою писати листа
+             "DE": "de", "BE": "en", "NL": "en"},
 }
 
 # ─────────────────────── канал 2: «зелені» міста ───────────────────────
-# Центральна та Північна Європа
+# Уся Європа: 27 країн ЄС + Швейцарія, Норвегія, Ісландія (ЄАВТ).
+# Формат: код → (QID країни, мова міток у Wikidata, мова листа).
 GREEN_COUNTRIES = {
     "DE": ("Q183", "de", "de"), "AT": ("Q40", "de", "de"),
     "CH": ("Q39", "de", "de"), "LU": ("Q32", "de", "de"),
@@ -62,6 +66,13 @@ GREEN_COUNTRIES = {
     "FI": ("Q33", "fi", "en"), "IS": ("Q189", "is", "en"),
     "EE": ("Q191", "et", "en"), "LV": ("Q211", "lv", "en"),
     "LT": ("Q37", "lt", "en"),
+    # решта ЄС
+    "FR": ("Q142", "fr", "en"), "ES": ("Q29", "es", "en"),
+    "PT": ("Q45", "pt", "en"), "IT": ("Q38", "it", "it"),
+    "IE": ("Q27", "en", "en"), "GR": ("Q41", "el", "en"),
+    "HR": ("Q224", "hr", "en"), "RO": ("Q218", "ro", "ro"),
+    "BG": ("Q219", "bg", "en"), "CY": ("Q229", "el", "en"),
+    "MT": ("Q233", "mt", "en"),
 }
 # Партії, яких немає в переліку членів Європейської партії зелених,
 # але які є «зеленими» у місцевих коаліціях Півночі Європи.
@@ -69,6 +80,10 @@ EXTRA_GREEN = ["Q215912",    # Socialistisk Folkeparti / Green Left (DK)
                "Q18042964",  # Alternativet (DK)
                "Q1130754",   # Vinstrihreyfingin – grænt framboð (IS)
                "Q28966907",  # Progresīvie (LV)
+               "Q104805981", # Možemo! (HR) — зелено-ліва платформа
+               "Q2325034",   # Zeleno dviženie (BG)
+               "Q1352071",   # Compromís (ES) — коаліція з Iniciativa/Verds
+               "Q2915519",   # Europa Verde / Federazione dei Verdi (IT)
                ]
 GREEN = {"file": "green_cities.yaml", "min_pop": 30000}
 
@@ -94,16 +109,38 @@ MANUAL_GREEN = [
     ("Helsinki", "FI"), ("Tampere", "FI"), ("Turku", "FI"), ("Espoo", "FI"),
     ("Oulu", "FI"), ("Jyväskylä", "FI"),
     ("Oslo", "NO"), ("Bergen", "NO"), ("Trondheim", "NO"),
-    ("København", "DK"), ("Aarhus", "DK"), ("Odense", "DK"),
+    ("København", "DK"), ("Aarhus", "DK"), ("Odense", "DK"), ("Aalborg", "DK"),
     ("Luxembourg", "LU"), ("Praha", "CZ"), ("Brno", "CZ"), ("Ljubljana", "SI"),
+    ("Reykjavík", "IS"),
+    # Франція: мери-екологісти або EELV у муніципальній більшості
+    ("Lyon", "FR"), ("Grenoble", "FR"), ("Strasbourg", "FR"), ("Bordeaux", "FR"),
+    ("Besançon", "FR"), ("Poitiers", "FR"), ("Tours", "FR"), ("Annecy", "FR"),
+    ("Marseille", "FR"), ("Montpellier", "FR"), ("Nantes", "FR"),
+    ("Rennes", "FR"), ("Lille", "FR"), ("Paris", "FR"),
+    # Бельгія, Нідерланди — Groen / GroenLinks у колегії
+    ("Brussel", "BE"), ("Antwerpen", "BE"), ("Mechelen", "BE"),
+    ("Eindhoven", "NL"), ("Rotterdam", "NL"), ("Zwolle", "NL"),
+    # Південь і Схід ЄС
+    ("Bologna", "IT"), ("Milano", "IT"), ("Firenze", "IT"),
+    ("Barcelona", "ES"), ("València", "ES"),
+    ("Lisboa", "PT"), ("Dublin", "IE"), ("Cork", "IE"), ("Galway", "IE"),
+    ("Zagreb", "HR"), ("Sofia", "BG"), ("Warszawa", "PL"),
 ]
 
 
 def wd(query: str, timeout: int = 300, tries: int = 4) -> list[dict]:
     """Запит до Wikidata Query Service із повторами: сервіс часто дає 504."""
-    url = WDQS + "?" + urllib.parse.urlencode({"query": query})
-    req = urllib.request.Request(url, headers={
-        "Accept": "application/sparql-results+json", "User-Agent": UA})
+    # довгі запити (сотні VALUES) не влазять у рядок URL → POST
+    if len(query) > 1500:
+        req = urllib.request.Request(
+            WDQS, data=urllib.parse.urlencode({"query": query}).encode(),
+            headers={"Accept": "application/sparql-results+json",
+                     "User-Agent": UA,
+                     "Content-Type": "application/x-www-form-urlencoded"})
+    else:
+        url = WDQS + "?" + urllib.parse.urlencode({"query": query})
+        req = urllib.request.Request(url, headers={
+            "Accept": "application/sparql-results+json", "User-Agent": UA})
     last: Exception | None = None
     for attempt in range(1, tries + 1):
         try:
@@ -147,9 +184,11 @@ def merge(rows: list[dict], key: str = "city") -> dict[str, dict]:
 def fetch_big() -> list[dict]:
     partners: list[dict] = []
     for cc, (country_qid, label_lang) in BIG["countries"].items():
-        query = f"""SELECT ?city ?cityLabel ?pop ?site ?mail ?phone ?adminLabel ?lat ?lon WHERE {{
+        query = f"""SELECT ?city ?cityLabel ?pop ?site ?mail ?phone ?adminLabel ?mayorLabel ?lat ?lon WHERE {{
   ?city wdt:P17 wd:{country_qid} ; wdt:P1082 ?pop ; wdt:P31/wdt:P279* wd:Q515 .
   FILTER(?pop >= {BIG['min_pop']})
+  OPTIONAL {{ ?city p:P6 ?st . ?st ps:P6 ?mayor .
+             FILTER NOT EXISTS {{ ?st pq:P582 ?ended }} }}
   OPTIONAL {{ ?city wdt:P856 ?site }} OPTIONAL {{ ?city wdt:P968 ?mail }}
   OPTIONAL {{ ?city wdt:P1329 ?phone }} OPTIONAL {{ ?city wdt:P131 ?admin }}
   OPTIONAL {{ ?city p:P625/psv:P625 ?co .
@@ -169,6 +208,9 @@ def fetch_big() -> list[dict]:
                 "site": clean_site(rec.get("site", "")),
                 "email": clean_mail(rec.get("mail", "")),
                 "phone": rec.get("phone", "").strip(),
+                "mayor": (rec.get("mayorLabel", "")
+                          if not rec.get("mayorLabel", "").startswith("Q")
+                          else ""),
                 "wikidata": rec["qid"],
                 "lat": round(float(rec.get("lat", 0) or 0), 5),
                 "lon": round(float(rec.get("lon", 0) or 0), 5),
@@ -179,47 +221,55 @@ def fetch_big() -> list[dict]:
 
 
 def fetch_green() -> list[dict]:
-    countries = " ".join("wd:" + q for q, _, _ in GREEN_COUNTRIES.values())
+    """Міста, де чинний голова — член партії Європейських зелених.
+
+    Запит виконується покраїнно: одним запитом на всі 30 країн WDQS
+    стабільно віддає 504.
+    """
     extra = " ".join("wd:" + q for q in EXTRA_GREEN)
-    query = f"""SELECT ?city ?cityLabel ?cc ?pop ?site ?mail ?phone ?mayorLabel ?partyLabel
+    partners: list[dict] = []
+    for cc, (country_qid, label_lang, letter_lang) in GREEN_COUNTRIES.items():
+        query = f"""SELECT ?city ?cityLabel ?pop ?site ?mail ?phone ?mayorLabel ?partyLabel
                        ?adminLabel ?lat ?lon WHERE {{
-  VALUES ?country {{ {countries} }}
-  ?city wdt:P17 ?country ; wdt:P1082 ?pop ; wdt:P31/wdt:P279* wd:Q515 ; p:P6 ?st .
+  ?city wdt:P17 wd:{country_qid} ; wdt:P1082 ?pop ; wdt:P31/wdt:P279* wd:Q515 ;
+        p:P6 ?st .
   FILTER(?pop >= {GREEN['min_pop']})
   ?st ps:P6 ?mayor . FILTER NOT EXISTS {{ ?st pq:P582 ?end }}
   ?mayor wdt:P102 ?party .
   {{ ?party wdt:P463 wd:Q950179 }} UNION {{ VALUES ?party {{ {extra} }} }}
-  ?country wdt:P297 ?cc .
   OPTIONAL {{ ?city wdt:P856 ?site }} OPTIONAL {{ ?city wdt:P968 ?mail }}
   OPTIONAL {{ ?city wdt:P1329 ?phone }} OPTIONAL {{ ?city wdt:P131 ?admin }}
   OPTIONAL {{ ?city p:P625/psv:P625 ?co .
              ?co wikibase:geoLatitude ?lat ; wikibase:geoLongitude ?lon }}
-  SERVICE wikibase:label {{ bd:serviceParam wikibase:language "de,nl,en" }} }}"""
-    print("  Wikidata: міста, де мера обрано від партії Зелених…", flush=True)
-    found = merge(wd(query))
-    partners = []
-    for rec in found.values():
-        cc = rec.get("cc", "")
-        if cc not in GREEN_COUNTRIES or not rec.get("site"):
+  SERVICE wikibase:label {{ bd:serviceParam wikibase:language "{label_lang},en" }} }}"""
+        print(f"  Wikidata {cc}: міста з мером від Зелених…", flush=True)
+        try:
+            found = merge(wd(query))
+        except RuntimeError as exc:
+            print(f"    ⚠️ {cc} пропущено: {exc}")
             continue
-        name = rec.get("cityLabel") or ""
-        if not name or name.startswith("Q"):
-            continue
-        partners.append({
-            "name": name, "country": cc,
-            "lang": GREEN_COUNTRIES[cc][2],
-            "admin": rec.get("adminLabel", ""),
-            "population": int(float(rec.get("pop", 0))),
-            "site": clean_site(rec.get("site", "")),
-            "email": clean_mail(rec.get("mail", "")),
-            "phone": rec.get("phone", "").strip(),
-            "wikidata": rec["qid"],
-            "lat": round(float(rec.get("lat", 0) or 0), 5),
-            "lon": round(float(rec.get("lon", 0) or 0), 5),
-            "mayor": rec.get("mayorLabel", ""),
-            "party": rec.get("partyLabel", ""),
-            "note": "мер від Зелених (Wikidata P6 → P102)",
-        })
+        before = len(partners)
+        for rec in found.values():
+            name = rec.get("cityLabel") or ""
+            if not name or name.startswith("Q") or not rec.get("site"):
+                continue
+            partners.append({
+                "name": name, "country": cc, "lang": letter_lang,
+                "admin": rec.get("adminLabel", ""),
+                "population": int(float(rec.get("pop", 0))),
+                "site": clean_site(rec.get("site", "")),
+                "email": clean_mail(rec.get("mail", "")),
+                "phone": rec.get("phone", "").strip(),
+                "wikidata": rec["qid"],
+                "lat": round(float(rec.get("lat", 0) or 0), 5),
+                "lon": round(float(rec.get("lon", 0) or 0), 5),
+                "mayor": rec.get("mayorLabel", ""),
+                "party": rec.get("partyLabel", ""),
+                "note": "мер від Зелених (Wikidata P6 → P102)",
+            })
+        if len(partners) > before:
+            print(f"    {cc}: {len(partners) - before}")
+        time.sleep(1)
     return partners
 
 
@@ -256,37 +306,34 @@ def fetch_manual_green() -> list[dict]:
         time.sleep(0.2)
     if not candidates:
         return []
-    values = " ".join("wd:" + q for q in candidates)
-    query = f"""SELECT ?city ?cityLabel ?cc ?pop ?site ?mail ?phone ?adminLabel ?lat ?lon WHERE {{
-  VALUES ?city {{ {values} }}
-  ?city wdt:P17/wdt:P297 ?cc ; wdt:P1082 ?pop ; wdt:P856 ?site ;
-        wdt:P31/wdt:P279* wd:Q515 .
-  OPTIONAL {{ ?city wdt:P968 ?mail }} OPTIONAL {{ ?city wdt:P1329 ?phone }}
-  OPTIONAL {{ ?city wdt:P131 ?admin }}
-  OPTIONAL {{ ?city p:P625/psv:P625 ?co .
-             ?co wikibase:geoLatitude ?lat ; wikibase:geoLongitude ?lon }}
-  SERVICE wikibase:label {{ bd:serviceParam wikibase:language "de,nl,en" }} }}"""
-    print(f"  Wikidata: перевірка {len(candidates)} кандидатів…", flush=True)
-    found = merge(wd(query))
+    qids = list(candidates)
+    found: dict[str, dict] = {}
+    for start in range(0, len(qids), 100):
+        chunk = qids[start:start + 100]
+        found.update(merge(wd(_manual_query(chunk))))
+        time.sleep(1)
     best: dict[tuple[str, str], dict] = {}
     for qid, rec in found.items():
         want = candidates.get(qid)
         if not want or rec.get("cc") != want[1]:
             continue
-        key = want
-        if float(rec.get("pop", 0) or 0) > float(best.get(key, {}).get("pop", 0) or 0):
+        if float(rec.get("pop", 0) or 0) > float(best.get(want, {}).get("pop", 0) or 0):
             rec["wanted_name"] = want[0]
-            best[key] = rec
+            best[want] = rec
     out = []
     for (name, cc), rec in best.items():
         out.append({
-            "name": rec.get("cityLabel") or name,
+            # показуємо місцеву назву з MANUAL_GREEN: мітка Wikidata
+            # приходить німецькою (Brüssel, Mailand, Kopenhagen)
+            "name": name,
             "country": cc, "lang": GREEN_COUNTRIES[cc][2],
             "admin": rec.get("adminLabel", ""),
             "population": int(float(rec.get("pop", 0))),
             "site": clean_site(rec.get("site", "")),
             "email": clean_mail(rec.get("mail", "")),
             "phone": rec.get("phone", "").strip(),
+            "mayor": (rec.get("mayorLabel", "")
+                      if not rec.get("mayorLabel", "").startswith("Q") else ""),
             "wikidata": rec["qid"],
             "lat": round(float(rec.get("lat", 0) or 0), 5),
             "lon": round(float(rec.get("lon", 0) or 0), 5),
@@ -295,6 +342,20 @@ def fetch_manual_green() -> list[dict]:
     print(f"    знайдено {len(out)} з {len(MANUAL_GREEN)}")
     return out
 
+
+def _manual_query(chunk: list[str]) -> str:
+    values = " ".join("wd:" + q for q in chunk)
+    return f"""SELECT ?city ?cityLabel ?cc ?pop ?site ?mail ?phone ?mayorLabel ?adminLabel ?lat ?lon WHERE {{
+  VALUES ?city {{ {values} }}
+  OPTIONAL {{ ?city p:P6 ?st . ?st ps:P6 ?mayor .
+             FILTER NOT EXISTS {{ ?st pq:P582 ?ended }} }}
+  ?city wdt:P17/wdt:P297 ?cc ; wdt:P1082 ?pop ; wdt:P856 ?site ;
+        wdt:P31/wdt:P279* wd:Q515 .
+  OPTIONAL {{ ?city wdt:P968 ?mail }} OPTIONAL {{ ?city wdt:P1329 ?phone }}
+  OPTIONAL {{ ?city wdt:P131 ?admin }}
+  OPTIONAL {{ ?city p:P625/psv:P625 ?co .
+             ?co wikibase:geoLatitude ?lat ; wikibase:geoLongitude ?lon }}
+  SERVICE wikibase:label {{ bd:serviceParam wikibase:language "de,nl,en" }} }}"""
 
 def names_for(qids: list[str]) -> dict[str, dict]:
     """Назви й контакти для вручну доданих міст (секція manual:)."""
@@ -326,7 +387,8 @@ def dump(partners: list[dict], header: str, path: Path) -> None:
         # лапки обов'язкові: YAML 1.1 читає NO (Норвегія) як False
         lines.append(f"    country: {esc(p['country'])}")
         lines.append(f"    lang: {esc(p['lang'])}")
-        for key in ("admin", "site", "email", "phone", "mayor", "party", "note"):
+        for key in ("admin", "site", "email", "mayor_email", "phone",
+                    "mayor", "party", "note"):
             if p.get(key):
                 lines.append(f"    {key}: {esc(p[key])}")
         lines.append(f"    population: {p.get('population', 0)}")
